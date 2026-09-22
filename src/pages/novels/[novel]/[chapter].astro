@@ -1,0 +1,89 @@
+---
+import NovelReader from "@components/novel/NovelReader.astro";
+import NovelLayout from "@layouts/NovelLayout.astro";
+import {
+	getChapterNavigation,
+	getNovelLibrary,
+	type NovelChapterEntry,
+	type NovelSeriesEntry,
+} from "@utils/novel-utils";
+import { getNovelChapterUrl, getNovelUrl } from "@utils/url-utils";
+
+export async function getStaticPaths() {
+	const library = await getNovelLibrary();
+	return library.flatMap((record) =>
+		record.chapters.map((chapter) => ({
+			params: {
+				novel: record.series.data.novelId,
+				chapter: chapter.data.chapterId,
+			},
+			props: {
+				series: record.series,
+				chapter,
+				...getChapterNavigation(record.chapters, chapter.data.chapterId),
+			},
+		})),
+	);
+}
+
+interface Props {
+	series: NovelSeriesEntry;
+	chapter: NovelChapterEntry;
+	previous?: NovelChapterEntry;
+	next?: NovelChapterEntry;
+}
+
+const { series, chapter, previous, next } = Astro.props;
+const { Content } = await chapter.render();
+const chapterUrl = new URL(
+	getNovelChapterUrl(series.data.novelId, chapter.data.chapterId),
+	Astro.site,
+);
+const workUrl = new URL(getNovelUrl(series.data.novelId), Astro.site);
+const jsonLd = {
+	"@context": "https://schema.org",
+	"@type": "Chapter",
+	name: chapter.data.title,
+	position: chapter.data.order,
+	description: chapter.data.description,
+	datePublished: chapter.data.published.toISOString().slice(0, 10),
+	dateModified: (chapter.data.updated ?? chapter.data.published)
+		.toISOString()
+		.slice(0, 10),
+	inLanguage: chapter.data.lang.replace("_", "-"),
+	url: chapterUrl.href,
+	isPartOf: {
+		"@type": "Book",
+		name: series.data.title,
+		url: workUrl.href,
+	},
+	author: {
+		"@type": "Person",
+		name: series.data.author,
+	},
+};
+---
+
+<NovelLayout
+	title={`${chapter.data.title} - ${series.data.title}`}
+	description={chapter.data.description || series.data.description}
+	lang={chapter.data.lang}
+	image={series.data.cover || undefined}
+	article
+>
+	<script
+		is:inline
+		slot="head"
+		type="application/ld+json"
+		set:html={JSON.stringify(jsonLd)}
+	></script>
+
+	<NovelReader
+		series={series}
+		chapter={chapter}
+		previous={previous}
+		next={next}
+	>
+		<Content />
+	</NovelReader>
+</NovelLayout>

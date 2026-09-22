@@ -69,7 +69,82 @@ const specCollection = defineCollection({
 			.optional(),
 	}),
 });
+
+const novelIdSchema = z
+	.string()
+	.trim()
+	.regex(
+		/^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+		"小说标识只能包含小写字母、数字和连字符",
+	);
+
+const novelCollection = defineCollection({
+	schema: z
+		.discriminatedUnion("type", [
+			z.object({
+				type: z.literal("novel"),
+				novelId: novelIdSchema,
+				title: z.string().trim().min(1, "作品标题不能为空"),
+				subtitle: z.string().trim().optional().default(""),
+				description: z.string().trim().min(1, "作品简介不能为空"),
+				author: z.string().trim().min(1, "作者不能为空"),
+				status: z.enum(["连载中", "已完结", "暂停更新"]),
+				cover: z.string().trim().optional().default(""),
+				hero: z.string().trim().optional().default(""),
+				showcase: z
+					.object({
+						image: z.string().trim().optional().default(""),
+						position: z.string().trim().optional().default("72% center"),
+						scale: z.number().min(0.5).max(2).optional().default(1),
+					})
+					.optional()
+					.default({ image: "", position: "72% center", scale: 1 }),
+				accentHue: z.number().int().min(0).max(360).optional().default(205),
+				started: z.date(),
+				tags: z
+					.array(z.string())
+					.optional()
+					.default([])
+					.transform((tags) => [
+						...new Set(tags.map((tag) => tag.trim()).filter(Boolean)),
+					]),
+				lang: z.string().trim().optional().default("zh_CN"),
+				draft: z.boolean().optional().default(false),
+			}),
+			z.object({
+				type: z.literal("chapter"),
+				novel: novelIdSchema,
+				chapterId: z
+					.string()
+					.trim()
+					.regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "章节标识格式不正确"),
+				title: z.string().trim().min(1, "章节标题不能为空"),
+				order: z.number().int().positive("章节排序必须是正整数"),
+				chapter: z.number().int().positive("章号必须是正整数"),
+				volume: z.number().int().positive("卷号必须是正整数").default(1),
+				volumeTitle: z.string().trim().optional().default(""),
+				published: z.date(),
+				updated: z.date().optional(),
+				description: z.string().trim().optional().default(""),
+				lang: z.string().trim().optional().default("zh_CN"),
+				draft: z.boolean().optional().default(false),
+			}),
+		])
+		.superRefine((entry, context) => {
+			if (entry.type === "chapter") {
+				if (entry.updated && entry.updated < entry.published) {
+					context.addIssue({
+						code: z.ZodIssueCode.custom,
+						path: ["updated"],
+						message: "章节更新时间不能早于发布时间",
+					});
+				}
+			}
+		}),
+});
+
 export const collections = {
 	posts: postsCollection,
 	spec: specCollection,
+	novels: novelCollection,
 };

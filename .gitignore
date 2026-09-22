@@ -29,3 +29,6 @@ yarn.lock
 # ide
 .idea
 *.iml
+
+# local media-analysis artifacts
+.codex-fps-frames/

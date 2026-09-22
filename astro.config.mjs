@@ -37,7 +37,7 @@ export default defineConfig({
 		swup({
 			theme: false,
 			animationClass: "transition-swup-",
-			containers: ["main", "#toc"],
+			containers: ["#swup-container"],
 			smoothScrolling: true,
 			// Always request the latest page HTML. This avoids stale content while
 			// editing and keeps query-based archive filters in sync after navigation.

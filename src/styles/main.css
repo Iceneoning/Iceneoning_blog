@@ -60,7 +60,6 @@
         hover:decoration-[var(--link-hover)] active:decoration-[var(--link-active)] underline-offset-[0.25rem]
     }
 
-    .toc-hide,
     .toc-not-ready {
         @apply opacity-0 pointer-events-none
     }

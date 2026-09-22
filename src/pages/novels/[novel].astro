@@ -1,0 +1,75 @@
+---
+import Markdown from "@components/misc/Markdown.astro";
+import NovelChapterList from "@components/novel/NovelChapterList.astro";
+import NovelHero from "@components/novel/NovelHero.astro";
+import NovelLayout from "@layouts/NovelLayout.astro";
+import { getNovelLibrary, type NovelRecord } from "@utils/novel-utils";
+import { getNovelUrl } from "@utils/url-utils";
+
+export async function getStaticPaths() {
+	const library = await getNovelLibrary();
+	return library.map((record) => ({
+		params: { novel: record.series.data.novelId },
+		props: { record },
+	}));
+}
+
+interface Props {
+	record: NovelRecord;
+}
+
+const { record } = Astro.props;
+const { series } = record;
+const { Content } = await series.render();
+const canonicalUrl = new URL(getNovelUrl(series.data.novelId), Astro.site);
+const jsonLd = {
+	"@context": "https://schema.org",
+	"@type": "Book",
+	name: series.data.title,
+	alternateName: series.data.subtitle || undefined,
+	description: series.data.description,
+	author: {
+		"@type": "Person",
+		name: series.data.author,
+	},
+	datePublished: series.data.started.toISOString().slice(0, 10),
+	inLanguage: series.data.lang.replace("_", "-"),
+	url: canonicalUrl.href,
+	image: series.data.cover
+		? new URL(series.data.cover, Astro.site).href
+		: undefined,
+};
+---
+
+<NovelLayout
+	title={series.data.title}
+	description={series.data.description}
+	lang={series.data.lang}
+	image={series.data.cover || undefined}
+>
+	<script
+		is:inline
+		slot="head"
+		type="application/ld+json"
+		set:html={JSON.stringify(jsonLd)}
+	></script>
+
+	<div
+		class="novel-content-wide"
+		style={`--novel-accent-hue: ${series.data.accentHue}`}
+	>
+		<NovelHero record={record} />
+
+		<section class="card-base mt-4 px-6 py-7 sm:px-9 sm:py-8" aria-labelledby="novel-about-title">
+			<p class="novel-eyebrow mb-2">About the Story</p>
+			<h2 id="novel-about-title" class="text-90 text-2xl font-bold">关于这个故事</h2>
+			<div class="mt-5 max-w-3xl" data-pagefind-body>
+				<Markdown class="novel-about-prose">
+					<Content />
+				</Markdown>
+			</div>
+		</section>
+
+		<NovelChapterList record={record} />
+	</div>
+</NovelLayout>

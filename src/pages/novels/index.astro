@@ -1,0 +1,288 @@
+---
+import NovelCard from "@components/novel/NovelCard.astro";
+import NovelLayout from "@layouts/NovelLayout.astro";
+import { getNovelLibrary } from "@utils/novel-utils";
+
+const library = await getNovelLibrary();
+const serializingCount = library.filter(
+	(record) => record.series.data.status === "连载中",
+).length;
+const chapterCount = library.reduce(
+	(total, record) => total + record.chapters.length,
+	0,
+);
+---
+
+<NovelLayout
+	title="小说馆"
+	description="冰霓的小说作品与章节目录，在故事里走得慢一点。"
+>
+	<div class="novel-content-wide">
+		<header
+			class="novel-library-hero card-base"
+			data-pagefind-body
+			data-novel-showcase-root
+			data-novel-hero-graphics
+		>
+			<div
+				class="novel-hero-left-decor"
+				data-hero-depth="0.62"
+				aria-hidden="true"
+			>
+				<span class="novel-left-rail"></span>
+				<span class="novel-left-cut novel-left-cut-a"></span>
+				<span class="novel-left-cut novel-left-cut-b"></span>
+				<span class="novel-left-node novel-left-node-a"></span>
+				<span class="novel-left-node novel-left-node-b"></span>
+				<span class="novel-left-spark novel-left-spark-a"></span>
+				<span class="novel-left-spark novel-left-spark-b"></span>
+				<svg
+					class="novel-left-orbit"
+					viewBox="0 0 360 240"
+					preserveAspectRatio="none"
+				>
+					<path d="M18 196 C82 98 188 54 336 86"></path>
+					<path d="M56 226 C132 146 228 124 350 152"></path>
+				</svg>
+			</div>
+
+			<div class="novel-library-copy">
+				<h1 data-pagefind-meta="title" class="novel-library-title novel-glow-title">
+					小说馆
+				</h1>
+				<p class="novel-library-lede">
+					在故事里走得慢一点，让风景多停留一会。
+				</p>
+
+				<div class="novel-library-meta" aria-label="小说馆概览">
+					<span>{library.length} 部作品</span>
+					<span aria-hidden="true">·</span>
+					<span>{chapterCount} 个章节</span>
+					{serializingCount > 0 && (
+						<>
+							<span aria-hidden="true">·</span>
+							<span>{serializingCount} 部连载</span>
+						</>
+					)}
+				</div>
+			</div>
+
+			<div
+				class="novel-hero-lightfield"
+				data-hero-depth="0.55"
+				aria-hidden="true"
+			></div>
+
+			<div
+				class="novel-hero-depth-field"
+				data-hero-depth="0.22"
+				aria-hidden="true"
+			>
+				<span class="novel-hero-cloud novel-hero-cloud-a"></span>
+				<span class="novel-hero-cloud novel-hero-cloud-b"></span>
+				<span class="novel-hero-cloud novel-hero-cloud-c"></span>
+				<svg
+					class="novel-hero-skyline"
+					viewBox="0 0 1000 320"
+					preserveAspectRatio="none"
+				>
+					<path
+						class="novel-hero-skyline-haze"
+						d="M390 248 C470 224 548 232 612 218 C682 203 744 210 822 232 L822 282 L390 282 Z"
+					></path>
+					<path
+						class="novel-hero-skyline-shape"
+						d="M438 258 L438 238 L450 238 L450 220 L458 220 L462 182 L466 220 L478 220 L478 246 L492 246 L492 214 L500 214 L505 168 L510 214 L522 214 L522 236 L535 236 L535 198 L543 198 L548 146 L553 198 L565 198 L565 226 L578 226 L578 188 L586 188 L591 122 L596 188 L606 188 L606 218 L621 218 L621 180 L628 180 L633 136 L638 180 L650 180 L650 224 L664 224 L664 194 L672 194 L676 158 L681 194 L693 194 L693 232 L707 232 L707 204 L715 204 L720 174 L725 204 L738 204 L738 240 L752 240 L752 218 L760 218 L764 190 L768 218 L784 218 L784 258 Z"
+					></path>
+				</svg>
+			</div>
+
+			<svg
+				class="novel-hero-orbit-field"
+				data-hero-depth="0.35"
+				viewBox="0 0 1000 320"
+				preserveAspectRatio="none"
+				aria-hidden="true"
+			>
+				<defs>
+					<filter id="novel-orbit-glow" x="-40%" y="-80%" width="180%" height="260%">
+						<feGaussianBlur stdDeviation="3.5" result="blur"></feGaussianBlur>
+						<feMerge>
+							<feMergeNode in="blur"></feMergeNode>
+							<feMergeNode in="SourceGraphic"></feMergeNode>
+						</feMerge>
+					</filter>
+					<linearGradient id="novel-orbit-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+						<stop offset="0%" stop-color="white" stop-opacity="0"></stop>
+						<stop offset="35%" stop-color="white" stop-opacity="0.24"></stop>
+						<stop offset="68%" stop-color="white" stop-opacity="0.62"></stop>
+						<stop offset="100%" stop-color="white" stop-opacity="0.08"></stop>
+					</linearGradient>
+				</defs>
+				<path
+					class="novel-hero-orbit novel-hero-orbit-primary"
+					d="M 320 228 C 455 82, 675 28, 922 108"
+					pathLength="1000"
+				></path>
+				<path
+					class="novel-hero-orbit novel-hero-orbit-secondary"
+					d="M 365 276 C 535 132, 748 138, 945 236"
+					pathLength="1000"
+				></path>
+				<path
+					class="novel-hero-orbit novel-hero-orbit-tertiary"
+					d="M 260 294 C 472 184, 744 184, 970 288"
+					pathLength="1000"
+				></path>
+				<ellipse
+					class="novel-hero-orbit novel-hero-orbit-ring"
+					cx="625"
+					cy="170"
+					rx="190"
+					ry="82"
+					transform="rotate(-9 625 170)"
+				></ellipse>
+				<path
+					class="novel-hero-orbit-spark"
+					d="M 320 228 C 455 82, 675 28, 922 108"
+					pathLength="1000"
+				></path>
+				<path
+					class="novel-hero-orbit-spark-secondary"
+					d="M 365 276 C 535 132, 748 138, 945 236"
+					pathLength="1000"
+				></path>
+			</svg>
+
+			<div
+				class="novel-hero-flare-field"
+				data-hero-depth="0.7"
+				aria-hidden="true"
+			>
+				<span class="novel-hero-flare-core"></span>
+				<span class="novel-hero-flare-ghost novel-hero-flare-ghost-a"></span>
+				<span class="novel-hero-flare-ghost novel-hero-flare-ghost-b"></span>
+			</div>
+
+			<div
+				class="novel-hero-core-structure"
+				data-hero-depth="0.78"
+				aria-hidden="true"
+			>
+				<span class="novel-core-ring novel-core-ring-a"></span>
+				<span class="novel-core-ring novel-core-ring-b"></span>
+				<span class="novel-core-ring novel-core-ring-c"></span>
+				<span class="novel-core-axis novel-core-axis-x"></span>
+				<span class="novel-core-axis novel-core-axis-y"></span>
+				<span class="novel-core-tick novel-core-tick-a"></span>
+				<span class="novel-core-tick novel-core-tick-b"></span>
+				<span class="novel-core-tick novel-core-tick-c"></span>
+			</div>
+
+			<div
+				class="novel-hero-prism-field"
+				data-hero-depth="1.05"
+				aria-hidden="true"
+			>
+				<span class="novel-hero-prism novel-hero-prism-a"></span>
+				<span class="novel-hero-prism novel-hero-prism-b"></span>
+				<span class="novel-hero-prism novel-hero-prism-c"></span>
+				<span class="novel-hero-prism novel-hero-prism-d"></span>
+				<span class="novel-hero-prism novel-hero-prism-e"></span>
+			</div>
+
+			<canvas
+				class="novel-hero-particle-field"
+				data-novel-hero-particles
+				data-hero-depth="0.9"
+				aria-hidden="true"
+			></canvas>
+
+			<div
+				class="novel-hero-character-aura"
+				data-hero-depth="0.3"
+				aria-hidden="true"
+			>
+				<span class="novel-character-halo novel-character-halo-a"></span>
+				<span class="novel-character-halo novel-character-halo-b"></span>
+				<span class="novel-character-floor-glow"></span>
+				<span class="novel-character-mist"></span>
+			</div>
+
+			{library.length > 0 && (
+				<div class="novel-library-showcase" data-hero-depth="0.35" aria-hidden="true">
+					{library.map((record, index) => {
+						const { series } = record;
+						const showcase = series.data.showcase;
+						const image = showcase.image || series.data.hero || series.data.cover;
+						const style = [
+							`--showcase-position: ${showcase.position}`,
+							`--showcase-scale: ${showcase.scale}`,
+							`--showcase-hue: ${series.data.accentHue}`,
+						].join("; ");
+
+						return (
+							<div
+								class:list={[
+									"novel-library-showcase-item",
+									index === 0 && "is-active",
+								]}
+								data-showcase-item={series.data.novelId}
+								style={style}
+							>
+								{image ? (
+									<div class="novel-showcase-character-stack">
+										<img
+											class="novel-showcase-character-ghost"
+											src={image}
+											alt=""
+											loading={index === 0 ? "eager" : "lazy"}
+											decoding="async"
+										/>
+										<img
+											class="novel-showcase-character-edge"
+											src={image}
+											alt=""
+											loading={index === 0 ? "eager" : "lazy"}
+											decoding="async"
+										/>
+										<img
+											class="novel-showcase-character-main"
+											src={image}
+											alt=""
+											loading={index === 0 ? "eager" : "lazy"}
+											decoding="async"
+										/>
+									</div>
+								) : (
+									<div class="novel-showcase-fallback">
+										<span>{series.data.title}</span>
+									</div>
+								)}
+							</div>
+						);
+					})}
+				</div>
+			)}
+		</header>
+
+		<div class="novel-section-heading novel-section-heading-simple">
+			<div>
+				<p class="novel-section-kicker">STORIES</p>
+				<h2 class="novel-section-title text-90">作品</h2>
+			</div>
+			<p class="novel-section-note text-30">挑一个故事，慢慢读下去。</p>
+		</div>
+
+		{library.length > 0 ? (
+			<div class="space-y-4">
+				{library.map((record) => <NovelCard record={record} />)}
+			</div>
+		) : (
+			<section class="card-base mt-4 px-6 py-16 text-center">
+				<p class="text-75 text-xl font-bold">故事还在路上</p>
+				<p class="text-30 mt-2">第一部作品准备好后，会在这里与大家见面。</p>
+			</section>
+		)}
+	</div>
+</NovelLayout>

@@ -5,9 +5,12 @@ import { url } from "../../utils/url-utils";
 
 interface Props {
 	links: NavBarLink[];
+	isNovelPage?: boolean;
 }
 
-const links = Astro.props.links;
+const { links, isNovelPage = false } = Astro.props;
+const crossesLayoutBoundary = (href: string) =>
+	isNovelPage !== href.startsWith("/novels/");
 ---
 <div id="nav-menu-panel" class:list={["float-panel float-panel-closed absolute transition-all fixed right-4 px-2 py-2"]}>
     {links.map((link) => (
@@ -15,6 +18,7 @@ const links = Astro.props.links;
             hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition
         "
            target={link.external ? "_blank" : null}
+           data-no-swup={!link.external && crossesLayoutBoundary(link.url) ? "true" : undefined}
         >
             <div class="transition text-black/75 dark:text-white/75 font-bold group-hover:text-[var(--primary)] group-active:text-[var(--primary)]">
                 {link.name}

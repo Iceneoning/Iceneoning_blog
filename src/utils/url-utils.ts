@@ -16,6 +16,17 @@ export function getPostUrlBySlug(slug: string): string {
 	return url(`/posts/${slug}/`);
 }
 
+export function getNovelUrl(novelId: string): string {
+	return url(`/novels/${novelId}/`);
+}
+
+export function getNovelChapterUrl(
+	novelId: string,
+	chapterId: string,
+): string {
+	return url(`/novels/${novelId}/${chapterId}/`);
+}
+
 export function getTagUrl(tag: string): string {
 	if (!tag) return url("/archive/");
 	return url(`/archive/?tag=${encodeURIComponent(tag.trim())}`);

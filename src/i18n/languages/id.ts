@@ -2,18 +2,13 @@ import Key from "../i18nKey";
 import type { Translation } from "../translation";
 
 export const id: Translation = {
-	[Key.home]: "Beranda",
-	[Key.about]: "Tentang",
 	[Key.archive]: "Arsip",
 	[Key.search]: "Cari",
 
 	[Key.tags]: "Tag",
 	[Key.categories]: "Kategori",
-	[Key.recentPosts]: "Postingan Terbaru",
 
-	[Key.comments]: "Komentar",
 
-	[Key.untitled]: "Tanpa Judul",
 	[Key.uncategorized]: "Tanpa Kategori",
 	[Key.noTags]: "Tanpa Tag",
 

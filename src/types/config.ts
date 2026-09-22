@@ -21,16 +21,6 @@ export type SiteConfig = {
 		hue: number;
 		fixed: boolean;
 	};
-	banner: {
-		enable: boolean;
-		src: string;
-		position?: "top" | "center" | "bottom";
-		credit: {
-			enable: boolean;
-			text: string;
-			url?: string;
-		};
-	};
 	toc: {
 		enable: boolean;
 		depth: 1 | 2 | 3;
@@ -45,12 +35,6 @@ export type Favicon = {
 	sizes?: string;
 };
 
-export enum LinkPreset {
-	Home = 0,
-	Archive = 1,
-	About = 2,
-}
-
 export type NavBarLink = {
 	name: string;
 	url: string;
@@ -58,7 +42,7 @@ export type NavBarLink = {
 };
 
 export type NavBarConfig = {
-	links: (NavBarLink | LinkPreset)[];
+	links: NavBarLink[];
 };
 
 export type ProfileConfig = {

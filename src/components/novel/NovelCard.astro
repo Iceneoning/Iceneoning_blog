@@ -1,0 +1,88 @@
+---
+import type { NovelRecord } from "@utils/novel-utils";
+import { formatNovelDate, getFirstChapterUrl } from "@utils/novel-utils";
+import { getNovelUrl } from "@utils/url-utils";
+import { Icon } from "astro-icon/components";
+
+interface Props {
+	record: NovelRecord;
+}
+
+const { record } = Astro.props;
+const { series, chapters, latestPublished } = record;
+const detailUrl = getNovelUrl(series.data.novelId);
+const readingUrl = getFirstChapterUrl(record) ?? detailUrl;
+const accentStyle = `--novel-accent-hue: ${series.data.accentHue}`;
+---
+
+<article
+	class="novel-card novel-work-card card-base grid gap-6 p-5 sm:p-6 md:grid-cols-[11rem_minmax(0,1fr)] md:gap-7 lg:p-7"
+	style={accentStyle}
+	data-pagefind-body
+	data-showcase-target={series.data.novelId}
+>
+	<a
+		href={detailUrl}
+		class="novel-cover novel-work-cover mx-auto w-full max-w-[12rem] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--primary)] md:max-w-none"
+		aria-label={`查看《${series.data.title}》作品页`}
+	>
+		{series.data.cover ? (
+			<img
+				src={series.data.cover}
+				alt={`《${series.data.title}》封面`}
+				loading="lazy"
+				width="480"
+				height="640"
+			/>
+		) : (
+			<div class="novel-cover-mark" aria-hidden="true">
+				<span class="novel-cover-code">NOVEL</span>
+				<strong>{series.data.title}</strong>
+				<span class="novel-cover-rule"></span>
+			</div>
+		)}
+	</a>
+
+	<div class="novel-work-copy flex min-w-0 flex-col justify-center">
+		<div class="novel-work-topline">
+			<span class="novel-status-soft">{series.data.status}</span>
+			<span class="text-30 text-sm">{series.data.tags.join(" · ")}</span>
+		</div>
+
+		<a href={detailUrl} class="group mt-4 block w-fit no-underline">
+			<h2
+				data-pagefind-meta="title"
+				class="novel-work-title text-90 transition group-hover:text-[var(--primary)]"
+			>
+				{series.data.title}
+			</h2>
+		</a>
+
+		{series.data.subtitle && (
+			<p class="novel-work-subtitle text-50 mt-1.5">{series.data.subtitle}</p>
+		)}
+
+		<p class="novel-work-summary text-75 mt-4 max-w-2xl">
+			{series.data.description}
+		</p>
+
+		<div class="novel-work-footer mt-6">
+			<div class="novel-work-meta text-30 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
+				<span>{chapters.length} 章节</span>
+				{latestPublished && (
+					<time datetime={latestPublished.toISOString()}>
+						最近更新 {formatNovelDate(latestPublished, true)}
+					</time>
+				)}
+			</div>
+
+			<a
+				href={readingUrl}
+				class="novel-primary-action h-11 shrink-0 gap-2 rounded-xl px-5 font-bold no-underline"
+			>
+				{chapters.length > 0 ? "开始阅读" : "查看作品"}
+				<Icon name="material-symbols:arrow-forward-rounded" class="text-lg" />
+			</a>
+		</div>
+	</div>
+</article>

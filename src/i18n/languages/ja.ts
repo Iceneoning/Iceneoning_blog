@@ -2,18 +2,13 @@ import Key from "../i18nKey";
 import type { Translation } from "../translation";
 
 export const ja: Translation = {
-	[Key.home]: "Home",
-	[Key.about]: "About",
 	[Key.archive]: "Archive",
 	[Key.search]: "検索",
 
 	[Key.tags]: "タグ",
 	[Key.categories]: "カテゴリ",
-	[Key.recentPosts]: "最近の投稿",
 
-	[Key.comments]: "コメント",
 
-	[Key.untitled]: "タイトルなし",
 	[Key.uncategorized]: "カテゴリなし",
 	[Key.noTags]: "タグなし",
 

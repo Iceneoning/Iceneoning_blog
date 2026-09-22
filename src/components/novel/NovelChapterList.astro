@@ -1,0 +1,98 @@
+---
+import type { NovelChapterEntry, NovelRecord } from "@utils/novel-utils";
+import { formatNovelDate } from "@utils/novel-utils";
+import { getNovelChapterUrl } from "@utils/url-utils";
+import { Icon } from "astro-icon/components";
+
+interface Props {
+	record: NovelRecord;
+}
+
+const { record } = Astro.props;
+const { series, chapters } = record;
+const latestChapterId = chapters.at(-1)?.data.chapterId;
+const groups = chapters.reduce<
+	Array<{ volume: number; title: string; chapters: NovelChapterEntry[] }>
+>((accumulator, chapter) => {
+	const current = accumulator.at(-1);
+	if (!current || current.volume !== chapter.data.volume) {
+		accumulator.push({
+			volume: chapter.data.volume,
+			title: chapter.data.volumeTitle,
+			chapters: [chapter],
+		});
+	} else {
+		current.chapters.push(chapter);
+	}
+	return accumulator;
+}, []);
+---
+
+<section class="card-base mt-4 px-4 py-6 sm:px-8 sm:py-8" aria-labelledby="chapter-list-title">
+	<div class="mb-7 flex items-end justify-between gap-4">
+		<div>
+			<p class="novel-eyebrow mb-2">Contents</p>
+			<h2 id="chapter-list-title" class="text-90 text-2xl font-bold">章节目录</h2>
+		</div>
+		<span class="text-30 text-sm">共 {chapters.length} 章</span>
+	</div>
+
+	{groups.length > 0 ? (
+		<div class="space-y-8">
+			{groups.map((group) => (
+				<section aria-labelledby={`volume-${group.volume}`}>
+					<h3
+						id={`volume-${group.volume}`}
+						class="text-50 mb-3 text-sm font-bold tracking-wide"
+					>
+						第 {group.volume} 卷{group.title ? ` · ${group.title}` : ""}
+					</h3>
+					<div class="divide-y divide-black/[0.07] border-y border-black/[0.07] dark:divide-white/[0.08] dark:border-white/[0.08]">
+						{group.chapters.map((chapter) => (
+							<a
+								href={getNovelChapterUrl(series.data.novelId, chapter.data.chapterId)}
+								class="novel-chapter-row group grid min-h-16 grid-cols-[2.6rem_minmax(0,1fr)_auto] items-center gap-2 rounded-lg px-2 no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)] sm:grid-cols-[3.25rem_minmax(0,1fr)_auto] sm:px-3"
+								data-novel-chapter
+								data-novel-id={series.data.novelId}
+								data-chapter-id={chapter.data.chapterId}
+								data-chapter-order={chapter.data.order}
+							>
+								<span class="text-30 font-mono text-sm">
+									{String(chapter.data.chapter).padStart(2, "0")}
+								</span>
+								<span class="min-w-0 py-3">
+									<span class="novel-chapter-title text-75 block truncate font-medium transition group-hover:text-[var(--primary)]">
+										{chapter.data.title}
+									</span>
+									<span class="novel-read-indicator text-30 mt-0.5 block min-h-4 text-xs sm:hidden"></span>
+								</span>
+								<span class="flex items-center gap-3 pl-2">
+									<span class="novel-read-indicator text-30 hidden min-w-7 text-right text-xs sm:inline"></span>
+									{chapter.data.chapterId === latestChapterId && (
+										<span class="rounded-full bg-[var(--btn-regular-bg)] px-2 py-0.5 text-[0.65rem] font-bold text-[var(--primary)]">
+											最新
+										</span>
+									)}
+									<time
+										datetime={chapter.data.published.toISOString()}
+										class="text-30 hidden text-xs md:inline"
+									>
+										{formatNovelDate(chapter.data.published)}
+									</time>
+									<Icon
+										name="material-symbols:chevron-right-rounded"
+										class="text-lg text-[var(--primary)]"
+									/>
+								</span>
+							</a>
+						))}
+					</div>
+				</section>
+			))}
+		</div>
+	) : (
+		<div class="py-12 text-center">
+			<p class="text-50">章节尚在风里，过些时候再来看看吧。</p>
+		</div>
+	)}
+</section>

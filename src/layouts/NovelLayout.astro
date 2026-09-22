@@ -1,0 +1,56 @@
+---
+import BackToTop from "@components/control/BackToTop.astro";
+import Footer from "@components/Footer.astro";
+import Navbar from "@components/Navbar.astro";
+import Layout from "@layouts/Layout.astro";
+import "../styles/novel.css";
+
+interface Props {
+	title?: string;
+	description?: string;
+	lang?: string;
+	image?: string;
+	article?: boolean;
+}
+
+const { title, description, lang, image, article = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+---
+
+<Layout
+	title={title}
+	description={description}
+	lang={lang}
+	image={image}
+	canonical={canonical}
+	setOGTypeArticle={article}
+>
+	<slot slot="head" name="head" />
+
+	<!-- Keep Navbar stable while only the page body transitions between layouts. -->
+	<div
+		id="top-row"
+		class="pointer-events-none relative z-50 mx-auto max-w-[var(--page-width)] px-0 transition-all duration-700 md:px-4"
+	>
+		<div
+			id="navbar-wrapper"
+			class="pointer-events-auto sticky top-0 transition-all"
+		>
+			<Navbar />
+		</div>
+	</div>
+
+	<div>
+		<div class="novel-shell relative z-30 mx-auto w-full max-w-[86rem] px-0 pb-2 pt-4 md:px-4">
+			<main id="swup-container" class="transition-swup-fade min-h-[65vh]">
+				<slot />
+				<div class="novel-footer">
+					<Footer />
+				</div>
+			</main>
+
+			<div id="toc" aria-hidden="true"></div>
+			<BackToTop />
+		</div>
+	</div>
+</Layout>

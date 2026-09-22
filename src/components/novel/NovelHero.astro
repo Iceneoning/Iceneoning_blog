@@ -1,0 +1,89 @@
+---
+import type { NovelRecord } from "@utils/novel-utils";
+import { getFirstChapterUrl } from "@utils/novel-utils";
+import { Icon } from "astro-icon/components";
+
+interface Props {
+	record: NovelRecord;
+}
+
+const { record } = Astro.props;
+const { series, chapters } = record;
+const firstChapterUrl = getFirstChapterUrl(record);
+const heroImage = series.data.hero ? `url('${series.data.hero}')` : "none";
+const accentStyle = `--novel-accent-hue: ${series.data.accentHue}; --novel-hero-image: ${heroImage}`;
+---
+
+<section
+	class="novel-hero card-base grid gap-7 p-5 sm:p-7 md:grid-cols-[12rem_minmax(0,1fr)] md:gap-8 lg:p-8"
+	style={accentStyle}
+	data-pagefind-body
+>
+	<div class="novel-cover novel-hero-cover mx-auto w-full max-w-[13rem] md:max-w-none">
+		{series.data.cover ? (
+			<img
+				src={series.data.cover}
+				alt={`《${series.data.title}》封面`}
+				loading="eager"
+				fetchpriority="high"
+				width="480"
+				height="640"
+			/>
+		) : (
+			<div class="novel-cover-mark" aria-hidden="true">
+				<span class="novel-cover-code">NOVEL</span>
+				<strong>{series.data.title}</strong>
+				<span class="novel-cover-rule"></span>
+			</div>
+		)}
+	</div>
+
+	<div class="novel-hero-copy flex min-w-0 flex-col justify-center">
+		<div class="novel-hero-meta-line">
+			<span class="novel-status-soft novel-status-soft-on-dark">{series.data.status}</span>
+			<span>{series.data.tags.join(" · ")}</span>
+		</div>
+
+		<h1
+			data-pagefind-meta="title"
+			class="novel-hero-title novel-glow-title mt-5"
+		>
+			{series.data.title}
+		</h1>
+
+		{series.data.subtitle && (
+			<p class="novel-hero-subtitle novel-glow-subtitle mt-2">{series.data.subtitle}</p>
+		)}
+
+		<p class="novel-hero-summary mt-5 max-w-2xl">
+			{series.data.description}
+		</p>
+
+		<div class="novel-hero-meta mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+			<span>{series.data.author}</span>
+			<span>{chapters.length} 章节</span>
+		</div>
+
+		{firstChapterUrl && (
+			<div class="mt-7 flex flex-wrap gap-3">
+				<a
+					href={firstChapterUrl}
+					class="novel-primary-action novel-primary-action-light h-11 gap-2 rounded-xl px-5 font-bold no-underline"
+				>
+					<Icon name="material-symbols:menu-book-outline-rounded" class="text-lg" />
+					从第一章开始
+				</a>
+				<a
+					href={firstChapterUrl}
+					hidden
+					data-novel-continue
+					data-novel-id={series.data.novelId}
+					class="novel-secondary-action hidden h-11 gap-2 rounded-xl px-5 font-bold no-underline"
+				>
+					<Icon name="material-symbols:resume-rounded" class="text-lg" />
+					继续阅读
+				</a>
+			</div>
+		)}
+	</div>
+</section>

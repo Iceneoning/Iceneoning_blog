@@ -1,0 +1,138 @@
+---
+import Markdown from "@components/misc/Markdown.astro";
+import type { NovelChapterEntry, NovelSeriesEntry } from "@utils/novel-utils";
+import { formatNovelDate } from "@utils/novel-utils";
+import { getNovelChapterUrl, getNovelUrl } from "@utils/url-utils";
+import { Icon } from "astro-icon/components";
+
+interface Props {
+	series: NovelSeriesEntry;
+	chapter: NovelChapterEntry;
+	previous?: NovelChapterEntry;
+	next?: NovelChapterEntry;
+}
+
+const { series, chapter, previous, next } = Astro.props;
+const novelUrl = getNovelUrl(series.data.novelId);
+
+function chapterLabel(entry: NovelChapterEntry) {
+	return `第 ${entry.data.chapter} 章 · ${entry.data.title}`;
+}
+---
+
+<div class="novel-reading-track" aria-hidden="false">
+	<div
+		class="novel-reading-progress"
+		data-reading-progress
+		role="progressbar"
+		aria-label="本章阅读进度"
+		aria-valuemin="0"
+		aria-valuemax="100"
+		aria-valuenow="0"
+	></div>
+</div>
+
+<div class="novel-reader-stage" data-reader-settings-root>
+	<div class="novel-reader-wrap">
+		<article
+			class="novel-reader-card card-base"
+			data-novel-reader
+			data-novel-id={series.data.novelId}
+			data-chapter-id={chapter.data.chapterId}
+			data-chapter-order={chapter.data.order}
+		>
+			<header class="novel-reader-header" data-pagefind-body>
+				<div class="novel-reader-topline">
+					<a
+						href={novelUrl}
+						class="novel-reader-series no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--primary)]"
+					>
+						{series.data.title}
+					</a>
+					<time datetime={chapter.data.published.toISOString()}>
+						{formatNovelDate(chapter.data.published)}
+					</time>
+				</div>
+
+				<p class="novel-reader-chapter-label">第 {chapter.data.chapter} 章</p>
+				<h1
+					data-pagefind-meta="title"
+					class="novel-reader-title text-90"
+				>
+					{chapter.data.title}
+				</h1>
+
+				<p class="novel-reader-submeta">
+					第 {chapter.data.volume} 卷{chapter.data.volumeTitle ? ` · ${chapter.data.volumeTitle}` : ""}
+				</p>
+			</header>
+
+			<div class="novel-reader-divider" aria-hidden="true"></div>
+
+			<div class="novel-reader-body" data-novel-prose data-pagefind-ignore>
+				<Markdown class="novel-prose" pagefind={false}>
+					<slot />
+				</Markdown>
+			</div>
+		</article>
+
+		<div class="novel-reader-floating-toolbar" data-reader-toolbar aria-label="阅读工具">
+			<span class="novel-reader-percent" data-reading-percent>0%</span>
+			<a href={novelUrl} class="novel-reader-toolbar-action no-underline">
+				<Icon name="material-symbols:format-list-bulleted-rounded" class="text-lg" />
+				<span>目录</span>
+			</a>
+			<button type="button" class="novel-reader-toolbar-action" data-reader-font="decrease">
+				A−
+			</button>
+			<button type="button" class="novel-reader-toolbar-action" data-reader-font="increase">
+				A+
+			</button>
+			<button type="button" class="novel-reader-toolbar-action" data-reader-line-height>
+				行距
+			</button>
+			<button type="button" class="novel-reader-toolbar-action" data-reader-top>
+				<Icon name="material-symbols:vertical-align-top-rounded" class="text-lg" />
+				<span>顶部</span>
+			</button>
+		</div>
+
+		<nav class="novel-reader-nav mt-4 grid gap-3 sm:grid-cols-2" aria-label="章节导航">
+			{previous ? (
+				<a
+					href={getNovelChapterUrl(series.data.novelId, previous.data.chapterId)}
+					class="btn-card min-h-20 justify-start gap-3 rounded-2xl px-5 text-left font-bold no-underline"
+					rel="prev"
+				>
+					<Icon name="material-symbols:chevron-left-rounded" class="shrink-0 text-2xl text-[var(--primary)]" />
+					<span class="min-w-0">
+						<span class="text-30 block text-xs font-medium">上一章</span>
+						<span class="text-75 mt-1 block truncate">{chapterLabel(previous)}</span>
+					</span>
+				</a>
+			) : (
+				<span class="card-base text-30 flex min-h-20 items-center justify-center rounded-2xl px-5 text-sm">
+					已经是第一章
+				</span>
+			)}
+
+			{next ? (
+				<a
+					href={getNovelChapterUrl(series.data.novelId, next.data.chapterId)}
+					class="btn-card min-h-20 justify-end gap-3 rounded-2xl px-5 text-right font-bold no-underline"
+					rel="next"
+				>
+					<span class="min-w-0">
+						<span class="text-30 block text-xs font-medium">下一章</span>
+						<span class="text-75 mt-1 block truncate">{chapterLabel(next)}</span>
+					</span>
+					<Icon name="material-symbols:chevron-right-rounded" class="shrink-0 text-2xl text-[var(--primary)]" />
+				</a>
+			) : (
+				<span class="card-base text-30 flex min-h-20 items-center justify-center rounded-2xl px-5 text-sm">
+					已读到目前的最后一章
+				</span>
+			)}
+		</nav>
+	</div>
+</div>
