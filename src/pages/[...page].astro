@@ -27,7 +27,6 @@ const featuredImageBasePath = featuredPost?.data.image
 	? path.join("content/posts/", getDir(featuredPost.id))
 	: "";
 ---
-
 <MainGridLayout>
 	{isFirstPage && featuredPost && (
 		<section class="home-navigation card-base p-4 mb-4">

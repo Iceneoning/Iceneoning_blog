@@ -1,0 +1,101 @@
+<div id="site-technical-grid" aria-hidden="true"></div>
+
+<script>
+import "../../scripts/site-graphics-layer";
+</script>
+
+<style is:global>
+/*
+ * Technical Grid Overlay
+ *
+ * 只在屏幕外围显示程序化网格与节点，并位于主 UI 上方；
+ * 中央区域通过 mask 完全淡出，因此不会覆盖正文阅读区。
+ */
+#site-technical-grid {
+	position: fixed;
+	inset: 0;
+	z-index: 40;
+	pointer-events: none;
+	opacity: 0.22;
+	background-image:
+		linear-gradient(
+			to right,
+			color-mix(in srgb, var(--primary) 42%, transparent) 1px,
+			transparent 1px
+		),
+		linear-gradient(
+			to bottom,
+			color-mix(in srgb, var(--primary) 42%, transparent) 1px,
+			transparent 1px
+		),
+		radial-gradient(
+			circle at 1px 1px,
+			color-mix(in srgb, var(--primary) 70%, white 30%) 1.25px,
+			transparent 1.7px
+		);
+	background-size: 72px 72px, 72px 72px, 72px 72px;
+	mask-image: radial-gradient(
+		ellipse 72% 70% at center,
+		transparent 0%,
+		transparent 48%,
+		rgba(0, 0, 0, 0.14) 63%,
+		black 88%,
+		black 100%
+	);
+	-webkit-mask-image: radial-gradient(
+		ellipse 72% 70% at center,
+		transparent 0%,
+		transparent 48%,
+		rgba(0, 0, 0, 0.14) 63%,
+		black 88%,
+		black 100%
+	);
+}
+
+:root.dark #site-technical-grid {
+	opacity: 0.3;
+}
+
+/*
+ * Mouse Edge Light
+ *
+ * 只在当前鼠标所在的卡片边缘显示一小段主题色高光。
+ * 它不改变卡片背景，也不参与布局；坐标由 site-graphics-layer.ts 写入。
+ */
+.site-card-edge-light {
+	position: absolute;
+	inset: 0;
+	z-index: 20;
+	border-radius: inherit;
+	padding: 1px;
+	pointer-events: none;
+	opacity: 0.82;
+	background: radial-gradient(
+		180px circle at var(--site-edge-light-x, 50%) var(--site-edge-light-y, 50%),
+		color-mix(in srgb, var(--primary) 78%, white 22%) 0%,
+		color-mix(in srgb, var(--primary) 48%, transparent) 34%,
+		transparent 72%
+	);
+	-webkit-mask:
+		linear-gradient(#000 0 0) content-box,
+		linear-gradient(#000 0 0);
+	-webkit-mask-composite: xor;
+	mask:
+		linear-gradient(#000 0 0) content-box,
+		linear-gradient(#000 0 0);
+	mask-composite: exclude;
+}
+
+@media (max-width: 900px), (pointer: coarse) {
+	#site-technical-grid,
+	.site-card-edge-light {
+		display: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.site-card-edge-light {
+		transition: none;
+	}
+}
+</style>

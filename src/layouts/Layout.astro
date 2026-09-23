@@ -8,6 +8,8 @@ import "../styles/transition.css";
 import "../styles/variables.styl";
 import ConfigCarrier from "@components/ConfigCarrier.astro";
 import MouseSparkEffect from "@components/effects/MouseSparkEffect.astro";
+
+import SiteGraphicsLayer from "@components/effects/SiteGraphicsLayer.astro";
 import roboto400 from "@fontsource/roboto/files/roboto-latin-400-normal.woff2";
 import roboto700 from "@fontsource/roboto/files/roboto-latin-700-normal.woff2";
 import { backgroundConfig, profileConfig, siteConfig } from "@/config";
@@ -60,6 +62,7 @@ const siteLang = lang.replace("_", "-");
 const backgroundImageUrl = backgroundConfig.src.startsWith("/")
 	? url(backgroundConfig.src)
 	: backgroundConfig.src;
+
 const socialImageUrl = image
 	? image.startsWith("http://") || image.startsWith("https://")
 		? image
@@ -174,6 +177,7 @@ const socialImageUrl = image
 			</>
 		)}
 		<div id="site-content">
+			{backgroundConfig.enable && <SiteGraphicsLayer />}
 			<ConfigCarrier></ConfigCarrier>
 			<MouseSparkEffect></MouseSparkEffect>
 			<slot />
@@ -204,7 +208,7 @@ const socialImageUrl = image
 		background-size: cover;
 		background-position: center;
 		background-repeat: no-repeat;
-		transform: scale(var(--site-bg-scale));
+		transform: translate3d(var(--site-bg-parallax-x, 0px), var(--site-bg-parallax-y, 0px), 0) scale(var(--site-bg-scale));
 		transform-origin: center;
 		will-change: transform;
 	}

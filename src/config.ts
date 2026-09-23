@@ -32,6 +32,7 @@ export const siteConfig: SiteConfig = {
 export const backgroundConfig = {
 	enable: true,
 	src: "/background/site-bg.webp", // Path relative to /public when it starts with '/'
+	
 	blur: 0, // Blur radius in px for frosted effect
 	overlayLight: 0.42, // Light mode overlay opacity
 	overlayDark: 0.5, // Dark mode overlay opacity
