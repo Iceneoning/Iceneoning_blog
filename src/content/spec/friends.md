@@ -2,7 +2,7 @@
 friends:
   - name: 社亦园
     url: https://blog.sheyiyuan.com/
-    avatar: /Portrait/SheYiYuan.png
+    avatar: /Portrait/SheYiYuan.webp
     description: 记录前端、设计和生活片段。
   - name: 吟风
     url: https://www.windchant.online/

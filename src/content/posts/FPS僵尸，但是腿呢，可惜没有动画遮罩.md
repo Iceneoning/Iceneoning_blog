@@ -2,7 +2,7 @@
 title: FPS僵尸，但是腿呢，可惜没有动画遮罩
 published: 2026-08-31
 description: "从逆向分析一个 UE5 FPS 实例项目开始，记录射击系统、动画蓝图协作与一帧时序错位的排查过程。"
-image: "/images/Posts/FPS僵尸，但是腿呢，可惜没有动画遮罩/0.png"
+image: "/images/Posts/FPS僵尸，但是腿呢，可惜没有动画遮罩/0.webp"
 tags: ["Unreal Engine", "UE5", "FPS", "Animation Blueprint", "逆向工程", "游戏开发"]
 category: 代码
 draft: false
