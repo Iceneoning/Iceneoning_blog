@@ -1,5 +1,7 @@
 # 全站视觉系统重构与 Depth Map Parallax 方案
 
+> **DEPRECATED / 已过时（2026-10-08）**：本文用于说明 Fog 与 Depth Map 为什么被撤回。回退结论仍有参考意义，但后续局部美化路线和效果参数已由 [05～09 现行规范](../V0.2_冰霜旅途/05_冰霜旅途全站视觉重构总览.md) 取代；**不要重新实现 Depth Map、全屏 Fog 或旧 Graphics Layer 方案**。
+
 > 版本：Refactor V1.2  
 > 状态：Depth Map Parallax 已回退，恢复单层 Pointer Parallax  
 > 目标：背景原画优先，视觉增强局部化、交互化

@@ -1,5 +1,7 @@
 # 小说馆 Hero 图形化实现方案
 
+> **DEPRECATED / 已过时（2026-10-08）**：本文的多层实时光场、轨道、Canvas 粒子与角色多层光晕是历史实现探索，不能作为新施工要求。现行参考：[05 总览](../V0.2_冰霜旅途/05_冰霜旅途全站视觉重构总览.md)、[07 背景与航线](../V0.2_冰霜旅途/07_冰霜旅途背景与航线系统规范.md)。Showcase 资料结构应另以当前源码/功能文档核验，不因废弃旧视觉而删除。
+
 > 版本：Visual V3.7
 >
 > 目标：把小说馆 Hero 从“CSS 装饰集合”升级为可维护的 2.5D 实时图形层。
@@ -203,5 +205,5 @@ src/scripts/novel-hero-effects.ts
 src/scripts/novel-showcase.ts
 src/styles/novel.css
 src/layouts/Layout.astro
-docs/美化方案/02_小说馆Hero图形化实现方案.md
+docs/美化方案/V0.1_历史视觉实验/02_小说馆Hero图形化实现方案.md
 ```
