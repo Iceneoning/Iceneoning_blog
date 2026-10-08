@@ -2,7 +2,7 @@
 title: “MC 大殖民时代”？营销号先死一死：所谓 MC 移植 GTA，其背后发生了什么
 published: 2026-10-05
 description: "从 universal-modder 的 Minecraft × GTA Demo 出发，解释 Passthrough、跨游戏状态同步、渲染合成、Decomp Library，以及所谓“游戏移植”究竟发生了什么。"
-image: "/images/Posts/“MC 大殖民时代”？营销号先死一死：所谓 MC 移植 GTA，其背后发生了什么/1《我的世界》闯入洛圣都.webp"
+image: "/images/Posts/universal-modder/1《我的世界》闯入洛圣都.webp"
 tags: ["AI", "游戏开发", "Mod", "Minecraft", "GTA5", "逆向工程"]
 category: 代码
 draft: false
@@ -54,7 +54,7 @@ Minecraft
 GTA5 Minecraft Mod
 ```
 
-甚至还能继续脑补：（这里还需要直白一点，面向非技术人员也能看懂   |）
+甚至很容易把它理解成一个“万能游戏转换器”：只要把 Minecraft 丢进去，再指定一个目标游戏，它就能自动变成对应的 Mod。
 
 ```text
 Minecraft
@@ -81,7 +81,8 @@ universal-modder
     ↓
 任何游戏
 ```
-（与上面括号内容呼应  |）
+如果真是这样，那意思就很简单了：今天是 GTA5，明天换成《艾尔登法环》、Skyrim，后天理论上什么游戏都能塞。
+
 好家伙。
 
 MC 真要开始大殖民了。
@@ -92,7 +93,8 @@ MC 真要开始大殖民了。
 
 打开《赛博朋克 2077》，荒坂塔顶上有人搭火柴盒。
 
-（这里加入我从github上寻找这个项目）
+于是我顺着视频里出现的项目名去 GitHub 找到了它，准备看看这东西到底是怎么实现的。
+
 再结合这个项目的名字：
 
 **`universal-modder`。**
@@ -136,7 +138,10 @@ Modder。
 ---
 
 ## 因为真正发生的事情是：两个游戏都开着
-（加入“从头到尾，甚至可以说是无知者的狂欢和带偏大众任职”之类的说法）
+
+到这里也能看出来，前面那些“完整移植”的说法从一开始就把概念带偏了。
+
+说难听点，这已经有点像一场无知者的狂欢：标题越传越夸张，真正的技术事实反而被丢在后面。
 
 这件事第一次看可能有点反直觉。
 
@@ -207,7 +212,7 @@ GTA5.exe
 
 **Passthrough Mod。**
 
-![Minecraft 与 GTA5 同时运行，并通过 Bridge 同步关键数据](/images/Posts/“MC 大殖民时代”？营销号先死一死：所谓 MC 移植 GTA，其背后发生了什么/2.webp)
+![Minecraft 与 GTA5 同时运行，并通过 Bridge 同步关键数据](/images/Posts/universal-modder/2.webp)
 
 `universal-modder` 给出的示例项目本身就叫：
 
@@ -219,7 +224,7 @@ GTA5.exe
 
 如果非要翻译成人话，更接近：
 
-> “Minecraft 和 GTA 同时在后台跑，然后有人搭了一座桥（这里加一个简短的解释（桥接层之类的）），让两个游戏假装自己生活在同一个世界里。”
+> “Minecraft 和 GTA 同时在后台跑，然后有人搭了一座桥。这里的‘桥’不是地图里的桥，而是一层桥接程序：专门在两个游戏进程之间传位置、摄像机、碰撞和事件。最后再把两边画面合到一起，于是玩家看起来就像真的处在同一个世界里。”
 
 到这里，这件事情反而开始比“简单移植”有意思了。
 
@@ -254,6 +259,10 @@ universal-modder
 它更像是一整套给 AI Agent 准备的：
 
 **游戏 Mod / 逆向 / 自动化工程工具链。**
+
+这里先记住一个后面还会出现的概念：**Decomp Library**。
+
+它不是让两个完整游戏同时运行，而是把一个游戏的一部分原始逻辑经过逆向、反编译和整理，变成宿主程序可以直接调用的 Library。这个思路比“万能移植”更接近 `universal-modder` 真正想覆盖的技术边界，后面会专门展开。
 
 简单来说，它想做的事情不是：
 
@@ -409,7 +418,7 @@ Steve 永远都会显示在大楼前面。
 
 **Depth Buffer。**
 
-![Render Fusion 中直接叠图与使用 Depth Buffer 合成的区别](/images/Posts/“MC 大殖民时代”？营销号先死一死：所谓 MC 移植 GTA，其背后发生了什么/3.webp)
+![Render Fusion 中直接叠图与使用 Depth Buffer 合成的区别](/images/Posts/universal-modder/3.webp)
 
 ---
 
@@ -614,7 +623,7 @@ Z = 前后
 
 它的世界本身就是非常干净的离散坐标。
 
-![Minecraft 与 GTA V 之间的关键状态同步](/images/Posts/“MC 大殖民时代”？营销号先死一死：所谓 MC 移植 GTA，其背后发生了什么/4.webp)
+![Minecraft 与 GTA V 之间的关键状态同步](/images/Posts/universal-modder/4.webp)
 
 ---
 
@@ -848,7 +857,7 @@ Bridge 只是告诉双方：
 
 > 同一个位置，现在发生了一件叫“爆炸”的事情。
 
-![Gameplay Synchronization：两边的玩法事件产生对应影响](/images/Posts/“MC 大殖民时代”？营销号先死一死：所谓 MC 移植 GTA，其背后发生了什么/5.webp)
+![Gameplay Synchronization：两边的玩法事件产生对应影响](/images/Posts/universal-modder/5.webp)
 
 ---
 
@@ -1136,7 +1145,7 @@ Minecraft × GTA 之所以看起来特别自然，很大程度就是因为：
 
 `universal-modder` 还总结了另外几种思路。
 
-![Content Port、Passthrough、Decomp Library 与 Reimplementation 四种路线的区别](/images/Posts/“MC 大殖民时代”？营销号先死一死：所谓 MC 移植 GTA，其背后发生了什么/6.webp)
+![Content Port、Passthrough、Decomp Library 与 Reimplementation 四种路线的区别](/images/Posts/universal-modder/6.webp)
 
 最容易理解的是：
 
@@ -1182,7 +1191,7 @@ GTA5.exe
 
 ---
 
-## Decomp Library(这个知识我希望能放在前面能够重点介绍)
+## Decomp Library
 
 这个就更有意思了。
 
@@ -1224,276 +1233,7 @@ Game.exe
 
 这和 Passthrough 完全不同。
 
----（相关知识：
-可以这么理解，但我会把你的表述稍微修正一下，这样更准确。
-
-`Decomp Library` 先拆开看：
-
-- `Decomp` = decompilation，反编译 / 反编译重构
-- `Library` = 库
-
-它的核心不是“运行两个游戏”，而是把某个游戏或其中一部分逻辑，整理成一个可以被别的程序调用的库。
-
-比如原来有一个老游戏：
-
-```text
-Game.exe
- ├─ 玩家移动
- ├─ 物理
- ├─ 动画
- ├─ 敌人 AI
- ├─ 关卡逻辑
- └─ 渲染
-```
-
-经过反编译、逆向、重构之后，可以把其中一部分做成：
-
-```text
-libGame.dll
-
-UpdatePlayer()
-UpdatePhysics()
-UpdateEnemy()
-LoadLevel()
-...
-```
-
-然后另一个游戏就可以：
-
-```cpp
-GameLib_UpdatePlayer();
-GameLib_UpdatePhysics();
-```
-
-也就是说，宿主游戏不需要重新手写那个游戏的全部玩法逻辑，而是直接调用“原游戏逻辑库”。
-
-一个经典思路就是 `libsm64` 这种东西：把《Super Mario 64》的一部分游戏逻辑整理成库，然后其他程序可以直接让 Mario 按原来的物理和移动逻辑运行。
-
-所以它和刚才说的 Passthrough 区别很大：
-
-```text
-Passthrough
-
-Minecraft.exe        GTA5.exe
-     │                    │
-     └──── 同时运行 ──────┘
-              │
-          IPC 同步
-```
-
-而 Decomp Library 更像：
-
-```text
-GTA.exe
-   │
-   ├── GTA 自己的逻辑
-   │
-   └── 调用 MinecraftLib.dll
-             │
-             ├── 方块逻辑
-             ├── 生物逻辑
-             └── 物理逻辑
-```
-
-这里甚至可能根本没有 `Minecraft.exe`。
-
-Minecraft 的部分逻辑已经“嵌进”宿主程序里了。
-
-所以可以简单记：
-
-```text
-Content Port
-= 我模仿你
-
-Passthrough
-= 我们两个同时跑
-
-Decomp Library
-= 我把你的原逻辑拿过来直接调用
-
-Reimplementation
-= 我重新写一个你
-```
-
 ---
-
-至于你第二个问题：
-
-> 能同时将两个游戏的玩法同时渲染并同步给玩家？
-
-如果你说的是刚才 Minecraft × GTA 那种 Passthrough，基本可以这么说，但“玩法同时渲染”这个词稍微不严谨。
-
-更准确的是：
-
-> 两个游戏同时运行各自的玩法模拟，然后把选定的状态、事件和渲染结果同步/合成，最终让玩家感觉自己在玩一个统一的游戏世界。
-
-关键在“各自模拟”。
-
-比如：
-
-```text
-Minecraft
-负责：
-- Steve 移动
-- 方块
-- TNT
-- Minecraft 生物
-- Minecraft 物理
-
-GTA
-负责：
-- 汽车
-- NPC
-- 警察
-- GTA 世界
-- GTA 物理
-```
-
-然后桥接层做：
-
-```text
-Minecraft TNT 爆炸
-       ↓
-发送事件
-       ↓
-GTA 创建爆炸
-       ↓
-GTA 汽车被炸飞
-```
-
-反方向：
-
-```text
-GTA 地面高度
-       ↓
-同步给 MC
-       ↓
-MC 创建 invisible collision
-       ↓
-Steve 可以站在 GTA 马路上
-```
-
-所以从玩家视角看：
-
-```text
-       一个画面
-
-Steve ───── GTA 汽车
-  │             │
- MC逻辑       GTA逻辑
-  │             │
-  └────同步─────┘
-```
-
-这确实可以叫：
-
-> “两个游戏的玩法被同时呈现并同步给玩家。”
-
-只是底层实际上不是：
-
-```text
-一个游戏同时执行两套玩法
-```
-
-而更像：
-
-```text
-游戏 A Simulation
-        ↕
-     Bridge
-        ↕
-游戏 B Simulation
-        ↓
- Rendering Composition
-        ↓
-      玩家
-```
-
-还有一个很重要的限制：
-
-它一般不会同步两个游戏的“所有东西”。
-
-比如 GTA 里有：
-
-```text
-100 个 NPC
-100 辆车
-天气
-任务系统
-交通 AI
-物理
-动画
-音频
-粒子
-```
-
-Minecraft 也有一大堆状态。
-
-如果全部双向同步，复杂度会直接爆炸。
-
-所以实际一般是：
-
-```text
-只同步需要产生交互的状态
-```
-
-例如：
-
-```text
-玩家位置        ✓
-Camera          ✓
-地面高度        ✓
-方块位置        ✓
-爆炸事件        ✓
-攻击事件        ✓
-
-GTA 每辆车完整内部状态  ✗
-每个 NPC 全部 AI 状态   ✗
-所有 Minecraft chunk    ✗
-```
-
-这其实和你做 UE 网络同步很像。
-
-你不会把：
-
-```text
-Server 整个 World 内存
-```
-
-同步给 Client。
-
-而是选择：
-
-```text
-Actor Transform
-Health
-Gameplay Tags
-Ability Event
-FastArray data
-```
-
-进行 Replication。
-
-Passthrough 只是把这个概念扩大成了：
-
-> “两个完全不同的游戏进程之间做选择性 Replication。”
-
-你甚至可以把它粗略理解成：
-
-```text
-Minecraft ≈ 一个 Server/Simulation
-GTA       ≈ 另一个 Server/Simulation
-
-中间自己实现了一套跨游戏 Replication Protocol
-```
-
-再把两边的 Renderer 合成在一起。
-
-所以你那句话如果拿去和别人解释，我建议说：
-
-> “它让两个游戏同时运行，各自保留自己的玩法逻辑，再通过桥接层同步玩家位置、碰撞、攻击、爆炸之类的关键事件，并把两个游戏的画面合成，所以玩家看起来像是在一个世界里同时玩两个游戏。”
-
-这个表述基本就很准了。）
 
 ## Reimplementation
 
@@ -1535,7 +1275,9 @@ Decomp Library？
 
 作为技术事实：
 
-**还早得很（这里更换为任何游戏的殖民时代都可能到来，但是会根据设备的承受能力有所限制）。**
+**任何游戏的“大殖民时代”理论上都可能出现，但远不是一句“万能移植”就能概括的事。**
+
+它首先受制于目标游戏是否可修改、桥接与适配成本，以及机器能不能同时扛住两套游戏和额外的同步、合成开销。
 
 因为真正发生的事情并不是：
 
@@ -1595,7 +1337,7 @@ Render Composition
 
 **AI Agent 开始从“代码生成器”，往“工程执行者”发展了。**
 
-![AI Agent 从侦察、逆向、编码、构建、启动、观察、验证到迭代的完整工程闭环](/images/Posts/“MC 大殖民时代”？营销号先死一死：所谓 MC 移植 GTA，其背后发生了什么/7.webp)
+![AI Agent 从侦察、逆向、编码、构建、启动、观察、验证到迭代的完整工程闭环](/images/Posts/universal-modder/7.webp)
 
 它真正试图解决的问题是：
 

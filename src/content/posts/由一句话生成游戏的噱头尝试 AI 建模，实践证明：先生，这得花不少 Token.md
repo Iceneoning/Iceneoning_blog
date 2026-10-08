@@ -2,6 +2,7 @@
 title: 由一句话生成游戏的噱头尝试 AI 建模，实践证明：先生，这得花不少 Token
 published: 2026-10-05
 description: "从一把 UE5 武器的 AI 协作建模实践出发，聊聊一句话生成、工程验收、上下文边界，以及 Token 到底烧在了哪里。"
+image: "/images/Posts/由一句话生成游戏的噱头尝试AI建模，实践证明：先生，这得花不少Token/1.webp"
 tags: ["AI", "游戏开发", "Blender", "Unreal Engine", "UE5", "3D建模"]
 category: 代码
 draft: false
@@ -37,9 +38,9 @@ draft: false
 
 恰恰相反。
 
-它真的能做。
+它真的能做，但是依旧烧心。
 
-而是你会非常直观地看到，一个看起来只有一句话的目标，真正落到工程里以后，到底藏了多少东西。
+而且你会非常直观地看到，一个看起来只有一句话的目标，真正落到工程里以后，到底藏了多少东西。
 
 于是最后留下来的感受反而变成了：
 
@@ -948,6 +949,4 @@ AI 负责干活。
 
 > **先生，这得花不少 Token。**
 
-![这得花不少 Token](/images/Posts/由一句话生成游戏的噱头尝试 AI 建模，实践证明：先生，这得花不少 Token/1.webp)
-
-![亿兆 Token 券](/images/Posts/由一句话生成游戏的噱头尝试 AI 建模，实践证明：先生，这得花不少 Token/2亿兆_Token_智能使用券.webp)
+![亿兆 Token 券](/images/Posts/由一句话生成游戏的噱头尝试AI建模，实践证明：先生，这得花不少Token/2亿兆_Token_智能使用券.webp)
