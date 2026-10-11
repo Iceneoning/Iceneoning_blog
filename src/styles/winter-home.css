@@ -1,0 +1,114 @@
+/* Clear starfield prologue. The background video is the artwork;
+ * this module supplies text hierarchy, not blur or decorative overlays. */
+#main-grid .winter-home {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  container-type: inline-size;
+  border-radius: .82rem;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+:root:root #main-grid .winter-home-prologue,
+:root:root #main-grid .winter-home-reflection {
+  max-width: 33rem;
+  min-width: 0;
+}
+:root:root #main-grid .winter-home-prologue {
+  padding: clamp(1.25rem, 3cqw, 1.7rem) clamp(1.15rem, 3.1cqw, 1.65rem) 0;
+}
+:root:root #main-grid .winter-home-eyebrow {
+  font-size: .76rem;
+  font-weight: 650;
+  letter-spacing: .05em;
+}
+:root:root #main-grid .winter-home-prologue h1 {
+  margin: .72rem 0 .85rem;
+  color: #f4f2ff;
+  font-size: clamp(1.8rem, 3.9cqw, 2.15rem);
+  font-weight: 680;
+  line-height: 1.32;
+  letter-spacing: -.02em;
+  text-shadow: 0 1px 5px rgba(3, 5, 17, .8);
+}
+:root:root #main-grid .winter-home-intro {
+  max-width: 29rem;
+  margin: 0;
+  font-size: clamp(.88rem, 1.75cqw, .98rem);
+  line-height: 1.9;
+  color: #e5e5f4;
+  text-shadow: 0 1px 4px rgba(4, 5, 20, .82);
+  text-wrap: pretty;
+}
+:root:root #main-grid .winter-home-reflection {
+  align-self: end;
+  margin: 0 clamp(1.15rem, 3.1cqw, 1.65rem) clamp(1.15rem, 2.6cqw, 1.5rem);
+  margin-top: 1.75rem;
+  padding: .15rem 0 .15rem 1rem;
+  border-left: 1px solid rgba(210, 205, 248, .48);
+}
+:root:root #main-grid .winter-home-reflection p {
+  margin: 0;
+  max-width: 29rem;
+  color: #eeeafa;
+  font-size: clamp(.9rem, 1.85cqw, 1rem);
+  font-weight: 500;
+  line-height: 1.9;
+  text-shadow: 0 1px 5px rgba(3, 5, 18, .86);
+  text-wrap: pretty;
+}
+:root:root #main-grid .winter-home-reflection strong {
+  font-weight: 700;
+}
+:root:root #main-grid .winter-home-reflection footer {
+  margin-top: 1.5rem;
+  color: #d2d0e9;
+  font-size: .78rem;
+  line-height: 1.75;
+  text-shadow: 0 1px 4px rgba(3, 5, 18, .8);
+}
+
+/* Make genuine reading content readable; microtype is for metadata, not paragraphs. */
+#main-grid .journey-index-header h2 { font-size: clamp(1.45rem, 2.5vw, 1.8rem); }
+#main-grid .journey-entry-title {
+  font-size: clamp(1.19rem, 2.1vw, 1.48rem);
+  font-weight: 760;
+  line-height: 1.5;
+  letter-spacing: -.015em;
+}
+#main-grid .journey-entry-summary {
+  font-size: .91rem;
+  line-height: 1.82;
+  margin-block: .75rem .95rem;
+}
+#main-grid .journey-entry-kicker { font-size: .77rem; }
+#main-grid .journey-entry-footer { font-size: .75rem; }
+#main-grid .journey-index-header h2 span { font-size: .73rem; }
+#main-grid .journey-section-overline { font-size: .78rem; letter-spacing: .045em; }
+#main-grid .journey-index-widget-body .btn-regular,
+#main-grid .journey-category-link { font-size: .8rem; }
+#main-grid .journey-passport-person > span { font-size: .8rem; }
+#main-grid .journey-passport-bio { font-size: .84rem; }
+
+
+@container (max-width: 430px) {
+  :root:root #main-grid .winter-home-prologue { padding: 1.15rem 1rem 0; }
+  :root:root #main-grid .winter-home-prologue h1 { font-size: 1.7rem; }
+  :root:root #main-grid .winter-home-intro { font-size: .9rem; }
+  :root:root #main-grid .winter-home-reflection { margin: 0 1rem 1.1rem; }
+  :root:root #main-grid .winter-home-reflection p { font-size: .9rem; }
+}
+@media (max-width: 640px) {
+  #main-grid .journey-entry { grid-template-columns: 1.4rem minmax(0, 1fr); }
+  #main-grid .journey-entry-title { font-size: 1.2rem; }
+  #main-grid .journey-entry-image {
+    display: block;
+    grid-column: 2;
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+    margin-top: .75rem;
+  }
+  #main-grid .journey-entry-summary { font-size: .88rem; }
+}
+

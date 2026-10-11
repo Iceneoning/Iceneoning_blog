@@ -1,0 +1,221 @@
+/* BG-00G: the approved Morning Window Frost direction.
+ * Keep S2 geometry and the original illustration. Glass is cool; reading is warm.
+ * No perpetual motion, full-screen fog, or blur on the heroine's face. */
+:root {
+  --winter-art-ink: #29363b;
+  --winter-art-muted: #57676d;
+  --winter-art-edge: rgba(255, 253, 244, .86);
+  --winter-art-glass: rgba(249, 253, 251, .61);
+  --winter-art-paper: rgba(254, 253, 246, .86);
+  --winter-art-shadow: rgba(61, 69, 65, .12);
+  --winter-art-serif: "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", "SimSun", serif;
+  --journey-ink: var(--winter-art-ink);
+  --journey-ink-muted: var(--winter-art-muted);
+  --journey-paper: var(--winter-art-glass);
+  --journey-paper-strong: var(--winter-art-paper);
+}
+:root.dark {
+  --winter-art-ink: #f3f1e8;
+  --winter-art-muted: #c4cdc9;
+  --winter-art-edge: rgba(239, 244, 228, .43);
+  --winter-art-glass: rgba(37, 46, 46, .74);
+  --winter-art-paper: rgba(36, 44, 44, .93);
+  --winter-art-shadow: rgba(14, 23, 24, .25);
+  --journey-ink: var(--winter-art-ink);
+  --journey-ink-muted: var(--winter-art-muted);
+  --journey-paper: var(--winter-art-glass);
+  --journey-paper-strong: var(--winter-art-paper);
+}
+body:has(#main-grid) { font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif; }
+:root #navbar .journey-topbar-inner {
+  background: var(--winter-art-glass);
+  border-color: var(--winter-art-edge);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.58), 0 7px 25px var(--winter-art-shadow);
+}
+:root #navbar .journey-topbar-inner::after {
+  height: 1px;
+  opacity: .7;
+  background: linear-gradient(90deg,#fcffff,rgba(167,195,194,.45),rgba(255,232,187,.65),transparent);
+}
+:root .journey-wordmark-type strong {
+  font-family: var(--winter-art-serif);
+  font-size: 1.27rem;
+  font-weight: 700;
+  letter-spacing: .07em;
+}
+:root .journey-wordmark-type small { font-weight: 500; letter-spacing: .1em; }
+:root .journey-wordmark-seal {
+  border-radius: .5rem 1.2rem .5rem .5rem;
+  border-color: var(--winter-art-edge);
+  background: rgba(252,255,248,.27);
+  color: #738d90;
+}
+:root.dark .journey-wordmark-seal { background: rgba(245,251,234,.07); color: #c8d9d5; }
+:root .journey-nav-index { opacity: .28; }
+:root .journey-nav-name { font-weight: 600; }
+:root #main-grid .winter-home {
+  border-color: var(--winter-art-edge);
+  background: linear-gradient(115deg,rgba(249,255,255,.025),transparent 44%,rgba(255,243,217,.045));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.7), inset 0 -1px 0 rgba(177,204,204,.17), 0 8px 22px var(--winter-art-shadow);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+:root.dark #main-grid .winter-home {
+  background: linear-gradient(115deg,rgba(27,39,39,.065),transparent 44%,rgba(255,237,199,.025));
+  box-shadow: inset 0 1px 0 rgba(242,252,236,.38), 0 8px 22px var(--winter-art-shadow);
+}
+:root #main-grid .winter-home-heading { position:relative; z-index:2; }
+:root #main-grid .winter-home-heading h1 {
+  font-family: var(--winter-art-serif);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-shadow: none;
+  width:max-content;
+  padding:0 .12rem;
+  border-radius:.3rem;
+  background:rgba(255,252,243,.62);
+}
+:root #main-grid .winter-home-heading p {
+  font-size:.87rem;
+  line-height:1.76;
+  text-shadow:none;
+  color:var(--winter-art-ink);
+}
+/* A backing only as wide as each short line, placed outside the eyes.
+ * It replaces the previous outline-heavy text without fogging the whole pane. */
+:root #main-grid .winter-home-heading p span {
+  display:block;
+  width:max-content;
+  max-width:100%;
+  white-space:nowrap;
+  padding:0 .25rem;
+  margin-left:-.25rem;
+  border-radius:.25rem;
+  background:rgba(255,252,243,.62);
+  box-decoration-break:clone;
+  -webkit-box-decoration-break:clone;
+}
+:root.dark #main-grid .winter-home-heading p span { background:rgba(31,42,42,.91); }
+:root.dark #main-grid .winter-home-heading h1 { background:rgba(31,42,42,.72); }
+:root #main-grid .winter-home-accent { flex-basis:.16rem; background:linear-gradient(#faffff,#a8c1c0 55%,#ffe9b7); }
+:root #main-grid .winter-home-latest,
+:root #main-grid .winter-home-guide a {
+  color:var(--winter-art-ink);
+  border-color:var(--winter-art-edge);
+  background:rgba(254,253,246,.64);
+  border-radius:.55rem;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 2px 8px rgba(62,73,66,.05);
+}
+:root.dark #main-grid .winter-home-latest,
+:root.dark #main-grid .winter-home-guide a { background:rgba(31,43,42,.85); }
+:root #main-grid .winter-home-latest-meta { color:var(--winter-art-muted); }
+:root #main-grid #sidebar .journey-passport,
+:root #main-grid widget-layout.journey-index-widget,
+:root #main-grid aside .date-panel-card {
+  background-color:var(--winter-art-glass);
+  background-image:linear-gradient(125deg,rgba(255,251,235,.18),transparent 25%,transparent 85%,rgba(231,249,249,.04));
+  border-color:var(--winter-art-edge);
+  border-radius:.85rem;
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+  box-shadow:inset 0 1px 0 rgba(255,255,248,.56),inset 1px 0 0 rgba(255,255,255,.16),0 8px 22px var(--winter-art-shadow);
+}
+:root #main-grid .journey-passport-person h2 { font-family:var(--winter-art-serif); font-weight:700; letter-spacing:.02em; }
+:root #main-grid aside .date-panel-glow { opacity:.08; }
+:root #main-grid aside .calendar-month { background:rgba(230,238,230,.75); color:var(--winter-art-ink); border-bottom:1px solid var(--winter-art-edge); }
+:root.dark #main-grid aside .calendar-month { background:rgba(114,131,115,.25); }
+:root #main-grid aside .live-dot { color:var(--winter-art-muted); }
+:root #main-grid aside .live-dot span { background:#8b9d89; box-shadow:none; }
+:root #main-grid .journey-index,
+:root #main-grid .journey-chronicle,
+:root #main-grid #archive-filter-view .journey-filter-heading {
+  position:relative;
+  isolation:isolate;
+  background-color:var(--winter-art-paper);
+  background-image:linear-gradient(122deg,rgba(255,255,250,.37),transparent 35%,rgba(219,237,230,.05));
+  border-color:var(--winter-art-edge);
+  border-radius:.75rem;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8),inset 3px 0 0 rgba(255,255,247,.38),0 10px 24px var(--winter-art-shadow);
+}
+:root #main-grid .journey-index { overflow:hidden; }
+:root.dark #main-grid .journey-index,
+:root.dark #main-grid .journey-chronicle,
+:root.dark #main-grid #archive-filter-view .journey-filter-heading { background-image:linear-gradient(122deg,rgba(245,251,233,.04),transparent 35%,rgba(250,231,196,.025)); }
+:root #main-grid .journey-index-header { border-bottom:1px solid rgba(132,160,151,.34); }
+:root #main-grid .journey-index-header h2 { font-family:var(--winter-art-serif); font-weight:700; font-size:1.85rem; letter-spacing:.1em; }
+:root #main-grid .journey-index-header h2 span { font-family:system-ui,sans-serif; font-weight:400; letter-spacing:.045em; }
+:root #main-grid .journey-section-overline { color:var(--winter-art-muted); font-size:.7rem; font-weight:500; letter-spacing:.12em; }
+:root #main-grid .journey-entry { border-bottom-color:rgba(139,169,157,.2); }
+:root #main-grid .journey-entry-title { color:var(--winter-art-ink); font-weight:600; letter-spacing:.015em; }
+:root #main-grid .journey-entry-summary { color:var(--winter-art-muted); }
+:root #main-grid .journey-entry-number { color:#778f90; font-weight:500; }
+:root.dark #main-grid .journey-entry-number { color:#b9ceca; }
+:root #main-grid .journey-entry-tick { opacity:.24; }
+:root #main-grid .journey-entry-image { border-radius:.5rem; border-color:var(--winter-art-edge); box-shadow:0 4px 12px var(--winter-art-shadow); }
+:root #main-grid .journey-entry-image-corner { width:.75rem; height:.75rem; opacity:.72; background:linear-gradient(130deg,#fffdf0,#cfe4df); }
+:root #main-grid .journey-entry-footer { border-top-color:rgba(139,169,157,.17); color:var(--winter-art-muted); }
+:root #main-grid .journey-index-context { color:var(--winter-art-muted); background:rgba(197,212,203,.06); border-left-color:rgba(168,189,179,.42); }
+/* Keep reading surfaces calm; the chapter layout and reader settings are untouched. */
+:root #main-grid #post-container.card-base { background:var(--winter-art-paper); border-color:var(--winter-art-edge); border-radius:.75rem; }
+:root #main-grid .journey-article-title,
+:root #main-grid .journey-about-cover h1,
+:root #main-grid .journey-chronicle-hero h1 { font-family:var(--winter-art-serif); font-weight:700; letter-spacing:.015em; }
+:root #main-grid .journey-page-orbit { display:none; }
+:root #main-grid .journey-chronicle-hero,
+:root #main-grid .journey-about-cover { background:linear-gradient(120deg,rgba(255,250,230,.12),transparent); border-bottom:1px solid rgba(139,169,157,.28); }
+:root #main-grid .journey-chronicle-hero::after { display:none; }
+:root #main-grid #archive-filter-view .journey-filter-heading {
+  background:linear-gradient(115deg,rgba(249,255,255,.035),transparent 44%,rgba(255,243,217,.055));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 8px 22px var(--winter-art-shadow);
+}
+:root #main-grid #archive-filter-view [data-filter-title] {
+  width:max-content; max-width:100%; font-family:var(--winter-art-serif);
+  color:var(--winter-art-ink); background:rgba(255,252,243,.68);
+  padding:0 .15rem; margin-left:-.15rem; border-radius:.3rem;
+}
+:root #main-grid #archive-filter-view [data-filter-description] {
+  width:max-content; max-width:100%; color:var(--winter-art-ink);
+  white-space:nowrap;
+  background:rgba(255,252,243,.68); padding:0 .2rem; margin-left:-.2rem; border-radius:.25rem;
+}
+:root.dark #main-grid #archive-filter-view [data-filter-title],
+:root.dark #main-grid #archive-filter-view [data-filter-description] { background:rgba(31,42,42,.91); }
+:root #main-grid #archive-cards .journey-filter-card {
+  background:var(--winter-art-paper);
+  border-color:var(--winter-art-edge);
+  border-radius:.65rem;
+  box-shadow:inset 2px 0 0 rgba(251,255,245,.22),0 7px 22px var(--winter-art-shadow);
+}
+:root #main-grid #archive-cards .journey-filter-card h2 { color:var(--winter-art-ink); font-weight:600; }
+:root #main-grid #archive-cards .journey-filter-card-excerpt { color:var(--winter-art-muted); }
+:root #main-grid #archive-cards .journey-filter-card.has-cover { grid-template-columns:minmax(0,1fr) 27% 1.5rem; }
+.winter-archive-cover { position:relative; align-self:stretch; overflow:hidden; border-radius:.5rem; aspect-ratio:1 / 1.05; border:1px solid var(--winter-art-edge); }
+.winter-archive-cover > div { position:absolute; inset:0; height:100%; }
+.winter-archive-cover img { width:100%; height:100%; object-fit:cover; }
+/* A single, quiet highlight in the existing right-hand window space.
+ * This is an artistic light trace, not a claim of physical refraction. */
+@media(min-width:1280px) {
+  :root #main-grid .winter-home-heading p { position:absolute; top:2.75rem; left:.95rem; width:max-content; max-width:none; margin:0; }
+}
+@media(min-width:1024px) and (max-width:1279px) {
+  :root:not(.dark) #main-grid .winter-home-heading h1 { background:rgba(255,252,243,.68); border-radius:.3rem; padding:0 .12rem; }
+  :root #main-grid .winter-home-heading p { position:absolute; top:5.2rem; left:.95rem; width:max-content; max-width:none; margin:0; font-size:.84rem; line-height:1.6; }
+}
+@media(max-width:640px) {
+  :root .journey-wordmark-type strong { font-size:1.05rem; }
+  :root #main-grid .winter-home-heading p { font-size:.82rem; margin-top:.25rem; }
+  :root #main-grid .winter-home-heading p span { display:inline; padding:.08rem .16rem; margin-left:0; }
+  :root #main-grid .journey-index-header h2 { font-size:1.55rem; }
+  :root #main-grid .journey-entry-title { -webkit-line-clamp:3; }
+  :root #main-grid .journey-index::before { width:84px; height:42px; opacity:.55; }
+  :root #main-grid .winter-home::after { width:72px; height:35px; }
+  :root #main-grid #archive-filter-view .journey-filter-heading { min-height:8.45rem; }
+  :root #main-grid #archive-filter-view [data-filter-description] { position:absolute; bottom:-1.4rem; left:50%; width:50%; font-size:.75rem; line-height:1.5; white-space:normal; }
+  :root #main-grid #archive-cards .journey-filter-card.has-cover { grid-template-columns:minmax(0,1fr) 1.5rem; }
+  .winter-archive-cover { grid-column:1 / -1; grid-row:2; aspect-ratio:16 / 9; }
+}

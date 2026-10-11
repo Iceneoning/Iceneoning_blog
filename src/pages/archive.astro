@@ -2,9 +2,13 @@
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
+import JourneyOrbit from "../components/effects/JourneyOrbit.astro";
 import { Icon } from "astro-icon/components";
 import { getSortedPosts } from "../utils/content-utils";
 import { getPostUrlBySlug } from "../utils/url-utils";
+import { getDir } from "../utils/url-utils";
+import path from "node:path";
+import ImageWrapper from "../components/misc/ImageWrapper.astro";
 
 const rawPosts = await getSortedPosts();
 const allPosts = await Promise.all(
@@ -49,44 +53,46 @@ function formatTag(tagList: string[]) {
 ---
 
 <MainGridLayout title={i18n(I18nKey.archive)}>
-	<!-- Timeline view (all posts) -->
-	<div id="archive-timeline" class="card-base px-4 py-6 sm:px-8">
-		{
-			groups.map((group) => (
-				<div>
-					<div class="flex flex-row w-full items-center h-[3.75rem]">
-						<div class="w-[15%] md:w-[10%] transition text-2xl font-bold text-right text-75">{group.year}</div>
-						<div class="w-[15%] md:w-[10%]">
-							<div class="h-3 w-3 bg-none rounded-full outline outline-[var(--primary)] mx-auto -outline-offset-[2px] z-50 outline-3"></div>
-						</div>
-						<div class="w-[70%] md:w-[80%] transition text-left text-50">
-							{group.posts.length} {i18n(group.posts.length === 1 ? I18nKey.postCount : I18nKey.postsCount)}
-						</div>
+	<!-- Chronicle view: all routes and posts, grouped by year. -->
+	<section id="archive-timeline" class="journey-chronicle">
+		<header class="journey-chronicle-hero">
+            <JourneyOrbit />
+			<div class="journey-section-overline">CHRONICLE / 文章目录</div>
+			<h1>时间的航迹。</h1>
+			<p>从最近的一站往回走，每个日期都留着一段故事。</p>
+			<div class="journey-chronicle-counter">{String(allPosts.length).padStart(2, "0")} <span>篇文章 · 持续记录</span></div>
+		</header>
+		<div class="journey-chronicle-years">
+			{groups.map((group) => (
+				<section class="journey-chronicle-year" aria-label={`${group.year} 年文章`}>
+					<div class="journey-chronicle-year-label">
+						<strong>{group.year}</strong>
+						<span>{group.posts.length} {i18n(group.posts.length === 1 ? I18nKey.postCount : I18nKey.postsCount)}</span>
 					</div>
-					{group.posts.map((post) => (
-						<a href={getPostUrlBySlug(post.slug)} aria-label={post.data.title} class="group btn-plain !block h-10 w-full rounded-lg hover:text-[initial]">
-							<div class="flex flex-row justify-start items-center h-full">
-								<div class="w-[15%] md:w-[10%] transition text-sm text-right text-50">{formatDate(new Date(post.data.published))}</div>
-								<div class="w-[15%] md:w-[10%] relative dash-line h-full flex items-center">
-									<div class="transition-all mx-auto w-1 h-1 rounded group-hover:h-5 bg-[oklch(0.5_calc(0.05*var(--theme-chroma-scale))_var(--hue))] group-hover:bg-[var(--primary)] outline outline-4 z-50 outline-[var(--card-bg)] group-hover:outline-[var(--btn-plain-bg-hover)] group-active:outline-[var(--btn-plain-bg-active)]"></div>
-								</div>
-								<div class="w-[70%] md:max-w-[65%] md:w-[65%] text-left font-bold group-hover:translate-x-1 transition-all group-hover:text-[var(--primary)] text-75 pr-8 whitespace-nowrap overflow-ellipsis overflow-hidden">{post.data.title}</div>
-								<div class="hidden md:block md:w-[15%] text-left text-sm transition whitespace-nowrap overflow-ellipsis overflow-hidden text-30">{formatTag(post.data.tags)}</div>
-							</div>
-						</a>
-					))}
-				</div>
-			))
-		}
-	</div>
-
+					<ol class="journey-chronicle-list">
+						{group.posts.map((post) => (
+							<li>
+								<a href={getPostUrlBySlug(post.slug)} class="journey-chronicle-item" aria-label={post.data.title}>
+									<time datetime={formatDateFull(new Date(post.data.published))}>{formatDate(new Date(post.data.published))}</time>
+									<strong>{post.data.title}</strong>
+									<span class="journey-chronicle-tags">{formatTag(post.data.tags)}</span>
+									<Icon name="material-symbols:arrow-outward-rounded" />
+								</a>
+							</li>
+						))}
+					</ol>
+				</section>
+			))}
+		</div>
+	</section>
 	<!-- Query-based filters are applied in the browser so they also work on a statically built site. -->
 	<section id="archive-filter-view" class="hidden" aria-live="polite">
-		<header class="hidden">
+		<header class="journey-filter-heading">
+            <JourneyOrbit />
 			<div class="filter-glow" aria-hidden="true"></div>
 			<div class="relative z-10 flex items-end justify-between gap-4">
 				<div>
-					<div class="mb-2 text-xs font-bold tracking-[0.16em] text-[var(--primary)]">CURATED POSTS</div>
+					<div class="journey-section-overline">CHRONICLE / 分类文章</div>
 					<h1 data-filter-title class="m-0 text-2xl font-bold text-black/85 dark:text-white/90">精选文章</h1>
 					<p data-filter-description class="mb-0 mt-2 text-sm text-black/50 dark:text-white/50">按内容类型精确筛选</p>
 				</div>
@@ -94,48 +100,41 @@ function formatTag(tagList: string[]) {
 			</div>
 		</header>
 
-		<div id="archive-cards" class="flex flex-col gap-4">
+
+		<div id="archive-cards" class="journey-filter-list">
 			{allPosts.map((post) => (
 				<a
 					href={getPostUrlBySlug(post.slug)}
 					data-tags={JSON.stringify(post.data.tags)}
 					data-category={post.data.category ?? ""}
-					class="archive-card-item card-base group relative block overflow-hidden border border-white/25 p-5 pr-[4.9rem] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl sm:p-7 sm:pr-[6.5rem]"
+					class:list={["archive-card-item journey-filter-card", { "has-cover": Boolean(post.data.image) }]}
 				>
-					<h2 class="relative z-10 mb-4 line-clamp-2 pl-4 text-2xl font-bold leading-tight text-black/85 transition group-hover:text-[var(--primary)] dark:text-white/90 sm:text-3xl">
-						{post.data.title}
-					</h2>
-					<div class="relative z-10 mb-4 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm font-semibold text-black/45 dark:text-white/45">
-						<div class="archive-meta-item">
-							<span class="archive-meta-icon">
-								<Icon name="material-symbols:calendar-today-outline-rounded" />
-							</span>
-							<time>{formatDateFull(new Date(post.data.published))}</time>
+					<div class="journey-filter-card-content">
+						<div class="journey-filter-card-meta">
+							<time datetime={formatDateFull(new Date(post.data.published))}>
+								{formatDateFull(new Date(post.data.published))}
+							</time>
+							<span class="journey-filter-card-category">{post.data.category || "未分类"}</span>
 						</div>
-						<div class="archive-meta-item">
-							<span class="archive-meta-icon">
-								<Icon name="material-symbols:book-2-outline-rounded" />
-							</span>
-							<span>{post.data.category ?? "代码"}</span>
-						</div>
-						<div class="archive-meta-item archive-tags">
-							<span class="archive-meta-icon">
-								<Icon name="material-symbols:tag-rounded" />
-							</span>
-							<span>{post.data.tags.join(" / ") || "无标签"}</span>
+						<h2><span class="winter-reading-line">{post.data.title}</span></h2>
+						<p class="journey-filter-card-excerpt"><span class="winter-reading-line">{post.data.description || post.stats.excerpt}</span></p>
+						<div class="journey-filter-card-footer">
+							<span>{post.stats.words} {i18n(post.stats.words === 1 ? I18nKey.wordCount : I18nKey.wordsCount)}</span>
+							<span aria-hidden="true">·</span>
+							<span>{post.stats.minutes} {i18n(post.stats.minutes === 1 ? I18nKey.minuteCount : I18nKey.minutesCount)}</span>
+							{post.data.tags.length > 0 && (
+								<span class="journey-filter-card-tags">{post.data.tags.slice(0, 3).map((tag) => `#${tag}`).join("  ")}</span>
+							)}
 						</div>
 					</div>
-					<p class="relative z-10 mb-4 line-clamp-2 text-base leading-7 text-black/70 dark:text-white/70">
-						{post.data.description || post.stats.excerpt}
-					</p>
-					<div class="relative z-10 flex items-center gap-4 text-sm font-medium text-black/35 transition dark:text-white/35">
-						<span>{post.stats.words} {i18n(post.stats.words === 1 ? I18nKey.wordCount : I18nKey.wordsCount)}</span>
-						<span>|</span>
-						<span>{post.stats.minutes} {i18n(post.stats.minutes === 1 ? I18nKey.minuteCount : I18nKey.minutesCount)}</span>
-					</div>
-					<div class="archive-enter" aria-hidden="true">
-						<Icon name="material-symbols:chevron-right-rounded" />
-					</div>
+					{post.data.image && (
+						<div class="winter-archive-cover">
+							<ImageWrapper src={post.data.image} basePath={path.join("content/posts/", getDir(post.id))} alt={post.data.title} class="w-full h-full object-cover" />
+						</div>
+					)}
+					<span class="journey-filter-card-action" aria-hidden="true">
+						<Icon name="material-symbols:arrow-outward-rounded" />
+					</span>
 				</a>
 			))}
 		</div>
@@ -148,185 +147,4 @@ function formatTag(tagList: string[]) {
 	</section>
 </MainGridLayout>
 
-<style>
-	.archive-filter-header {
-		isolation: isolate;
-		border: 1px solid rgb(255 255 255 / 0.24);
-	}
-
-	.filter-glow {
-		position: absolute;
-		top: -7rem;
-		right: -3rem;
-		width: 16rem;
-		height: 16rem;
-		border-radius: 9999px;
-		background: color-mix(in oklch, var(--primary) 18%, transparent);
-	}
-
-	.filter-count {
-		display: flex;
-		align-items: baseline;
-		gap: 0.25rem;
-		padding: 0.65rem 0.8rem;
-		border-radius: 0.85rem;
-		background: rgb(255 255 255 / 0.45);
-		box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.05);
-	}
-
-	:global(.dark) .filter-count {
-		background: rgb(255 255 255 / 0.05);
-		box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.07);
-	}
-
-	.filter-count strong {
-		color: var(--primary);
-		font-size: 1.35rem;
-		font-variant-numeric: tabular-nums;
-	}
-
-	.filter-count span {
-		color: rgb(0 0 0 / 0.4);
-		font-size: 0.75rem;
-		font-weight: 700;
-	}
-
-	:global(.dark) .filter-count span {
-		color: rgb(255 255 255 / 0.4);
-	}
-
-	.card-accent {
-		position: absolute;
-		top: -5rem;
-		right: -5rem;
-		width: 10rem;
-		height: 10rem;
-		border-radius: 9999px;
-		background: color-mix(in oklch, var(--primary) 10%, transparent);
-		transition: transform 350ms ease;
-	}
-
-	.archive-card-item:hover .card-accent {
-		transform: scale(1.35);
-	}
-
-	.archive-card-item {
-		isolation: isolate;
-		border-radius: 1.35rem;
-	}
-
-	.archive-card-item::before {
-		content: "";
-		position: absolute;
-		top: 1.7rem;
-		left: 1.55rem;
-		z-index: 1;
-		width: 0.28rem;
-		height: 1.65rem;
-		border-radius: 9999px;
-		background: var(--primary);
-	}
-
-	.archive-card-item::after {
-		content: "";
-		position: absolute;
-		inset: 0;
-		z-index: 0;
-		background:
-			linear-gradient(115deg, rgb(255 255 255 / 0.28), transparent 58%),
-			color-mix(in oklch, var(--primary) 5%, transparent);
-		pointer-events: none;
-	}
-
-	.archive-meta-item {
-		display: inline-flex;
-		align-items: center;
-		min-width: 0;
-		gap: 0.7rem;
-	}
-
-	.archive-tags {
-		max-width: 100%;
-	}
-
-	.archive-tags > span:last-child {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-	}
-
-	.archive-meta-icon {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		flex: 0 0 auto;
-		width: 2.4rem;
-		height: 2.4rem;
-		border-radius: 0.55rem;
-		background: color-mix(in oklch, var(--primary) 13%, white 82%);
-		color: var(--primary);
-		font-size: 1.45rem;
-	}
-
-	.archive-enter {
-		position: absolute;
-		top: 1rem;
-		right: 1rem;
-		bottom: 1rem;
-		z-index: 2;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 3.6rem;
-		border-radius: 1rem;
-		background: color-mix(in oklch, var(--primary) 13%, white 84%);
-		color: var(--primary);
-		font-size: 2.8rem;
-		transition:
-			background-color 200ms ease,
-			transform 200ms ease;
-	}
-
-	.archive-card-item:hover .archive-enter {
-		background: color-mix(in oklch, var(--primary) 20%, white 78%);
-		transform: translateX(0.12rem);
-	}
-
-	:global(.dark) .archive-card-item::after {
-		background:
-			linear-gradient(115deg, rgb(255 255 255 / 0.08), transparent 58%),
-			color-mix(in oklch, var(--primary) 11%, transparent);
-	}
-
-	:global(.dark) .archive-meta-icon,
-	:global(.dark) .archive-enter {
-		background: color-mix(in oklch, var(--primary) 24%, rgb(21 27 38) 76%);
-	}
-
-	@media (max-width: 640px) {
-		.archive-card-item::before {
-			top: 1.45rem;
-			left: 1.1rem;
-		}
-
-		.archive-enter {
-			right: 0.75rem;
-			width: 2.9rem;
-			font-size: 2.25rem;
-		}
-
-		.archive-meta-icon {
-			width: 2.1rem;
-			height: 2.1rem;
-			font-size: 1.25rem;
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.archive-card-item,
-		.card-accent,
-		.archive-enter {
-			transition: none;
-		}
-	}
-</style>
+<!-- Archive filter visual styles are defined in src/styles/journey.css. -->

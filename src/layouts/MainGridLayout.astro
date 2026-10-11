@@ -37,7 +37,7 @@ const {
 
 	<div>
 		<!-- Main content -->
-		<div class="absolute w-full z-30 pointer-events-none" style="top: 5.5rem">
+		<div class="absolute w-full z-30 pointer-events-none" style="top: var(--journey-main-offset, 6.65rem)">
 			<!-- The pointer-events-none here prevent blocking the click event of the TOC -->
 			<div class="relative max-w-[var(--page-width)] mx-auto pointer-events-auto">
 				<div id="main-grid" class="transition duration-700 w-full left-0 right-0 grid grid-cols-1 lg:grid-cols-[17.5rem_minmax(0,_1fr)] xl:grid-cols-[17.5rem_minmax(0,_1fr)_14rem] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4 px-0 md:px-4">
@@ -88,15 +88,4 @@ const {
 			</div>
 		</div>
 	</div>
-	<style is:global>
-		#main-grid .card-base {
-			background: rgba(255, 255, 255, 0.72);
-			-webkit-backdrop-filter: blur(6px);
-			backdrop-filter: blur(6px);
-		}
-
-		:root.dark #main-grid .card-base {
-			background: rgba(21, 27, 38, 0.68);
-		}
-	</style>
 </Layout>

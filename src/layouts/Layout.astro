@@ -3,21 +3,22 @@ import "@fontsource/roboto/latin-400.css";
 import "@fontsource/roboto/latin-500.css";
 import "@fontsource/roboto/latin-700.css";
 import "../styles/main.css";
+import "../styles/journey.css";
 import "../styles/scrollbar.css";
 import "../styles/transition.css";
 import "../styles/variables.styl";
+import "../styles/winter-art.css";
+import "../styles/winter-crystal.css";
+import "../styles/winter-type.css";
+import "../styles/winter-journal.css";
 import ConfigCarrier from "@components/ConfigCarrier.astro";
 import MouseSparkEffect from "@components/effects/MouseSparkEffect.astro";
 
-import SiteGraphicsLayer from "@components/effects/SiteGraphicsLayer.astro";
 import roboto400 from "@fontsource/roboto/files/roboto-latin-400-normal.woff2";
 import roboto700 from "@fontsource/roboto/files/roboto-latin-700-normal.woff2";
 import { backgroundConfig, profileConfig, siteConfig } from "@/config";
 import {
-	AUTO_MODE,
 	DARK_MODE,
-	DEFAULT_THEME,
-	LIGHT_MODE,
 	PAGE_WIDTH,
 } from "../constants/constants";
 import { defaultFavicons } from "../constants/icon";
@@ -62,6 +63,13 @@ const siteLang = lang.replace("_", "-");
 const backgroundImageUrl = backgroundConfig.src.startsWith("/")
 	? url(backgroundConfig.src)
 	: backgroundConfig.src;
+const mobileBackgroundImageUrl = backgroundConfig.mobileSrc.startsWith("/")
+	? url(backgroundConfig.mobileSrc)
+	: backgroundConfig.mobileSrc;
+const enableVideoBackground = backgroundConfig.enable && backgroundConfig.mode === "video";
+const backgroundVideoUrl = backgroundConfig.videoSrc.startsWith("/")
+	? url(backgroundConfig.videoSrc)
+	: backgroundConfig.videoSrc;
 
 const socialImageUrl = image
 	? image.startsWith("http://") || image.startsWith("https://")
@@ -71,7 +79,7 @@ const socialImageUrl = image
 ---
 
 <!DOCTYPE html>
-<html lang={siteLang} class="bg-[var(--page-bg)] transition text-[14px] md:text-[16px]">
+<html lang={siteLang} class="dark bg-[var(--page-bg)] transition text-[14px] md:text-[16px]">
 	<head>
 
 		<title>{pageTitle}</title>
@@ -109,25 +117,12 @@ const socialImageUrl = image
 		))}
 
 		<!-- Set the theme before the page is rendered to avoid a flash -->
-		<script is:inline define:vars={{DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE, PAGE_WIDTH, configHue, themeColorPresets}}>
-			// Load the theme from local storage
-			const theme = localStorage.getItem('theme') || DEFAULT_THEME;
+		<script is:inline define:vars={{DARK_MODE, PAGE_WIDTH, configHue, themeColorPresets}}>
+			// Night-only palette; an old saved light/auto preference must not flash on load.
+			document.documentElement.classList.add('dark');
+			localStorage.setItem('theme', DARK_MODE);
 			const themeColorStorageVersion = 'v2';
 			const themeColorVersionKey = 'theme-color-version';
-			switch (theme) {
-				case LIGHT_MODE:
-					document.documentElement.classList.remove('dark');
-					break
-				case DARK_MODE:
-					document.documentElement.classList.add('dark');
-					break
-				case AUTO_MODE:
-					if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-						document.documentElement.classList.add('dark');
-					} else {
-						document.documentElement.classList.remove('dark');
-					}
-			}
 
 			// Load the hue from local storage
 			const parseHue = (value) => {
@@ -155,6 +150,14 @@ const socialImageUrl = image
 			document.documentElement.style.setProperty('--primary', preset.hex);
 			document.documentElement.style.setProperty('--theme-chroma-scale', String(preset.chromaScale));
 		</script>
+		<!-- Guard query-filtered archive routes before the first paint. -->
+        <script is:inline>
+            const archiveParams = new URLSearchParams(window.location.search);
+            if (/\/archive\/?$/.test(window.location.pathname) &&
+                (archiveParams.has("category") || archiveParams.has("tag") || archiveParams.has("uncategorized"))) {
+                document.documentElement.setAttribute("data-archive-filter-pending", "");
+            }
+        </script>
 		<style define:vars={{
 			configHue,
 			'page-width': `${PAGE_WIDTH}rem`,
@@ -172,12 +175,20 @@ const socialImageUrl = image
 	<body class="min-h-screen transition">
 		{backgroundConfig.enable && (
 			<>
-				<div id="site-bg-image" aria-hidden="true" style={`background-image: url('${backgroundImageUrl}')`}></div>
+				<div id="site-bg-image" aria-hidden="true" style={`--site-bg-desktop-image: url('${backgroundImageUrl}'); --site-bg-mobile-image: url('${mobileBackgroundImageUrl}')`}></div>
+				{enableVideoBackground && (
+					<video
+						id="site-bg-video"
+						aria-hidden="true"
+						autoplay muted loop playsinline preload="none"
+						data-src={backgroundVideoUrl}
+						style={`--site-video-position: ${backgroundConfig.videoPosition}`}
+					></video>
+				)}
 				<div id="site-bg-frosted" aria-hidden="true"></div>
 			</>
 		)}
 		<div id="site-content">
-			{backgroundConfig.enable && <SiteGraphicsLayer />}
 			<ConfigCarrier></ConfigCarrier>
 			<MouseSparkEffect></MouseSparkEffect>
 			<slot />
@@ -205,12 +216,32 @@ const socialImageUrl = image
 		inset: 0;
 		z-index: 0;
 		pointer-events: none;
+		background-image: var(--site-bg-desktop-image);
 		background-size: cover;
 		background-position: center;
 		background-repeat: no-repeat;
 		transform: translate3d(var(--site-bg-parallax-x, 0px), var(--site-bg-parallax-y, 0px), 0) scale(var(--site-bg-scale));
 		transform-origin: center;
 		will-change: transform;
+	}
+	#site-bg-video {
+		position: fixed;
+		inset: 0;
+		z-index: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: var(--site-video-position, center);
+		pointer-events: none;
+		transform: translate3d(var(--site-bg-parallax-x, 0px), var(--site-bg-parallax-y, 0px), 0) scale(var(--site-bg-scale));
+		transform-origin: center;
+		will-change: transform;
+		opacity: 0;
+		transition: opacity .65s ease;
+	}
+	#site-bg-video.is-ready { opacity: 1; }
+	@media (max-width: 900px), (pointer: coarse), (prefers-reduced-motion: reduce) {
+		#site-bg-video { display: none; }
 	}
 	#site-bg-frosted {
 		position: fixed;
@@ -224,10 +255,23 @@ const socialImageUrl = image
 	:root.dark #site-bg-frosted {
 		background: rgba(10, 14, 20, var(--site-bg-overlay-dark));
 	}
+	/* Mobile uses a dedicated saved illustration, not the desktop MP4 poster. */
+	@media (max-width: 900px) {
+		#site-bg-image {
+			background-image: var(--site-bg-mobile-image);
+			background-position: center;
+			--site-bg-scale: 1.03;
+		}
+	}
 }
 </style>
 
 <script>
+// Persistent global wallpaper: keep these modules in the actual Layout bundle,
+// not inside a conditional Astro component whose scripts may not be emitted.
+import "../scripts/background-video";
+import "../scripts/background-parallax";
+// The oversized journey carousel was retired; the compact homepage is static.
 import "../scripts/novel-progress";
 import "../scripts/novel-showcase";
 import "../scripts/novel-hero-effects";
@@ -319,7 +363,10 @@ function applyArchiveFilters() {
 
 	timeline.classList.toggle("hidden", isFiltered);
 	filterView.classList.toggle("hidden", !isFiltered);
-	if (!isFiltered) return;
+	if (!isFiltered) {
+		document.documentElement.removeAttribute("data-archive-filter-pending");
+		return;
+	}
 
 	const labels: Record<string, { title: string; description: string }> = {
 		杂谈: { title: "杂谈", description: "生活见闻、兴趣经历与随想" },
@@ -347,6 +394,7 @@ function applyArchiveFilters() {
 	const count = filterView.querySelector<HTMLElement>("[data-filter-count]");
 	if (count) count.textContent = String(visibleCount).padStart(2, "0");
 	document.getElementById("archive-empty")?.classList.toggle("hidden", visibleCount > 0);
+	document.documentElement.removeAttribute("data-archive-filter-pending");
 }
 
 function init() {

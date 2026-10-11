@@ -1,0 +1,798 @@
+/* Winter journal: a focused finishing pass over the existing V0.3 skin.
+ * Keep the illustration, portrait, three columns and pointer parallax.
+ * The repeated :root matches winter-crystal.css without using !important.
+ */
+:root:root {
+  --journal-paper: #f1f6fc;
+  --journal-glass: #e9f1fb;
+  --journal-edge: rgba(255, 255, 255, .82);
+  --journal-rule: rgba(68, 100, 111, .16);
+  --journal-shadow: inset 0 1px 0 rgba(255,255,255,.85), inset 1px 0 0 rgba(255,255,255,.40), inset 0 -1px 0 rgba(97,139,157,.20), 0 8px 28px rgba(41,67,78,.09);
+  --journal-link: color-mix(in srgb, var(--primary) 65%, #234955);
+  --winter-art-ink: #203741;
+  --winter-art-muted: #364f5a;
+}
+:root:root.dark {
+  --journal-paper: #1d2034;
+  --journal-glass: #171b2d;
+  --journal-edge: rgba(179, 172, 222, .19);
+  --journal-rule: rgba(173, 169, 214, .14);
+  --journal-shadow: inset 0 1px 0 rgba(218,207,255,.055), 0 8px 28px rgba(5,7,20,.22);
+  --journal-link: #b6bdf1;
+  --winter-art-ink: #edf0fb;
+  --winter-art-muted: #afb7d1;
+  --journey-ink: #edf0fb;
+  --journey-ink-muted: #afb7d1;
+  --journey-paper: #171b2d;
+  --journey-paper-strong: #1d2034;
+  --journey-stroke: rgba(179, 172, 222, .19);
+  --journey-stroke-soft: rgba(173, 169, 214, .14);
+  --journey-blueprint: #27283e;
+  --journey-shadow: 0 8px 28px rgba(5,7,20,.22);
+}
+
+/* Solid navigation and sidebars: legibility over the moving starfield. */
+:root:root #navbar .journey-topbar-inner,
+:root:root #main-grid #sidebar .journey-passport,
+:root:root #main-grid widget-layout.journey-index-widget,
+:root:root #main-grid aside .date-panel-card,
+:root:root.dark #navbar .journey-topbar-inner,
+:root:root.dark #main-grid #sidebar .journey-passport,
+:root:root.dark #main-grid widget-layout.journey-index-widget,
+:root:root.dark #main-grid aside .date-panel-card {
+  background: var(--journal-glass);
+  border: 1px solid var(--journal-edge);
+  box-shadow: var(--journal-shadow), inset 0 1px 0 var(--journal-edge);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+:root:root #navbar .journey-topbar-inner {
+  border-top: 0;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+:root:root .journey-nav-index { display: none; }
+:root:root .journey-nav-item { min-height: 2.8rem; border-radius: .7rem; }
+:root:root .journey-nav-name { font-size: .87rem; }
+:root:root .journey-wordmark-type strong { letter-spacing: .08em; }
+:root:root .journey-wordmark-type small { margin-top: .2rem; letter-spacing: .1em; }
+:root:root #main-grid .journey-passport-person h2 { margin-block: .5rem; }
+:root:root #main-grid .journey-passport-social-link {
+  min-height: 2.5rem;
+  border-radius: .5rem;
+  color: var(--winter-art-muted);
+}
+:root:root #main-grid .journey-index-widget-heading {
+  font-size: .9rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  border-color: var(--journal-rule);
+}
+:root:root #main-grid .journey-index-widget-mark { opacity: .45; }
+:root:root #main-grid .journey-index-widget-body .btn-regular {
+  border-radius: .45rem;
+  min-height: 2rem;
+  color: var(--winter-art-muted);
+}
+
+/* Stable, opaque homepage banner; the moving heroine remains in the surrounding backdrop. */
+:root:root #main-grid .winter-home,
+:root:root.dark #main-grid .winter-home {
+  border-color: var(--journal-edge);
+  border-radius: 1rem;
+  margin-bottom: 1.25rem;
+  background: var(--journal-glass);
+  box-shadow: var(--journal-shadow);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+:root:root #main-grid .winter-home-header {
+  min-height: 10.5rem;
+  padding: 1.5rem 1.65rem 1rem;
+  gap: 1rem;
+}
+:root:root #main-grid .winter-home-heading { gap: 0; }
+:root:root #main-grid .winter-home-accent { display: none; }
+.winter-home-eyebrow {
+  margin-bottom: .75rem;
+  font-size: .72rem;
+  letter-spacing: .16em;
+  color: var(--winter-art-muted);
+}
+:root:root #main-grid .winter-home-heading h1 {
+  width: auto;
+  font-size: clamp(1.65rem, 4cqw, 2.15rem);
+  line-height: 1.35;
+  letter-spacing: .035em;
+  font-weight: 600;
+}
+:root:root #main-grid .winter-home-heading p {
+  position: static;
+  width: auto;
+  max-width: 16rem;
+  margin-top: .7rem;
+  font-size: .87rem;
+  line-height: 1.85;
+  text-shadow: none;
+}
+:root:root #main-grid .winter-home-heading p span { display: block; white-space: normal; }
+:root:root #main-grid .winter-home-latest,
+:root:root.dark #main-grid .winter-home-latest {
+  background: var(--journal-paper);
+  border: 1px solid var(--journal-edge);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  padding: .7rem .8rem;
+  min-width: 0;
+  border-radius: .7rem;
+}
+:root:root #main-grid .winter-home-latest-meta { font-size: .7rem; }
+:root:root #main-grid .winter-home-latest-action { font-size: .83rem; }
+:root:root #main-grid .winter-home-guide {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .65rem;
+  padding: .5rem 1.65rem 1.25rem;
+}
+:root:root #main-grid .winter-home-guide a,
+:root:root.dark #main-grid .winter-home-guide a {
+  min-width: 0;
+  min-height: 2.75rem;
+  border-radius: .6rem;
+  background: var(--journal-paper);
+  border: 1px solid var(--journal-edge);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  font-size: .83rem;
+  font-weight: 500;
+}
+:root:root #main-grid .winter-home :is(a:hover, a:focus-visible),
+:root:root.dark #main-grid .winter-home :is(a:hover, a:focus-visible) {
+  background: var(--journal-paper);
+  border-color: var(--journal-link);
+}
+
+/* Opaque reading and index surfaces, without backdrop blur. */
+:root:root #main-grid .journey-index,
+:root:root #main-grid #post-container.card-base,
+:root:root #main-grid #archive-cards .journey-filter-card,
+:root:root #main-grid #archive-filter-view .journey-filter-heading,
+:root:root.dark #main-grid .journey-index,
+:root:root.dark #main-grid #post-container.card-base,
+:root:root.dark #main-grid #archive-cards .journey-filter-card,
+:root:root.dark #main-grid #archive-filter-view .journey-filter-heading {
+  background: linear-gradient(120deg, rgba(255,255,255,.16), transparent 48%, rgba(210,237,255,.055)), var(--journal-paper);
+  border: 1px solid var(--journal-edge);
+  border-radius: 1rem;
+  box-shadow: var(--journal-shadow);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+:root:root #main-grid .journey-index { padding-inline: 1.65rem; }
+:root:root #main-grid .journey-index-header {
+  padding-block: 1.5rem 1.25rem;
+  border-color: var(--journal-rule);
+}
+:root:root #main-grid .journey-section-overline {
+  font-size: .72rem;
+  letter-spacing: .1em;
+  margin-bottom: .5rem;
+}
+:root:root #main-grid .journey-index-header h2 {
+  font-size: 1.65rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+}
+:root:root #main-grid .journey-index-header h2 span {
+  font-size: .66rem;
+  font-weight: 400;
+  letter-spacing: .035em;
+  color: var(--winter-art-muted);
+}
+:root:root #main-grid .journey-entry {
+  column-gap: 1.35rem;
+  min-height: 0;
+  padding-block: 1.6rem;
+  border-color: var(--journal-rule);
+}
+:root:root #main-grid .journey-entry:not(.has-cover) { grid-template-columns: minmax(0, 1fr); }
+:root:root #main-grid .journey-entry:last-child { border-bottom: 0; }
+:root:root #main-grid .journey-entry-body { min-height: 0; }
+.journey-entry-heading { margin: 0; }
+:root:root #main-grid .journey-entry-title {
+  display: block;
+  font-size: clamp(1.12rem, 2.5cqw, 1.4rem);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.65;
+  -webkit-line-clamp: unset;
+}
+:root:root #main-grid .journey-entry-title:is(:hover, :focus-visible) { color: var(--journal-link); }
+:root:root #main-grid .journey-entry-summary {
+  font-size: .9rem;
+  line-height: 1.9;
+  margin-block: .75rem 1rem;
+}
+:root:root #main-grid .journey-entry-kicker { font-size: .73rem; gap: .65rem; }
+:root:root #main-grid .journey-entry-category {
+  color: var(--journal-link);
+  padding: .18rem .5rem;
+  background: color-mix(in srgb, var(--primary) 9%, transparent);
+  border-radius: .35rem;
+  font-weight: 500;
+}
+:root:root #main-grid .journey-entry-footer { font-size: .73rem; padding-top: 0; }
+:root:root #main-grid .journey-entry-tags { color: var(--journal-link); font-weight: 400; }
+:root:root #main-grid .journey-entry-image {
+  aspect-ratio: 1 / 1;
+  border-radius: .7rem;
+  border-color: var(--journal-edge);
+  box-shadow: 0 5px 16px rgba(23, 49, 60, .09);
+}
+:root:root #main-grid #post-container .markdown-content,
+:root:root.dark #main-grid #post-container .markdown-content {
+  background: transparent;
+  padding: 0;
+  line-height: 2;
+}
+:root:root #main-grid #archive-filter-view [data-filter-description] {
+  position: static;
+  width: auto;
+  max-width: 100%;
+  white-space: normal;
+}
+:root:root #main-grid .journey-filter-card-action { color: var(--journal-link); }
+
+@media (max-width: 767px) {
+  :root:root #main-grid { padding-inline: .8rem; }
+  :root:root #navbar .journey-topbar-inner { border-radius: 0 0 .85rem .85rem; }
+}
+@container (max-width: 610px) {
+  :root:root #main-grid .winter-home-header { flex-wrap: nowrap; padding-inline: 1.15rem; }
+  :root:root #main-grid .winter-home-latest { align-items: flex-end; }
+  :root:root #main-grid .winter-home-latest-meta { flex-direction: column; align-items: flex-end; gap: .25rem; }
+  :root:root #main-grid .winter-home-guide { padding-inline: 1.15rem; gap: .4rem; }
+  :root:root #main-grid .winter-home-guide a { font-size: .76rem; gap: .2rem; padding-inline: .6rem; }
+}
+@media (max-width: 640px) {
+  :root:root #main-grid .winter-home-header { min-height: 11rem; padding-top: 1.25rem; }
+  :root:root #main-grid .winter-home-heading h1 { font-size: 1.65rem; }
+  :root:root #main-grid .winter-home-heading p { font-size: .8rem; }
+  :root:root #main-grid .winter-home-latest { padding: .55rem; }
+  :root:root #main-grid .winter-home-latest-action { font-size: .72rem; gap: .25rem; }
+  :root:root #main-grid .winter-home-guide { padding-bottom: 1rem; }
+  :root:root #main-grid .journey-index { padding-inline: 1.1rem; }
+  :root:root #main-grid .journey-index-header h2 { font-size: 1.45rem; }
+  :root:root #main-grid .journey-entry { padding-block: 1.35rem; gap: .85rem; }
+  :root:root #main-grid .journey-entry-title { font-size: 1.15rem; }
+  :root:root #main-grid .journey-entry-image { aspect-ratio: 16 / 9; margin-top: 0; }
+  :root:root #main-grid .journey-entry-summary { font-size: .88rem; }
+  :root:root #main-grid .journey-entry-tags { margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root:root #main-grid .journey-entry-image:hover img { transform: none; }
+}
+
+/* Keep post backing opaque in both themes. */
+:root:root #main-grid #post-container.card-base,
+:root:root.dark #main-grid #post-container.card-base {
+  background-color: var(--journal-paper);
+}
+:root:root #main-grid .winter-home::before { content: none; }
+:root:root #main-grid .journey-index::before { opacity: .12; }
+:root:root.dark #main-grid .journey-index::before { opacity: .12; }
+
+/* V0.3: About, Chronicle and Friends share opaque paper and typography. */
+html[data-archive-filter-pending] #archive-timeline,
+html[data-archive-filter-pending] #archive-filter-view { display: none; }
+
+:root:root #main-grid :is(.journey-about, .journey-chronicle, .friends-shell, .friend-guide) {
+  min-width: 0;
+  border: 1px solid var(--journal-edge);
+  border-radius: 1rem;
+  background: linear-gradient(120deg,rgba(255,255,255,.12),transparent 46%),var(--journal-paper);
+  box-shadow: var(--journal-shadow);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+:root:root #main-grid :is(.journey-about-cover, .journey-chronicle-hero) {
+  min-height: 0;
+  padding: 1.6rem clamp(1.2rem,3vw,2rem) 1.4rem;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--journal-rule);
+  border-radius: 0;
+  box-shadow: none;
+}
+:root:root #main-grid .journey-section-overline {
+  display: block;
+  margin: 0 0 .55rem;
+  color: var(--journal-link);
+  font: 650 .75rem/1.5 var(--winter-type-text);
+  letter-spacing: .045em;
+  text-transform: none;
+}
+:root:root #main-grid :is(.journey-about-cover h1,.journey-chronicle-hero h1,.friends-intro h1,#archive-filter-view [data-filter-title]) {
+  margin: 0 0 .6rem;
+  color: var(--winter-art-ink);
+  font: 700 clamp(1.85rem,2.5vw,2.22rem)/1.36 var(--winter-type-text);
+  letter-spacing: -.02em;
+  text-wrap: balance;
+}
+:root:root #main-grid :is(.journey-about-cover p,.journey-chronicle-hero p,.friends-intro p,#archive-filter-view [data-filter-description]) {
+  margin: 0;
+  max-width: 38rem;
+  color: var(--winter-art-muted);
+  font: 400 .91rem/1.85 var(--winter-type-text);
+  letter-spacing: 0;
+}
+:root:root #main-grid .journey-about-stamp {
+  top: 1.05rem;
+  right: 1.4rem;
+  font-size: .64rem;
+  font-weight: 500;
+  letter-spacing: .035em;
+}
+:root:root #main-grid .journey-chronicle-counter {
+  display: inline-flex;
+  gap: .55rem;
+  align-items: baseline;
+  margin-top: 1rem;
+  color: var(--journal-link);
+  font: 700 1.55rem/1.2 var(--winter-type-text);
+}
+:root:root #main-grid .journey-chronicle-counter span {
+  color: var(--winter-art-muted);
+  font: 500 .76rem/1.6 var(--winter-type-text);
+  letter-spacing: .02em;
+}
+:root:root #main-grid .journey-chronicle-years {
+  padding: .5rem clamp(1.2rem,3vw,2rem) 1.4rem;
+}
+:root:root #main-grid .journey-chronicle-year {
+  grid-template-columns: 5.15rem minmax(0,1fr);
+  gap: 1rem;
+  padding: 1.45rem 0;
+  border-color: var(--journal-rule);
+}
+:root:root #main-grid .journey-chronicle-year-label strong {
+  color: var(--journal-link);
+  font: 700 1.26rem/1.4 var(--winter-type-text);
+}
+:root:root #main-grid .journey-chronicle-year-label span { font-size: .75rem; line-height: 1.6; }
+:root:root #main-grid .journey-chronicle-item {
+  grid-template-columns: 3.4rem minmax(0,1fr) minmax(0,19%) 1.1rem;
+  min-height: 3.6rem;
+  gap: .75rem;
+  padding: .65rem .25rem;
+  border-color: var(--journal-rule);
+}
+:root:root #main-grid .journey-chronicle-item time {
+  font: 500 .75rem/1.5 var(--winter-type-text);
+  font-variant-numeric: tabular-nums;
+}
+:root:root #main-grid .journey-chronicle-item strong {
+  font: 600 .94rem/1.55 var(--winter-type-text);
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+}
+:root:root #main-grid .journey-chronicle-tags {
+  color: var(--winter-art-muted);
+  font-size: .73rem;
+  line-height: 1.5;
+}
+:root:root #main-grid .journey-about-paper { padding: 1.5rem clamp(1.2rem,3vw,2rem) 2rem; }
+:root:root #main-grid .journey-about-text { color: var(--winter-art-ink); line-height: 1.9; }
+:root:root #main-grid .journey-about-text h1 {
+  font: 650 1.4rem/1.45 var(--winter-type-text);
+  letter-spacing: -.015em;
+}
+:root:root #main-grid .journey-about-text h2 { font-size: 1.2rem; line-height: 1.5; }
+
+/* Keep existing friends, avatars and contact links; align their surrounding chrome. */
+:root:root #main-grid .friends-header {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.2rem;
+  padding: 0 0 1.4rem;
+  border-bottom: 1px solid var(--journal-rule);
+  isolation: isolate;
+}
+:root:root #main-grid .friends-header-copy { position: relative; z-index: 1; min-width: 0; }
+:root:root #main-grid .friends-header > .journey-page-orbit { z-index: 0; opacity: .42; }
+:root:root #main-grid .friends-intro { max-width: none; margin: 0; }
+:root:root #main-grid .friend-count {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  padding: .55rem .8rem;
+  border: 1px solid var(--journal-edge);
+  border-radius: .65rem;
+  background: var(--journal-glass);
+  box-shadow: none;
+}
+:root:root #main-grid .friend-count strong {
+  color: var(--journal-link);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+:root:root #main-grid .friend-count span { color: var(--winter-art-muted); font-size: .75rem; }
+:root:root #main-grid .friends-shell > .relative.mt-7 { margin-top: 1.5rem; }
+:root:root #main-grid .friend-card {
+  border: 1px solid var(--journal-edge);
+  border-radius: .85rem;
+  background: var(--journal-glass);
+  box-shadow: 0 4px 18px rgba(23,49,60,.07);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+:root:root #main-grid .friend-guide .section-kicker {
+  color: var(--journal-link);
+  font-size: .75rem;
+  font-weight: 650;
+  letter-spacing: .045em;
+}
+:root:root #main-grid .friend-guide .section-title {
+  color: var(--winter-art-ink);
+  font: 650 1.4rem/1.4 var(--winter-type-text);
+}
+:root:root #main-grid .friend-guide :is(.section-lead,.rule-list li,.application-card p,.site-info dd) {
+  color: var(--winter-art-muted);
+  font-size: .87rem;
+  line-height: 1.8;
+}
+:root:root #main-grid .friend-guide .application-card {
+  border: 1px solid var(--journal-edge);
+  border-radius: .85rem;
+  background: var(--journal-glass);
+}
+:root:root #main-grid #archive-filter-view .journey-filter-heading {
+  padding: 1.6rem clamp(1.2rem,3vw,2rem) 1.4rem;
+  border: 1px solid var(--journal-edge);
+  border-radius: 1rem;
+  background: linear-gradient(120deg,rgba(255,255,255,.12),transparent 46%),var(--journal-paper);
+  box-shadow: var(--journal-shadow);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+:root:root #main-grid #archive-filter-view .filter-count {
+  border-color: var(--journal-edge);
+  border-radius: .65rem;
+  background: var(--journal-glass);
+}
+@media (max-width: 900px) {
+  :root:root #main-grid .journey-chronicle-item {
+    grid-template-columns: 3.4rem minmax(0,1fr) 1rem;
+  }
+  :root:root #main-grid .journey-chronicle-tags { display: none; }
+}
+@media (max-width: 640px) {
+  :root:root #main-grid :is(.journey-about-cover,.journey-chronicle-hero,#archive-filter-view .journey-filter-heading) {
+    padding: 1.3rem 1.1rem 1.2rem;
+  }
+  :root:root #main-grid .journey-chronicle-year { grid-template-columns: 1fr; gap: .4rem; }
+  :root:root #main-grid .journey-chronicle-year-label { display: flex; align-items: baseline; gap: .7rem; }
+  :root:root #main-grid .journey-chronicle-years { padding-inline: 1.1rem; }
+  :root:root #main-grid :is(.journey-about-cover h1,.journey-chronicle-hero h1,.friends-intro h1,#archive-filter-view [data-filter-title]) {
+    font-size: 1.75rem;
+  }
+  :root:root #main-grid .friends-header { flex-wrap: wrap; gap: .75rem; }
+  :root:root #main-grid .friends-header > .journey-page-orbit { opacity: .2; }
+}
+
+
+/* Quiet starfield layout: content panels use solid night material. */
+:root:root #main-grid :is(.journey-index, .journey-about, .journey-chronicle, .friends-shell, .friend-guide),
+:root:root #main-grid :is(#post-container.card-base, #archive-filter-view .journey-filter-heading, #archive-cards .journey-filter-card) {
+  background: var(--journal-paper);
+}
+:root:root.dark #navbar .journey-topbar-inner,
+:root:root.dark #main-grid #sidebar .journey-passport,
+:root:root.dark #main-grid widget-layout.journey-index-widget,
+:root:root.dark #main-grid aside .date-panel-card {
+  background: var(--journal-glass);
+  border-color: var(--journal-edge);
+}
+:root:root.dark #main-grid :is(.winter-home,.journey-index,.journey-chronicle,.journey-about,.friends-shell,.friend-guide) { border-radius: .8rem; }
+:root:root.dark #main-grid .journey-index,
+:root:root.dark #main-grid #post-container.card-base,
+:root:root.dark #main-grid :is(.journey-about,.journey-chronicle,.friends-shell,.friend-guide) { background: var(--journal-paper); }
+:root:root.dark #main-grid .winter-home { border-radius: .8rem; background: var(--journal-glass); }
+:root:root.dark #navbar .journey-nav-item:is(:hover,:focus-visible,[aria-current="page"]) {
+  color: var(--journal-link); background: rgba(167,155,218,.085);
+}
+:root:root.dark #navbar .journey-nav-item::after { background: var(--journal-link); opacity: .65; }
+:root:root.dark #navbar .journey-wordmark-seal {
+  background: #25243c; border-color: var(--journal-edge); color: #c0c6ec;
+}
+:root:root.dark #navbar .journey-topbar-inner::after { opacity: .2; height: 1px; }
+:root:root.dark #main-grid .journey-passport::before { opacity: .18; }
+:root:root.dark #main-grid .journey-index::before { content: none; }
+:root:root.dark #main-grid aside .date-panel-glow { display: none; }
+:root:root.dark #main-grid .journey-index-header { padding-block: 1.3rem 1.05rem; border-bottom-width: 1px; }
+:root:root.dark #main-grid .journey-entry { padding-block: 1.4rem; }
+:root:root.dark #main-grid .journey-entry-image { box-shadow: none; }
+:root:root.dark #main-grid .winter-home-guide a,
+:root:root.dark #main-grid .winter-home-latest,
+:root:root.dark #main-grid .journey-passport-social-link { box-shadow: none; border-color: var(--journal-rule); }
+:root:root.dark #main-grid :is(.winter-home-latest,.winter-home-guide a):is(:hover,:focus-visible) {
+  border-color: rgba(183,175,234,.46); background: #292a44;
+}
+
+
+/* Date widget: secondary controls should not compete with the heroine. */
+:root:root.dark #main-grid aside .fortune-button {
+  border: 1px solid var(--journal-rule);
+  border-radius: .6rem;
+  background: #262a44;
+  color: var(--journal-link);
+  box-shadow: none;
+  font-weight: 600;
+}
+:root:root.dark #main-grid aside .fortune-button:hover {
+  background: #303550;
+  border-color: rgba(183,175,234,.35);
+  box-shadow: none;
+}
+:root:root.dark #main-grid aside .calendar-month {
+  background: #2b304a;
+  border-color: var(--journal-rule);
+  color: #c5cbee;
+}
+:root:root.dark #main-grid aside .live-dot span { box-shadow: none; }
+
+/* Starfield night UI — one transparent material, no backdrop blur. */
+:root:root.dark {
+  --journal-glass: rgba(17, 21, 39, .67);
+  --journal-paper: rgba(21, 24, 46, .58);
+  --journey-paper: rgba(17, 21, 39, .65);
+  --journey-paper-strong: rgba(21, 24, 46, .58);
+}
+:root:root.dark #navbar .journey-topbar-inner {
+  background: rgba(16, 20, 38, .81);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+:root:root.dark #main-grid #sidebar .journey-passport,
+:root:root.dark #main-grid widget-layout.journey-index-widget,
+:root:root.dark #main-grid aside .date-panel-card {
+  background: rgba(17, 21, 39, .69);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+:root:root.dark #main-grid .winter-home {
+  width: auto;
+  max-width: none;
+  background: rgba(17, 21, 39, .25);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+:root:root.dark #main-grid .winter-home-header {
+  flex-direction: row;
+  align-items: flex-start;
+  min-height: 0;
+  gap: 1rem;
+  padding: 1.3rem 1.55rem .85rem;
+}
+:root:root.dark #main-grid .winter-home-latest {
+  max-width: 18rem;
+  width: auto;
+  background: rgba(17, 21, 39, .42);
+}
+:root:root.dark #main-grid .winter-home-guide {
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  padding: .4rem 1.55rem 1rem;
+  gap: .6rem;
+}
+:root:root.dark #main-grid .winter-home-guide a {
+  grid-column: auto;
+  background: rgba(17, 21, 39, .42);
+}
+:root:root.dark #main-grid .journey-index,
+:root:root.dark #main-grid :is(.journey-about,.journey-chronicle,.friends-shell,.friend-guide),
+:root:root.dark #main-grid #archive-filter-view .journey-filter-heading,
+:root:root.dark #main-grid #archive-cards .journey-filter-card {
+  background: rgba(21, 24, 46, .59);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+:root:root.dark #main-grid #post-container.card-base {
+  background: rgba(21, 24, 46, .84);
+  background-color: rgba(21, 24, 46, .84);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+:root:root.dark #main-grid .friend-card,
+:root:root.dark #main-grid .friend-guide .application-card {
+  background: rgba(20, 24, 44, .55);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+:root:root.dark #main-grid .winter-home-heading :is(h1,p),
+:root:root.dark #main-grid .journey-entry-title,
+:root:root.dark #main-grid .journey-entry-summary {
+  text-shadow: 0 1px 3px rgba(5, 7, 23, .72);
+}
+@media (max-width: 767px) {
+  :root:root.dark #main-grid .winter-home-header {
+    flex-direction: column;
+    padding-inline: 1.15rem;
+  }
+  :root:root.dark #main-grid .winter-home-latest { width: 100%; max-width: none; }
+  :root:root.dark #main-grid .winter-home-guide {
+    padding-inline: 1.15rem;
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Desktop v1.2 — balanced frame and content-led Hero, never frosted glass. */
+@media (min-width: 1280px) {
+  /* A contained stage: keep the girl visible around the quieter three columns. */
+  #top-row,
+  #main-grid { max-width: 80rem; }
+  #top-row { padding-top: .75rem; }
+  #main-grid {
+    grid-template-columns: 15rem minmax(0, 1fr) 12.5rem;
+    gap: 1.125rem;
+  }
+  #navbar .journey-topbar-inner {
+    min-height: 4.3rem;
+    padding: .45rem 1rem;
+  }
+  #navbar .journey-wordmark-seal {
+    width: 2.55rem;
+    height: 2.55rem;
+    border-radius: .7rem;
+  }
+  #navbar .journey-wordmark-seal svg {
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+  #navbar .journey-nav { min-height: 2.9rem; }
+  #navbar .journey-nav-item { min-width: 2.9rem; padding: .25rem .42rem; }
+  /* Narrower author card: keep the three social links in one tidy row. */
+  #main-grid .journey-passport-social {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .3rem;
+  }
+  #main-grid .journey-passport-social-link {
+    min-width: 0;
+    padding: .35rem .15rem;
+    font-size: .59rem;
+    white-space: nowrap;
+  }
+  :root:root.dark {
+    --pc-surface: rgba(13,16,35,.30);
+    --pc-control: rgba(13,16,35,.38);
+    --pc-outline: rgba(205,201,239,.27);
+    --pc-shadow: 0 8px 24px rgba(5,7,22,.10);
+    --journal-glass: var(--pc-surface);
+    --journal-paper: var(--pc-surface);
+    --journey-paper: var(--pc-surface);
+    --journey-paper-strong: var(--pc-surface);
+    --journal-edge: var(--pc-outline);
+    --journey-stroke: var(--pc-outline);
+    --journal-rule: rgba(206,203,237,.18);
+    --journey-ink-muted: #d5d8eb;
+    --winter-art-muted: #cdd2e9;
+    --journal-link: #c4cbfa;
+    --journal-shadow: var(--pc-shadow);
+    --journey-shadow: var(--pc-shadow);
+  }
+  :root:root.dark #navbar .journey-topbar-inner,
+  :root:root.dark #main-grid #sidebar .journey-passport,
+  :root:root.dark #main-grid widget-layout.journey-index-widget,
+  :root:root.dark #main-grid aside .date-panel-card,
+  :root:root.dark #main-grid .winter-home,
+  :root:root.dark #main-grid .journey-index,
+  :root:root.dark #main-grid :is(.journey-about,.journey-chronicle,.friends-shell,.friend-guide),
+  :root:root.dark #main-grid #archive-filter-view .journey-filter-heading,
+  :root:root.dark #main-grid #archive-cards .journey-filter-card {
+    background: var(--pc-surface);
+    border: 1px solid var(--pc-outline);
+    border-radius: .82rem;
+    box-shadow: var(--pc-shadow);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  /* Only full-length article reading receives extra backing. */
+  :root:root.dark #main-grid #post-container.card-base {
+    background: rgba(13,16,35,.52);
+    background-color: rgba(13,16,35,.52);
+    border-color: var(--pc-outline);
+    border-radius: .82rem;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  :root:root.dark #navbar .journey-topbar-inner { border-top: 0; }
+  :root:root.dark #main-grid .winter-home {
+    display: grid;
+    grid-template-rows: auto auto;
+    row-gap: clamp(2rem, 4vh, 2.5rem);
+    width: 100%;
+    min-height: 0;
+    margin-bottom: 4rem;
+  }
+  :root:root.dark #main-grid .winter-home-reflection {
+    margin-top: 0;
+  }
+  :root:root.dark #main-grid .winter-home-header {
+    min-height: 0;
+    padding: 1.15rem 1.4rem .2rem;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.2rem;
+  }
+  :root:root.dark #main-grid .winter-home-heading h1 {
+    font-size: 1.9rem;
+    font-weight: 650;
+  }
+  :root:root.dark #main-grid .winter-home-heading p {
+    max-width: 19rem;
+    line-height: 1.8;
+    font-size: .93rem;
+  }
+  :root:root.dark #main-grid .winter-home-guide {
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    padding: .15rem 1.4rem 1rem;
+    gap: .65rem;
+  }
+  :root:root.dark #main-grid :is(.winter-home-guide a,.winter-home-latest) {
+    background: var(--pc-control);
+    border: 1px solid rgba(205,201,239,.18);
+    border-radius: .65rem;
+    box-shadow: none;
+  }
+  :root:root.dark #main-grid .winter-home-guide a {
+    min-height: 2.55rem;
+    font-size: .86rem;
+  }
+  :root:root.dark #main-grid :is(.winter-home-guide a,.winter-home-latest):is(:hover,:focus-visible) {
+    background: rgba(35,35,64,.42);
+    border-color: rgba(205,201,239,.42);
+    transform: none;
+  }
+  :root:root.dark #main-grid .journey-index {
+    margin-top: 0;
+    padding-inline: 1.55rem;
+  }
+  :root:root.dark #main-grid .journey-index-header { padding-block: 1.3rem 1.05rem; }
+  :root:root.dark #main-grid .journey-entry-summary {
+    color: #e1e4f4;
+    font-size: .94rem;
+    line-height: 1.8;
+  }
+  :root:root.dark #main-grid :is(.journey-entry-kicker,.journey-entry-footer,.journey-passport-overline,.journey-index-context) {
+    color: #d4d8ed;
+    text-shadow: 0 1px 3px rgba(3,5,17,.70);
+  }
+  :root:root.dark #main-grid .journey-passport::before,
+  :root:root.dark #main-grid .journey-index::before { content: none; }
+  :root:root.dark #main-grid .journey-entry-title,
+  :root:root.dark #main-grid .journey-entry-summary,
+  :root:root.dark #main-grid .journey-index-header h2,
+  :root:root.dark #main-grid .winter-home-heading :is(h1,p),
+  :root:root.dark #main-grid .journey-passport-bio {
+    text-shadow: 0 1px 4px rgba(3,5,17,.78);
+  }
+  :root:root.dark #main-grid .journey-chronicle-item strong {
+    color: #f1f1ff;
+    text-shadow: 0 1px 4px rgba(2,5,18,.85);
+  }
+  :root:root.dark #main-grid .journey-chronicle-item time,
+  :root:root.dark #main-grid .journey-chronicle-tags {
+    color: #d5d8ee;
+    text-shadow: 0 1px 3px rgba(2,5,18,.78);
+  }
+  :root:root.dark #main-grid :is(.journey-passport-social-link,.winter-home-latest) { box-shadow: none; }
+  :root:root.dark #main-grid aside .fortune-button,
+  :root:root.dark #main-grid aside .calendar-month {
+    background: var(--pc-control);
+    border-color: rgba(205,201,239,.18);
+  }
+}

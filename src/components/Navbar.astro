@@ -2,64 +2,78 @@
 import { Icon } from "astro-icon/components";
 import { navBarConfig, siteConfig } from "../config";
 import { url } from "../utils/url-utils";
-import LightDarkSwitch from "./LightDarkSwitch.svelte";
 import Search from "./Search.svelte";
 import DisplaySettings from "./widget/DisplaySettings.svelte";
 import NavMenuPanel from "./widget/NavMenuPanel.astro";
 
-const className = Astro.props.class;
 
 const links = navBarConfig.links;
 const isNovelPage = Astro.url.pathname.startsWith("/novels/");
 const crossesLayoutBoundary = (href: string) =>
 	isNovelPage !== href.startsWith("/novels/");
 ---
-<div id="navbar" class="z-50">
-    <div class="absolute h-8 left-0 right-0 -top-8 bg-[var(--card-bg)] transition"></div>
-    <div class:list={[
-        className,
-        "card-base !overflow-visible max-w-[var(--page-width)] h-[4.5rem] !rounded-t-none mx-auto flex items-center justify-between px-4"]}>
-        <a href={url('/')} data-no-swup={isNovelPage ? "true" : undefined} class="btn-plain scale-animation rounded-lg h-[3.25rem] px-5 font-bold active:scale-95">
-            <div class="flex flex-row text-[var(--primary)] items-center text-md">
-                <Icon name="material-symbols:home-outline-rounded" class="text-[1.75rem] mb-1 mr-2" />
-                {siteConfig.title}
-            </div>
+<header id="navbar" class="journey-topbar">
+    <div class="journey-topbar-inner card-base">
+        <a href={url('/')} data-no-swup={isNovelPage ? "true" : undefined} class="journey-wordmark" aria-label={`返回首页：${siteConfig.title}`}>
+            <span class="journey-wordmark-seal" aria-hidden="true">
+                <svg viewBox="0 0 52 52" fill="none" focusable="false">
+                    <path d="M13 12Q23 6 32 9L40 18V42Q26 37 13 43Z" fill="currentColor" fill-opacity=".07" stroke="currentColor" stroke-width="1.2"/>
+                    <path d="M32 9V18H40M18 23L30 21M18 28L32 26M19 33L30 31" stroke="currentColor" stroke-width=".9" opacity=".7"/>
+                    <path d="M8 43L19 29M12 38L7 34M12 38L18 38M16 33L12 28M16 33L21 33M9 42L5 40" stroke="currentColor" stroke-width=".7"/>
+                    <path d="M14 12Q24 7 31 10" stroke="white" stroke-width="1.1" opacity=".8"/>
+                </svg>
+            </span>
+            <span class="journey-wordmark-type">
+                <strong>{siteConfig.title}</strong>
+                <small>写故事 · 做游戏 · 记旅途</small>
+            </span>
         </a>
-        <div class="hidden lg:flex">
-            {links.map((l) => {
-                return <a
-                          aria-label={l.name}
-                          href={l.external ? l.url : url(l.url)}
-                          target={l.external ? "_blank" : null}
-                          data-no-swup={!l.external && crossesLayoutBoundary(l.url) ? "true" : undefined}
-                          class="btn-plain scale-animation rounded-lg h-11 font-bold px-5 active:scale-95"
+        <nav class="journey-nav hidden lg:flex" aria-label="主导航">
+            {links.map((l, i) => (
+                <a
+                    aria-label={l.name}
+                    href={l.external ? l.url : url(l.url)}
+                    target={l.external ? "_blank" : undefined}
+                    rel={l.external ? "noopener noreferrer" : undefined}
+                    data-no-swup={!l.external && crossesLayoutBoundary(l.url) ? "true" : undefined}
+                    data-journey-route={!l.external ? "true" : undefined}
+                    class="journey-nav-item"
                 >
-                    <div class="flex items-center">
-                        {l.name}
-                        {l.external && <Icon name="fa6-solid:arrow-up-right-from-square" class="text-[0.875rem] transition -translate-y-[1px] ml-1 text-black/[0.2] dark:text-white/[0.2]"></Icon>}
-                    </div>
-                </a>;
-            })}
-        </div>
-        <div class="flex">
-            <Search client:load></Search>
+                    <span class="journey-nav-index">{String(i + 1).padStart(2, "0")}</span>
+                    <span class="journey-nav-name">{l.name}</span>
+                </a>
+            ))}
+        </nav>
+        <div class="journey-topbar-tools">
+            <Search client:load />
             {!siteConfig.themeColor.fixed && (
-                    <button aria-label="显示设置" class="btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90" id="display-settings-switch">
-                        <Icon name="material-symbols:palette-outline" class="text-[1.25rem]"></Icon>
-                    </button>
+                <button aria-label="显示设置" class="journey-topbar-icon btn-plain h-11 w-11" id="display-settings-switch">
+                    <Icon name="material-symbols:palette-outline" class="text-xl" />
+                </button>
             )}
-            <LightDarkSwitch client:load></LightDarkSwitch>
-            <button aria-label="菜单" name="菜单" class="btn-plain scale-animation rounded-lg w-11 h-11 active:scale-90 lg:!hidden" id="nav-menu-switch">
-                <Icon name="material-symbols:menu-rounded" class="text-[1.25rem]"></Icon>
+            <button aria-label="菜单" name="菜单" class="journey-topbar-icon btn-plain h-11 w-11 lg:!hidden" id="nav-menu-switch">
+                <Icon name="material-symbols:menu-rounded" class="text-xl" />
             </button>
         </div>
-        <NavMenuPanel links={links} isNovelPage={isNovelPage}></NavMenuPanel>
-        <DisplaySettings client:load></DisplaySettings>
+        <NavMenuPanel links={links} isNovelPage={isNovelPage} />
+        <DisplaySettings client:load />
     </div>
-</div>
+</header>
 
 <script>
+function updateJourneyCurrentLink() {
+    const current = new URL(window.location.href);
+    document.querySelectorAll<HTMLAnchorElement>("#navbar [data-journey-route]").forEach((item) => {
+        const destination = new URL(item.href, window.location.origin);
+        const matches = destination.pathname === current.pathname &&
+            destination.searchParams.toString() === current.searchParams.toString();
+        if (matches) item.setAttribute("aria-current", "page");
+        else item.removeAttribute("aria-current");
+    });
+}
+
 function bindNavbarButtons() {
+    updateJourneyCurrentLink();
     const settingBtn = document.getElementById("display-settings-switch");
     if (settingBtn) {
         settingBtn.onclick = function () {

@@ -1,0 +1,93 @@
+@import "./fonts/noto-sans-sc.css";
+
+/* BG-00J: keep BG-00F/S2 sans-serif hierarchy, with self-hosted Chinese glyphs.
+ * Roboto retains familiar Latin lettering; Noto Sans SC unifies Chinese across devices. */
+:root {
+  --winter-type-text:"Roboto","Noto Sans SC","Microsoft YaHei",sans-serif;
+  --winter-type-display:var(--winter-type-text);
+}
+body:has(#main-grid) { font-family:var(--winter-type-text); }
+:root .journey-wordmark-type strong {
+  font-family:var(--winter-type-display);
+  font-weight:700;
+  font-size:clamp(.94rem,1.24vw,1.18rem);
+  letter-spacing:.045em;
+  line-height:1.25;
+}
+:root .journey-wordmark-type small { font-family:var(--winter-type-text); font-size:.55rem; font-weight:700; letter-spacing:.14em; }
+:root .journey-nav-name { font-family:var(--winter-type-text); font-size:.81rem; font-weight:600; letter-spacing:normal; }
+:root .journey-nav-index { font-family:var(--winter-type-text); font-weight:400; font-size:.54rem; letter-spacing:.12em; }
+:root #main-grid .winter-home-heading h1,
+:root #main-grid .journey-index-header h2,
+:root #main-grid .journey-passport-person h2,
+:root #main-grid #archive-filter-view [data-filter-title],
+:root #main-grid .journey-chronicle-hero h1,
+:root #main-grid .journey-about-cover h1 {
+  font-family:var(--winter-type-display);
+  font-weight:700;
+  letter-spacing:.025em;
+}
+:root #main-grid .winter-home-heading h1 { font-size:clamp(1.65rem,3.6cqw,2rem); font-weight:700; line-height:1.25; letter-spacing:-.025em; }
+:root #main-grid .journey-index-header h2 { font-size:clamp(1.45rem,2.5vw,1.8rem); line-height:1.25; }
+:root #main-grid .journey-index-header h2 span { font-family:var(--winter-type-text); font-size:.73rem; letter-spacing:.04em; font-weight:700; }
+:root #main-grid .journey-section-overline { font-family:var(--winter-type-text); font-weight:500; font-size:.78rem; letter-spacing:.045em; }
+:root #main-grid .winter-home-heading p { font-family:var(--winter-type-text); font-weight:400; letter-spacing:normal; }
+:root #main-grid .winter-home-latest-action,
+:root #main-grid .winter-home-guide a { font-weight:600; letter-spacing:normal; }
+:root #main-grid .winter-home-latest-action { font-weight:600; }
+:root #main-grid .winter-home-latest-meta { font-weight:650; font-size:.79rem; letter-spacing:normal; }
+:root #main-grid .journey-entry-title {
+  font-family:var(--winter-type-text);
+  font-weight:700;
+  font-size:clamp(1.19rem,2.1vw,1.48rem);
+  line-height:1.5;
+  letter-spacing:-.015em;
+  text-wrap:pretty;
+}
+:root #main-grid #archive-cards .journey-filter-card h2 {
+  font-family:var(--winter-type-text); font-weight:700;
+  font-size:clamp(1.17rem,2vw,1.58rem); line-height:1.38; letter-spacing:-.02em;
+}
+:root #main-grid .journey-entry-summary,
+:root #main-grid .journey-filter-card-excerpt {
+  font-family:var(--winter-type-text);
+  font-weight:400;
+  font-size:.91rem;
+  line-height:1.82;
+  letter-spacing:normal;
+}
+:root #main-grid .journey-entry-kicker { font-size:.77rem; letter-spacing:normal; }
+:root #main-grid .journey-entry-category { font-weight:600; }
+:root #main-grid .journey-entry-footer { font-size:.75rem; line-height:1.65; font-weight:400; }
+:root #main-grid .journey-entry-tags { font-weight:700; }
+:root #main-grid .journey-passport-overline { font-size:.65rem; font-weight:400; letter-spacing:.02em; }
+:root #main-grid .journey-passport-seal { font-size:.6rem; letter-spacing:.04em; font-weight:400; }
+:root #main-grid .journey-passport-person h2 { font-size:clamp(1.17rem,1.45vw,1.34rem); line-height:1.25; letter-spacing:normal; }
+:root #main-grid .journey-passport-bio { font-size:.82rem; line-height:1.85; }
+:root #main-grid .journey-passport-caption { font-weight:400; font-size:.69rem; letter-spacing:.04em; }
+:root #main-grid .journey-passport-social-link { font-family:var(--winter-type-text); font-size:.68rem; font-weight:500; }
+:root #main-grid .journey-filter-card-meta,
+:root #main-grid .journey-filter-card-footer { font-size:.73rem; font-weight:400; letter-spacing:.01em; }
+:root #main-grid .journey-article-title {
+  font-family:var(--winter-type-text);
+  font-weight:700;
+  font-size:clamp(1.9rem,3vw,2.65rem);
+  line-height:1.33;
+  letter-spacing:-.03em;
+  text-wrap:pretty;
+}
+:root #main-grid .journey-article-subtitle { font-size:.92rem; line-height:1.85; font-weight:400; }
+:root #main-grid .journey-article-section { font-family:var(--winter-type-text); font-size:.72rem; font-weight:400; letter-spacing:.06em; }
+:root #main-grid .markdown-content { font-family:var(--winter-type-text); font-size:1rem; line-height:1.9; }
+:root #main-grid .markdown-content :is(code,pre) { font-family:var(--code-font,ui-monospace,monospace); }
+@media(max-width:640px) {
+  :root .journey-wordmark-type strong { font-size:.87rem; letter-spacing:.045em; }
+  :root #main-grid .journey-index-header h2 { font-size:clamp(1.45rem,2.5vw,1.8rem); }
+  :root #main-grid .journey-index-header h2 span { font-size:.73rem; }
+  :root #main-grid .journey-entry-title { font-size:1.2rem; line-height:1.5; }
+  :root #main-grid #archive-cards .journey-filter-card h2 { font-size:1.12rem; line-height:1.38; }
+  :root #main-grid .journey-entry-summary,
+  :root #main-grid .journey-filter-card-excerpt { font-size:.88rem; line-height:1.85; }
+  :root #main-grid .journey-entry-footer { font-size:.73rem; }
+  :root #main-grid .journey-article-title { font-size:clamp(1.9rem,3vw,2.65rem); line-height:1.33; }
+}

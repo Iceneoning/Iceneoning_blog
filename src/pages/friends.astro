@@ -2,6 +2,7 @@
 import { getEntry, render } from "astro:content";
 import { Icon } from "astro-icon/components";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
+import JourneyOrbit from "../components/effects/JourneyOrbit.astro";
 
 const friendsPost = await getEntry("spec", "friends");
 
@@ -29,17 +30,15 @@ function getDomain(rawUrl: string) {
 		<div class="friends-orb friends-orb-one" aria-hidden="true"></div>
 		<div class="friends-orb friends-orb-two" aria-hidden="true"></div>
 
-		<header class="relative z-10 flex flex-col gap-5 border-b border-black/[0.07] pb-7 dark:border-white/[0.09] sm:flex-row sm:items-end sm:justify-between">
-			<div class="min-w-0">
-				<div class="mb-3 inline-flex items-center gap-2 rounded-full bg-[var(--primary)]/10 px-3 py-1.5 text-xs font-bold tracking-[0.16em] text-[var(--primary)]">
-					<Icon name="material-symbols:diversity-3-rounded" class="text-base" />
-					FRIEND LINKS
-				</div>
-				<div class="friends-intro prose dark:prose-invert prose-base !max-w-2xl [&_.anchor]:hidden [&_h1]:!mb-2 [&_h1]:!text-3xl sm:[&_h1]:!text-4xl [&_p]:!mb-0 [&_p]:!text-sm [&_p]:!leading-7 [&_p]:!text-black/55 dark:[&_p]:!text-white/55">
+		<header class="friends-header relative z-10">
+            <JourneyOrbit />
+			<div class="friends-header-copy">
+				<div class="journey-section-overline">FRIEND LINKS / 同行者</div>
+				<div class="friends-intro prose dark:prose-invert max-w-none [&_.anchor]:hidden">
 					<Content />
 				</div>
 			</div>
-			<div class="friend-count shrink-0 self-start sm:self-auto">
+			<div class="friend-count shrink-0">
 				<strong>{String(friends.length).padStart(2, "0")}</strong>
 				<span>位同行者</span>
 			</div>

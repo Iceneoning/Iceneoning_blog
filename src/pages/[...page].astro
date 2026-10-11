@@ -1,115 +1,40 @@
 ---
-import path from "node:path";
 import type { GetStaticPaths } from "astro";
-import { Icon } from "astro-icon/components";
 import Pagination from "../components/control/Pagination.astro";
-import ImageWrapper from "../components/misc/ImageWrapper.astro";
 import PostPage from "../components/PostPage.astro";
 import { PAGE_SIZE } from "../constants/constants";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
 import { getSortedPosts } from "../utils/content-utils";
-import { formatDateToYYYYMMDD } from "../utils/date-utils";
-import { getDir, getPostUrlBySlug } from "../utils/url-utils";
+import "../styles/winter-home.css";
 
 export const getStaticPaths = (async ({ paginate }) => {
-	const allBlogPosts = await getSortedPosts();
-	return paginate(allBlogPosts, { pageSize: PAGE_SIZE });
+    const allBlogPosts = await getSortedPosts();
+    return paginate(allBlogPosts, { pageSize: PAGE_SIZE });
 }) satisfies GetStaticPaths;
-// https://github.com/withastro/astro/issues/6507#issuecomment-1489916992
 
 const { page } = Astro.props;
-
 const isFirstPage = page.currentPage === 1;
-const allPosts = isFirstPage ? await getSortedPosts() : [];
-const featuredPost = allPosts[0];
-const recapPosts = allPosts.slice(1, 4);
-const featuredImageBasePath = featuredPost?.data.image
-	? path.join("content/posts/", getDir(featuredPost.id))
-	: "";
 ---
 <MainGridLayout>
-	{isFirstPage && featuredPost && (
-		<section class="home-navigation card-base p-4 mb-4">
-			<div class="flex items-center justify-between">
-				<div class="flex items-center gap-2">
-					<span class="h-5 w-1 rounded-full bg-[var(--primary)]"></span>
-					<h2 class="text-xl font-bold text-90">启航</h2>
-				</div>
-				<a href="/archive/" class="btn-plain rounded-lg h-9 px-3 text-sm font-semibold">
-					<span class="flex items-center gap-1">
-						查看全部
-						<Icon name="material-symbols:chevron-right-rounded" class="text-[1rem]"></Icon>
-					</span>
-				</a>
-			</div>
-			<div class="home-navigation-grid mt-4 grid grid-cols-1 gap-4">
-				<a href={getPostUrlBySlug(featuredPost.slug)} class="featured-post-card card-base overflow-hidden flex flex-col">
-					{featuredPost.data.image && (
-						<div class="featured-post-media w-full h-40 shrink-0">
-							<ImageWrapper
-								class="w-full h-full object-cover"
-								src={featuredPost.data.image}
-								basePath={featuredImageBasePath}
-								alt={featuredPost.data.title}
-							></ImageWrapper>
-						</div>
-					)}
-					<div class="p-4 flex-1 min-w-0">
-						<div class="text-50 text-xs font-semibold">崭新出炉</div>
-						<div class="text-90 text-lg font-bold mt-2 truncate">
-							{featuredPost.data.title}
-						</div>
-						<div class="text-30 text-xs mt-1">
-							{formatDateToYYYYMMDD(featuredPost.data.published)}
-						</div>
-						{featuredPost.data.description && (
-							<p class="text-50 text-sm mt-2 leading-6">
-								{featuredPost.data.description}
-							</p>
-						)}
-					</div>
-				</a>
-
-				<div class="flex flex-col gap-2">
-					<div class="text-50 text-xs font-semibold">精彩回顾</div>
-					{recapPosts.map((entry) => (
-						<a href={getPostUrlBySlug(entry.slug)} class="btn-card rounded-xl px-3 py-3 flex items-center justify-between gap-3">
-							<span class="text-75 font-medium truncate">{entry.data.title}</span>
-							<span class="text-30 text-xs whitespace-nowrap">{formatDateToYYYYMMDD(entry.data.published)}</span>
-						</a>
-					))}
-				</div>
-			</div>
-		</section>
-	)}
-    <PostPage page={page}></PostPage>
-    <Pagination class="mx-auto" page={page}></Pagination>
+    {isFirstPage && (
+        <section class="winter-home" aria-labelledby="winter-home-heading">
+            <div class="winter-home-prologue">
+                <div class="winter-home-eyebrow">冰霓的旅途手记</div>
+                <h1 id="winter-home-heading">你好，旅人。</h1>
+                <p class="winter-home-intro">
+                    我是冰霓。喜欢写代码、做游戏，偶尔也把脑海里那些不太安分的故事写下来。
+                    这里存着一些已经完成的作品，也存着许多还在摸索的尝试。
+                </p>
+            </div>
+            <blockquote class="winter-home-reflection">
+                <p>
+                    <strong>仰望浩瀚星河时，总觉得自己渺小得像一粒尘埃。
+                    可即便只是一瞬微光，也想在这漫长的旅途中留下些什么。</strong>
+                </p>
+                <footer>宇宙很大，旅途还长。欢迎在这里停留片刻。</footer>
+            </blockquote>
+        </section>
+    )}
+    <PostPage page={page} />
+    <Pagination class="mx-auto" page={page} />
 </MainGridLayout>
-
-<style>
-	.home-navigation {
-		container-type: inline-size;
-	}
-
-	/* The featured card can become horizontal as soon as its own container has
-	   enough room, independent of the viewport-level sidebar breakpoints. */
-	@container (min-width: 36rem) {
-		.featured-post-card {
-			flex-direction: row;
-		}
-
-		.featured-post-media {
-			width: 15rem;
-			height: auto;
-			flex-basis: 15rem;
-		}
-	}
-
-	/* Split the navigation into two columns only when the main content column
-	   can accommodate both useful minimum widths. */
-	@container (min-width: 49rem) {
-		.home-navigation-grid {
-			grid-template-columns: minmax(30rem, 1.15fr) minmax(17rem, 0.85fr);
-		}
-	}
-</style>

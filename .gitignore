@@ -32,3 +32,11 @@ yarn.lock
 
 # local media-analysis artifacts
 .codex-fps-frames/
+
+# Original video/background source assets (not part of the deployed site)
+/source-assets/
+# Guard against accidentally tracking the large 4K master in public
+/public/background/莫宁 流星.mp4
+
+# Deprecated visual designs quarantined for manual removal
+/_待删除_旧版视觉方案/

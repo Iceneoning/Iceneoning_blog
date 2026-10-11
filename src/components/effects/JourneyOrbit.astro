@@ -1,0 +1,19 @@
+---
+// Shared, decorative travel beacon for section covers.
+// CSS/SMIL only: no timers, route hooks, or layout shifts.
+---
+<div class="journey-page-orbit" aria-hidden="true">
+  <svg viewBox="0 0 360 240" fill="none" focusable="false">
+    <path class="journey-page-orbit-guide" d="M-18 209 C81 190 91 93 177 126 S274 108 386 16" stroke-width="1.5" />
+    <path class="journey-page-orbit-dash" d="M-18 209 C81 190 91 93 177 126 S274 108 386 16" stroke-width="2" stroke-dasharray="5 10"/>
+    <circle class="journey-page-orbit-outer" cx="278" cy="78" r="52" stroke-width="1"/>
+    <circle class="journey-page-orbit-rotor" cx="278" cy="78" r="39" stroke-width="1.4" stroke-dasharray="48 24"/>
+    <circle class="journey-page-orbit-inner" cx="278" cy="78" r="9" stroke-width="1"/>
+    <circle class="journey-page-orbit-center" cx="278" cy="78" r="4.5"/>
+    <path class="journey-page-orbit-axes" d="M278 11 V17 M278 139 V145 M211 78 H217 M339 78 H345" stroke-width="1.4"/>
+    <circle class="journey-page-orbit-traveler" r="5.5">
+      <animateMotion dur="7s" repeatCount="indefinite" path="M-18 209 C81 190 91 93 177 126 S274 108 386 16"/>
+    </circle>
+  </svg>
+  <span class="journey-page-orbit-caption">SIGNAL / ON ROUTE</span>
+</div>

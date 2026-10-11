@@ -1,0 +1,175 @@
+/* BG-00K: transparent article surfaces, without ordinal decoration.
+ * Repeated :root keeps these resets above the earlier Light/Dark art selectors. */
+:root:root {
+  --winter-art-ink:#24343c;
+  --winter-art-muted:#3f515b;
+  --winter-crystal-line:rgba(249,255,255,.58);
+}
+:root:root.dark {
+  --winter-art-ink:#f7f5ed;
+  --winter-art-muted:#dedfd8;
+  --winter-crystal-line:rgba(239,250,251,.23);
+}
+:root:root .journey-wordmark-type,
+:root:root #main-grid .winter-home-heading h1,
+:root:root #main-grid .winter-home-heading p span,
+:root:root #main-grid .journey-index-header h2,
+:root:root #main-grid .journey-index-header > div,
+:root:root #main-grid .journey-section-overline,
+:root:root #main-grid .journey-entry-kicker > *,
+:root:root #main-grid .journey-entry-footer > span,
+:root:root #main-grid .journey-entry-number > span:first-child,
+:root:root #main-grid .journey-index-context,
+:root:root #main-grid .journey-passport-person h2,
+:root:root #main-grid .journey-passport-bio,
+:root:root #main-grid .journey-passport-person > span,
+:root:root #main-grid .journey-passport-caption,
+:root:root #main-grid .journey-passport-overline,
+:root:root #main-grid .journey-passport-dispatch,
+:root:root #main-grid .date-display,
+:root:root #main-grid .time-display,
+:root:root #main-grid #archive-filter-view [data-filter-title],
+:root:root #main-grid #archive-filter-view [data-filter-description],
+:root:root #main-grid .journey-filter-card-meta > *,
+:root:root #main-grid .journey-filter-card-footer > *,
+:root:root #main-grid .journey-article-section,
+:root:root #main-grid .journey-article-subtitle,
+:root:root #main-grid .winter-reading-line {
+  background:transparent;
+  border-radius:0;
+  box-decoration-break:slice;
+  -webkit-box-decoration-break:slice;
+}
+:root:root #main-grid .winter-reading-line,
+:root:root #main-grid .winter-home-heading h1,
+:root:root #main-grid .winter-home-heading p span { padding:0; margin-left:0; }
+:root:root #main-grid .journey-entry-body::before { content:none; }
+:root:root #main-grid .journey-index {
+  background:transparent;
+  border-color:var(--winter-crystal-line);
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+  box-shadow:0 8px 25px rgba(39,60,71,.06);
+}
+:root:root.dark #main-grid .journey-index { background:transparent; }
+:root:root #main-grid .journey-index-header {
+  background:transparent;
+  border-bottom:1px solid rgba(61,87,99,.18);
+}
+:root:root.dark #main-grid .journey-index-header {
+  background:transparent;
+  border-bottom-color:rgba(231,243,243,.16);
+}
+:root:root #main-grid .journey-entry {
+  background:transparent;
+  grid-template-columns:minmax(0,1fr) clamp(7.5rem,19%,10.5rem);
+  border-bottom:1px solid rgba(64,85,96,.14);
+}
+:root:root.dark #main-grid .journey-entry {
+  background:transparent;
+  border-bottom-color:rgba(239,249,249,.14);
+}
+:root:root #main-grid .journey-entry-footer { border-top:0; }
+:root:root #main-grid .journey-index-context { border-left:0; }
+:root:root #main-grid .winter-home {
+  background:transparent;
+  box-shadow:0 7px 25px rgba(43,61,70,.06);
+  border-color:var(--winter-crystal-line);
+}
+:root:root.dark #main-grid .winter-home {
+  background:transparent;
+  box-shadow:0 7px 25px rgba(10,19,24,.10);
+}
+:root:root #main-grid .winter-home-accent { opacity:.30; }
+:root:root #main-grid .winter-home-guide a,
+:root:root #main-grid .winter-home-latest {
+  background:transparent;
+  border-color:rgba(255,255,255,.43);
+  box-shadow:none;
+}
+:root:root.dark #main-grid .winter-home-guide a,
+:root:root.dark #main-grid .winter-home-latest {
+  background:transparent;
+  border-color:rgba(231,248,248,.17);
+}
+:root:root #navbar .journey-topbar-inner,
+:root:root #main-grid #sidebar .journey-passport,
+:root:root #main-grid widget-layout.journey-index-widget,
+:root:root #main-grid aside .date-panel-card {
+  background:linear-gradient(120deg,rgba(255,253,249,.67),rgba(246,253,255,.50));
+  box-shadow:0 7px 24px rgba(36,57,68,.07);
+  border-color:var(--winter-crystal-line);
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+:root:root.dark #navbar .journey-topbar-inner,
+:root:root.dark #main-grid #sidebar .journey-passport,
+:root:root.dark #main-grid widget-layout.journey-index-widget,
+:root:root.dark #main-grid aside .date-panel-card {
+  background:linear-gradient(120deg,rgba(25,36,41,.76),rgba(25,36,41,.57));
+}
+:root:root #main-grid .journey-passport-bio { width:auto; padding:.65rem 0 .9rem; }
+:root:root #main-grid .journey-passport-overline { width:auto; }
+:root:root #main-grid .journey-passport-dispatch {
+  border:0; border-top:1px solid rgba(68,95,106,.17); box-shadow:none; border-radius:0;
+}
+:root:root #main-grid .journey-passport-social-link { background:transparent; }
+:root:root #main-grid .journey-passport-caption { color:var(--winter-art-muted); }
+:root:root #main-grid #archive-filter-view .journey-filter-heading {
+  background:transparent;
+}
+:root:root.dark #main-grid #archive-filter-view .journey-filter-heading {
+  background:transparent;
+}
+:root:root #main-grid #archive-cards .journey-filter-card {
+  background:transparent;
+  border-width:1px;
+  border-color:var(--winter-crystal-line);
+}
+:root:root.dark #main-grid #archive-cards .journey-filter-card {
+  background:transparent;
+}
+:root:root #main-grid .journey-filter-card-action { background:transparent; border:0; }
+:root:root #main-grid #post-container.card-base {
+  background:linear-gradient(105deg,rgba(255,253,248,.74),rgba(255,253,248,.54));
+}
+:root:root.dark #main-grid #post-container.card-base {
+  background:linear-gradient(105deg,rgba(23,34,40,.85),rgba(23,34,40,.63));
+}
+/* Reduce the competing white cuts. Only the welcome pane retains a crystal rim. */
+:root:root #main-grid .journey-index::after,
+:root:root #main-grid #sidebar .journey-passport::after,
+:root:root #main-grid .journey-filter-card::before,
+:root:root #navbar .journey-topbar-inner::after,
+:root:root #main-grid aside .date-panel-card::after { content:none; }
+:root:root #main-grid .winter-home { isolation:isolate; }
+:root:root #main-grid #post-container .markdown-content {
+  background:rgba(255,253,246,.88); border-radius:.4rem; padding:.7rem;
+}
+:root:root.dark #main-grid #post-container .markdown-content { background:rgba(20,30,36,.93); }
+:root:root #main-grid .winter-home::after,
+:root:root #main-grid #sidebar .journey-passport::before,
+:root:root #main-grid .journey-index::before,
+:root:root #navbar .journey-topbar-inner::before { opacity:.22; }
+@media(max-width:640px) {
+  :root:root #main-grid .winter-home {
+    background:transparent;
+  }
+  :root:root.dark #main-grid .winter-home {
+    background:transparent;
+  }
+  :root:root #main-grid .winter-home-heading p span { display:block; white-space:normal; }
+  :root:root #main-grid .journey-entry { grid-template-columns:minmax(0,1fr); }
+  :root:root #main-grid .journey-entry-image { grid-column:1; }
+}
+
+@media(min-width:1280px) {
+  :root:root #main-grid .journey-entry { grid-template-columns:minmax(0,1fr) 29%; }
+}
+@media(min-width:1024px) and (max-width:1279px) {
+  :root:root #main-grid .journey-entry { grid-template-columns:minmax(0,1fr) 26%; }
+}
+@media(min-width:641px) and (max-width:1023px) {
+  :root:root #main-grid .journey-entry { grid-template-columns:minmax(0,1fr) 6.5rem; }
+}
+

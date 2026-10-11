@@ -31,11 +31,15 @@ export const siteConfig: SiteConfig = {
 
 export const backgroundConfig = {
 	enable: true,
-	src: "/background/site-bg.webp", // Path relative to /public when it starts with '/'
+	src: "/background/star-sea-poster.webp", // Matching MP4 frame; desktop image-mode and playback fallback
+	mobileSrc: "/background/mobile-background.jpg", // Protected mobile wallpaper; do not remove
+	mode: "video" as "video" | "image", // Switch to "image" to disable moving wallpaper
+	videoSrc: "/background/star-sea-loop-1080p.mp4", // 1080p H.264, silent, faststart
+	videoPosition: "50% 50%", // Center subject; configurable without CSS edits
 	
 	blur: 0, // Blur radius in px for frosted effect
-	overlayLight: 0.42, // Light mode overlay opacity
-	overlayDark: 0.5, // Dark mode overlay opacity
+	overlayLight: 0.08, // Preserve vivid blue; panels supply text contrast
+	overlayDark: 0.12, // Keep the Milky Way visible in dark mode
 	scale: 1.08, // Slight scale to avoid blur edge clipping
 };
 
@@ -75,7 +79,7 @@ export const navBarConfig: NavBarConfig = {
 export const profileConfig: ProfileConfig = {
 	avatar: "/Portrait/Iceneoning.webp",
 	name: "冰霓Iceneon",
-	bio: "你好啊，很高心认识你。",
+	bio: "你好啊，很高兴认识你。",
 	links: [
 		{
 			name: "Email",

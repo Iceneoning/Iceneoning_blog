@@ -2,22 +2,23 @@
 import { getEntry, render } from "astro:content";
 import Markdown from "@components/misc/Markdown.astro";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
+import JourneyOrbit from "../components/effects/JourneyOrbit.astro";
 
 const introPost = await getEntry("spec", "intro");
-
-if (!introPost) {
-	throw new Error("Intro page content not found");
-}
-
+if (!introPost) throw new Error("Intro page content not found");
 const { Content } = await render(introPost);
 ---
-
 <MainGridLayout title="介绍" description="关于我">
-	<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
-		<div class="card-base z-10 px-9 py-6 relative w-full">
-			<Markdown class="mt-2">
-				<Content />
-			</Markdown>
-		</div>
-	</div>
+    <section class="journey-about">
+        <header class="journey-about-cover">
+            <JourneyOrbit />
+            <span class="journey-section-overline">PERSONAL ATLAS / 旅人档案</span>
+            <span class="journey-about-stamp" aria-hidden="true">ICENEON · 001</span>
+            <h1>关于这段旅途。</h1>
+            <p>游戏、代码和一些不舍得遗忘的日常。</p>
+        </header>
+        <div class="journey-about-paper">
+            <Markdown class="journey-about-text"><Content /></Markdown>
+        </div>
+    </section>
 </MainGridLayout>

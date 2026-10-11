@@ -4,11 +4,19 @@ import { getPostUrlBySlug } from "@utils/url-utils";
 import PostCard from "./PostCard.astro";
 
 const { page } = Astro.props;
-
+const entries: CollectionEntry<"posts">[] = page.data;
 ---
-<div class="transition flex flex-col rounded-[var(--radius-large)] bg-[var(--card-bg)] py-1 md:py-0 md:bg-transparent md:gap-4 mb-4">
-    {page.data.map((entry: CollectionEntry<"posts">) => (
-        <PostCard
+<section class="journey-index" aria-label="文章目录">
+    <header class="journey-index-header">
+        <div>
+            <div class="journey-section-overline">星夜 · 故事仍在继续</div>
+            <h2>沿途札记 <span>Notes from the journey</span></h2>
+        </div>
+        <span class="journey-index-context"><span>本页</span><strong>{entries.length}</strong><span>则</span></span>
+    </header>
+    <div class="journey-entry-list">
+        {entries.map((entry) => (
+            <PostCard
                 entry={entry}
                 title={entry.data.title}
                 tags={entry.data.tags}
@@ -19,6 +27,7 @@ const { page } = Astro.props;
                 image={entry.data.image}
                 description={entry.data.description}
                 draft={entry.data.draft}
-        ></PostCard>
-    ))}
-</div>
+            />
+        ))}
+    </div>
+</section>
