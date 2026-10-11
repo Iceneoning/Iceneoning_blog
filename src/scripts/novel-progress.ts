@@ -18,6 +18,13 @@ const FONT_SIZES = ["1rem", "1.075rem", "1.15rem", "1.225rem"];
 const LINE_HEIGHTS = ["1.8", "2", "2.2"];
 let scrollFrame: number | null = null;
 let toolbarHideTimer: number | undefined;
+let readerToolbar: HTMLElement | null = null;
+let readingBar: HTMLElement | null = null;
+let readingPercent: HTMLElement | null = null;
+let readingArticle: HTMLElement | null = null;
+let previousProgress = -1;
+let previousPercentage = -1;
+const coarsePointer = window.matchMedia("(hover: none), (pointer: coarse)");
 
 function storageKey(novelId: string) {
 	return `${STORAGE_PREFIX}:${novelId}:progress:v${STORAGE_VERSION}`;
@@ -140,8 +147,8 @@ function setupReaderControls() {
 }
 
 function updateReaderToolbarFromPointer(event: PointerEvent) {
-	const toolbar = document.querySelector<HTMLElement>("[data-reader-toolbar]");
-	if (!toolbar || window.matchMedia("(hover: none), (pointer: coarse)").matches) {
+	const toolbar = readerToolbar;
+	if (!toolbar || coarsePointer.matches) {
 		return;
 	}
 
@@ -234,9 +241,9 @@ function updateContinueLinks() {
 
 function updateReadingBar() {
 	scrollFrame = null;
-	const bar = document.querySelector<HTMLElement>("[data-reading-progress]");
-	const percent = document.querySelector<HTMLElement>("[data-reading-percent]");
-	const article = document.querySelector<HTMLElement>("[data-novel-prose]");
+	const bar = readingBar;
+	const percent = readingPercent;
+	const article = readingArticle;
 	if (!bar || !article) return;
 
 	const rect = article.getBoundingClientRect();
@@ -250,29 +257,51 @@ function updateReadingBar() {
 		Math.max(0, (window.scrollY - articleTop) / readableDistance),
 	);
 	const percentage = Math.round(progress * 100);
-	bar.style.transform = `scaleX(${progress})`;
-	bar.setAttribute("aria-valuenow", String(percentage));
-	if (percent) percent.textContent = `${percentage}%`;
+	if (progress !== previousProgress) {
+		bar.style.transform = `scaleX(${progress})`;
+		previousProgress = progress;
+	}
+	if (percentage !== previousPercentage) {
+		bar.setAttribute("aria-valuenow", String(percentage));
+		if (percent) percent.textContent = `${percentage}%`;
+		previousPercentage = percentage;
+	}
 }
 
 function scheduleReadingBarUpdate() {
-	if (scrollFrame !== null) return;
+	if (!readingBar || !readingArticle || scrollFrame !== null) return;
 	scrollFrame = window.requestAnimationFrame(updateReadingBar);
 }
 
 function initNovelPage() {
+	disposeReaderPage();
 	saveCurrentChapter();
 	updateChapterList();
 	updateContinueLinks();
 	setupReaderControls();
+	readerToolbar = document.querySelector<HTMLElement>("[data-reader-toolbar]");
+	readingBar = document.querySelector<HTMLElement>("[data-reading-progress]");
+	readingPercent = document.querySelector<HTMLElement>("[data-reading-percent]");
+	readingArticle = document.querySelector<HTMLElement>("[data-novel-prose]");
+	if (readingBar && readingArticle) {
+		window.addEventListener("scroll", scheduleReadingBarUpdate, { passive: true });
+		window.addEventListener("resize", scheduleReadingBarUpdate, { passive: true });
+	}
+	if (readerToolbar) window.addEventListener("pointermove", updateReaderToolbarFromPointer, { passive: true });
 	scheduleReadingBarUpdate();
 }
 
-window.addEventListener("scroll", scheduleReadingBarUpdate, { passive: true });
-window.addEventListener("resize", scheduleReadingBarUpdate, { passive: true });
-window.addEventListener("pointermove", updateReaderToolbarFromPointer, {
-	passive: true,
-});
+function disposeReaderPage() {
+	window.removeEventListener("scroll", scheduleReadingBarUpdate);
+	window.removeEventListener("resize", scheduleReadingBarUpdate);
+	window.removeEventListener("pointermove", updateReaderToolbarFromPointer);
+	if (scrollFrame !== null) window.cancelAnimationFrame(scrollFrame);
+	if (toolbarHideTimer !== undefined) window.clearTimeout(toolbarHideTimer);
+	scrollFrame = null;
+	toolbarHideTimer = undefined;
+	readerToolbar = readingBar = readingPercent = readingArticle = null;
+	previousProgress = previousPercentage = -1;
+}
 
 if (document.readyState === "loading") {
 	document.addEventListener("DOMContentLoaded", initNovelPage, { once: true });
@@ -281,8 +310,10 @@ if (document.readyState === "loading") {
 }
 
 function setupSwup() {
+	window.swup.hooks.on("content:replace", disposeReaderPage, { before: true });
 	window.swup.hooks.on("page:view", initNovelPage);
 }
 
 if (window.swup?.hooks) setupSwup();
 else document.addEventListener("swup:enable", setupSwup, { once: true });
+export {};

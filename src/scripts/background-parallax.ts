@@ -3,6 +3,8 @@
  * No edge glow, canvas, shader or backdrop blur is involved.
  * Runs only when the pointer actually moves; Swup does not rebuild the wallpaper.
  */
+import { isIntroCoveringPage } from "./intro-lifecycle";
+
 type ParallaxWindow = Window & { __siteBackgroundParallaxDispose?: () => void };
 const runtime = window as ParallaxWindow;
 runtime.__siteBackgroundParallaxDispose?.();
@@ -14,7 +16,7 @@ const layers = [image, video].filter((layer): layer is HTMLElement => layer inst
 if (layers.length > 0) {
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const finePointer = window.matchMedia("(pointer: fine)");
-  const enabled = () => window.innerWidth > 900 && finePointer.matches && !reducedMotion.matches;
+  const enabled = () => window.innerWidth > 900 && finePointer.matches && !reducedMotion.matches && !isIntroCoveringPage();
 
   let targetX = 0;
   let targetY = 0;

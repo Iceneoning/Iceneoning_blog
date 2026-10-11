@@ -163,6 +163,24 @@ const socialImageUrl = image
                   (force || sessionStorage.getItem(key) !== '1')) {
                 document.documentElement.setAttribute('data-site-intro-pending', '');
                 sessionStorage.setItem(key, '1');
+                // Start recovery before fetching the renderer, so a stalled
+                // module request cannot leave the visitor under the curtain.
+                window.__siteStarIntroGuard = window.setTimeout(() => {
+                  if (window.__siteStarIntroDestroy) {
+                    window.__siteStarIntroDestroy();
+                    return;
+                  }
+                  const root = document.documentElement;
+                  if (root.hasAttribute('data-site-intro-pending') &&
+                      !root.hasAttribute('data-site-intro-preparing')) {
+                    root.setAttribute('data-site-intro-preparing', '');
+                    document.dispatchEvent(new Event('site:intro-prepare'));
+                  }
+                  root.removeAttribute('data-site-intro-pending');
+                  root.removeAttribute('data-site-intro-preparing');
+                  document.getElementById('star-intro-overlay')?.remove();
+                  window.__siteStarIntroGuard = undefined;
+                }, 9000);
               }
             } catch (e) {
               // Do not block the blog if session storage is unavailable.
@@ -188,7 +206,10 @@ const socialImageUrl = image
 		<slot name="head"></slot>
 
 		<link rel="alternate" type="application/rss+xml" title={profileConfig.name} href={`${Astro.site}rss.xml`}/>
-		{backgroundConfig.enable && <link rel="preload" href={backgroundImageUrl} as="image" fetchpriority="high" />}
+		{backgroundConfig.enable && <>
+			<link rel="preload" href={backgroundImageUrl} as="image" fetchpriority="high" media="(min-width: 901px)" />
+			<link rel="preload" href={mobileBackgroundImageUrl} as="image" fetchpriority="high" media="(max-width: 900px)" />
+		</>}
 		<link rel="preload" href={roboto400} as="font" type="font/woff2" crossorigin>
 		<link rel="preload" href={roboto700} as="font" type="font/woff2" crossorigin>
 
@@ -277,12 +298,19 @@ const socialImageUrl = image
 	:root.dark #site-bg-frosted {
 		background: rgba(10, 14, 20, var(--site-bg-overlay-dark));
 	}
-	/* Mobile uses a dedicated saved illustration, not the desktop MP4 poster. */
+	/* Mobile uses a dedicated 1200×800 illustration, not the desktop MP4.
+	   Avoid extra scaling and favor the heroine in portrait without letterboxing. */
 	@media (max-width: 900px) {
 		#site-bg-image {
 			background-image: var(--site-bg-mobile-image);
 			background-position: center;
-			--site-bg-scale: 1.03;
+			/* Mobile does not use pointer parallax; avoid the 1.08× desktop overscan. */
+			transform: none;
+		}
+	}
+	@media (max-width: 900px) and (orientation: portrait) {
+		#site-bg-image {
+			background-position: 77% center;
 		}
 	}
 }
@@ -294,66 +322,34 @@ const socialImageUrl = image
 import "../scripts/background-video";
 import "../scripts/background-parallax";
 import "../scripts/blank-screen";
+import { isIntroCoveringPage, prepareIntroPage } from "../scripts/intro-lifecycle";
 // Start only once per document, never on Swup page:view.
 if (document.documentElement.hasAttribute("data-site-intro-pending")) {
     void import("../scripts/star-intro").catch(error => {
         console.warn("[site intro] Load failed; showing the blog.", error);
         document.getElementById("star-intro-overlay")?.remove();
+        prepareIntroPage();
+        document.documentElement.removeAttribute("data-site-intro-preparing");
         document.documentElement.removeAttribute("data-site-intro-pending");
+        clearTimeout((window as Window & { __siteStarIntroGuard?: number }).__siteStarIntroGuard);
     });
 } else {
     document.getElementById("star-intro-overlay")?.remove();
 }
 // The oversized journey carousel was retired; the compact homepage is static.
-import "../scripts/novel-progress";
-import "../scripts/novel-showcase";
-import "../scripts/novel-crystal-hero";
+// Route features mount themselves on first import and keep their Swup hooks.
+// Ordinary blog pages do not need the reader or crystal runtime.
+function loadNovelFeatures() {
+    if (isIntroCoveringPage()) return;
+    const modules: Promise<unknown>[] = [];
+    if (document.querySelector("[data-novel-reader], [data-novel-chapter], [data-novel-continue]"))
+        modules.push(import("../scripts/novel-progress"));
+    if (document.querySelector("[data-novel-crystal-root]"))
+        modules.push(import("../scripts/novel-crystal-hero"));
+    void Promise.all(modules).catch(error => console.error("[novel features] Load failed", error));
+}
 import {getHue, getStoredTheme, setHue, setTheme} from "../utils/setting-utils";
 import { BACK_TO_TOP_SHOW_THRESHOLD_VH } from "../constants/constants";
-
-/* Preload fonts */
-// (async function() {
-// 	try {
-// 		await Promise.all([
-// 			document.fonts.load("400 1em Roboto"),
-// 			document.fonts.load("700 1em Roboto"),
-// 		]);
-// 		document.body.classList.remove("hidden");
-// 	} catch (error) {
-// 		console.log("Failed to load fonts:", error);
-// 	}
-// })();
-
-/* TODO This is a temporary solution for style flicker issue when the transition is activated */
-/* issue link: https://github.com/withastro/astro/issues/8711, the solution get from here too */
-/* update: fixed in Astro 3.2.4 */
-/*
-function disableAnimation() {
-	const css = document.createElement('style')
-	css.appendChild(
-		document.createTextNode(
-			`*{
-              -webkit-transition:none!important;
-              -moz-transition:none!important;
-              -o-transition:none!important;
-              -ms-transition:none!important;
-              transition:none!important
-              }`
-		)
-	)
-	document.head.appendChild(css)
-
-	return () => {
-		// Force restyle
-		;(() => window.getComputedStyle(document.body))()
-
-		// Wait for next tick before removing
-		setTimeout(() => {
-			document.head.removeChild(css)
-		}, 1)
-	}
-}
-*/
 
 function setClickOutsideToClose(panel: string, ignores: string[]) {
 	document.addEventListener("click", event => {
@@ -366,7 +362,7 @@ function setClickOutsideToClose(panel: string, ignores: string[]) {
 				return;
 			}
 		}
-		panelDom!.classList.add("float-panel-closed");
+		panelDom?.classList.add("float-panel-closed");
 	});
 }
 setClickOutsideToClose("display-setting", ["display-setting", "display-settings-switch"])
@@ -431,7 +427,6 @@ function applyArchiveFilters() {
 }
 
 function init() {
-	// disableAnimation()()		// TODO
 	loadTheme();
 	loadHue();
 	applyArchiveFilters();
@@ -439,6 +434,8 @@ function init() {
 
 /* Load settings when entering the site */
 init();
+loadNovelFeatures();
+document.addEventListener("site:intro-prepare", loadNovelFeatures, { once: true });
 
 const setup = () => {
 	window.swup.hooks.on('visit:start', () => {
@@ -455,6 +452,7 @@ const setup = () => {
 		}
 	});
 	window.swup.hooks.on('page:view', () => {
+		loadNovelFeatures()
 		loadTheme()
 		loadHue()
 		applyArchiveFilters()
@@ -512,6 +510,7 @@ scheduleScrollUpdate()
 <script>
 let lightbox: any = null
 let pswpPromise: Promise<any> | null = null
+let lightboxGeneration = 0
 
 function installPhotoSwipeStyles(...stylesheets: string[]) {
 	const styleId = "photoswipe-styles"
@@ -529,12 +528,11 @@ function loadPhotoSwipe() {
 }
 
 async function createPhotoSwipe() {
+	const generation = ++lightboxGeneration
+	lightbox?.destroy?.()
+	lightbox = null
 	const hasImages = document.querySelector(".custom-md img, #post-cover img")
 	if (!hasImages) return
-
-	lightbox?.destroy?.()
-
-	loadPhotoSwipe()
 
 	const [
 		{ default: PhotoSwipeLightbox },
@@ -545,6 +543,7 @@ async function createPhotoSwipe() {
 		import("photoswipe/style.css?inline"),
 		import("../styles/photoswipe.css?inline"),
 	])
+	if (generation !== lightboxGeneration) return
 	installPhotoSwipeStyles(photoSwipeBaseStyles, photoSwipeThemeStyles)
 
 	lightbox = new PhotoSwipeLightbox({
@@ -582,7 +581,9 @@ const setup = () => {
 	window.swup.hooks.on(
 		"content:replace",
 		() => {
+			lightboxGeneration++
 			lightbox?.destroy?.()
+			lightbox = null
 		},
 		{ before: true },
 	)

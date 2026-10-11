@@ -2,6 +2,8 @@
  * No Shader/GPU context: the site video is already the atmospheric background.
  * Swup re-entry disposes listeners, observers and RAF before reattaching.
  */
+import { isIntroCoveringPage } from "./intro-lifecycle";
+
 let cleanupNovelCrystal: (() => void) | undefined;
 
 function mountNovelCrystal() {
@@ -18,6 +20,8 @@ function mountNovelCrystal() {
   let visible = true, disposed = false;
   let raf=0,lastPaint=0,width=1,height=1,dpr=1;
   let px=0,py=0,targetX=0,targetY=0;
+  let pointer: {x:number,y:number} | undefined;
+  let appliedX="",appliedY="";
   let seed=0x71cfe31;
   const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
   const stars=Array.from({length:104},()=>({
@@ -27,8 +31,10 @@ function mountNovelCrystal() {
   }));
   function resize() {
     const rect=root!.getBoundingClientRect();
-    width=Math.max(1,rect.width);height=Math.max(1,rect.height);
-    dpr=Math.min(devicePixelRatio||1,1.3,Math.sqrt(650000/(width*height)));
+    const nextWidth=Math.max(1,rect.width),nextHeight=Math.max(1,rect.height);
+    const nextDpr=Math.min(devicePixelRatio||1,1.3,Math.sqrt(650000/(nextWidth*nextHeight)));
+    if(width===nextWidth&&height===nextHeight&&dpr===nextDpr)return;
+    width=nextWidth;height=nextHeight;dpr=nextDpr;
     canvas!.width=Math.round(width*dpr);canvas!.height=Math.round(height*dpr);
     context!.setTransform(dpr,0,0,dpr,0,0);
     paint(0);
@@ -56,30 +62,37 @@ function mountNovelCrystal() {
   }
   function frame(now:number) {
     raf=0;
-    if(disposed||document.hidden||!visible||reduced.matches)return;
+    if(disposed||document.hidden||!visible||reduced.matches||isIntroCoveringPage())return;
+    // Measure the latest pointer once before writing styles, even on high-Hz mice.
+    if(pointer){
+      const b=root!.getBoundingClientRect();
+      targetX=((pointer.x-b.left)/Math.max(b.width,1)-.5)*10;
+      targetY=((pointer.y-b.top)/Math.max(b.height,1)-.5)*7;
+      pointer=undefined;
+    }
     px+=(targetX-px)*.09;py+=(targetY-py)*.09;
-    root!.style.setProperty("--crystal-move-x",`${px.toFixed(1)}px`);
-    root!.style.setProperty("--crystal-move-y",`${py.toFixed(1)}px`);
+    const x=`${px.toFixed(1)}px`,y=`${py.toFixed(1)}px`;
+    if(x!==appliedX){root!.style.setProperty("--crystal-move-x",x);appliedX=x;}
+    if(y!==appliedY){root!.style.setProperty("--crystal-move-y",y);appliedY=y;}
     if(now-lastPaint>40){lastPaint=now;paint(now*.001);}
     raf=requestAnimationFrame(frame);
   }
-  function start(){if(disposed||raf||document.hidden||!visible||reduced.matches)return;raf=requestAnimationFrame(frame);}
+  function start(){if(disposed||raf||document.hidden||!visible||reduced.matches||isIntroCoveringPage())return;raf=requestAnimationFrame(frame);}
   function stop(){if(raf)cancelAnimationFrame(raf);raf=0;}
   function onMove(event:PointerEvent){
     if(reduced.matches||narrow.matches)return;
-    const b=root!.getBoundingClientRect();
-    targetX=((event.clientX-b.left)/b.width-.5)*10;
-    targetY=((event.clientY-b.top)/b.height-.5)*7;
+    pointer={x:event.clientX,y:event.clientY};
   }
-  function onLeave(){targetX=0;targetY=0;}
+  function onLeave(){pointer=undefined;targetX=0;targetY=0;}
   function onVisibility(){document.hidden?stop():start();}
-  function onMotion(){if(reduced.matches){stop();root!.style.removeProperty("--crystal-move-x");root!.style.removeProperty("--crystal-move-y");paint(0);} else start();}
+  function onMotion(){if(reduced.matches){stop();pointer=undefined;appliedX=appliedY="";root!.style.removeProperty("--crystal-move-x");root!.style.removeProperty("--crystal-move-y");paint(0);} else start();}
   const observer=new IntersectionObserver(entries=>{visible=entries.some(e=>e.isIntersecting);visible?start():stop();},{threshold:.02});
   const resizeObserver=new ResizeObserver(resize);
   observer.observe(root);resizeObserver.observe(root);
   root.addEventListener("pointermove",onMove,{passive:true});
   root.addEventListener("pointerleave",onLeave);
   document.addEventListener("visibilitychange",onVisibility);
+  document.addEventListener("site:intro-prepare",start);
   reduced.addEventListener("change",onMotion);
   resize();start();
   cleanupNovelCrystal=()=>{
@@ -87,6 +100,7 @@ function mountNovelCrystal() {
     root.removeEventListener("pointermove",onMove);
     root.removeEventListener("pointerleave",onLeave);
     document.removeEventListener("visibilitychange",onVisibility);
+    document.removeEventListener("site:intro-prepare",start);
     reduced.removeEventListener("change",onMotion);
     root.style.removeProperty("--crystal-move-x");
     root.style.removeProperty("--crystal-move-y");
@@ -96,6 +110,7 @@ function mountNovelCrystal() {
 if (document.readyState==="loading") document.addEventListener("DOMContentLoaded",mountNovelCrystal,{once:true});
 else mountNovelCrystal();
 function bindNovelCrystalSwup() {
+  window.swup?.hooks.on("content:replace",()=>{cleanupNovelCrystal?.();cleanupNovelCrystal=undefined;},{before:true});
   window.swup?.hooks.on("page:view",mountNovelCrystal);
 }
 if(window.swup?.hooks)bindNovelCrystalSwup();

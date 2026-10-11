@@ -72,6 +72,7 @@ class TableOfContents extends HTMLElement {
     active: boolean[] = [];
     activeIndicator: HTMLElement | null = null;
     updateFrame: number | null = null;
+    initFrame: number | null = null;
 
     constructor() {
         super();
@@ -163,8 +164,7 @@ class TableOfContents extends HTMLElement {
         if (!this.sections.length) return;
 
         for (let i = 0; i < this.sections.length; i++) {
-            let offsetTop = this.sections[i].getBoundingClientRect().top;
-            let offsetBottom = this.sections[i].getBoundingClientRect().bottom;
+            const { top: offsetTop, bottom: offsetBottom } = this.sections[i].getBoundingClientRect();
 
             if (this.isInRange(offsetTop, 0, window.innerHeight)
                 || this.isInRange(offsetBottom, 0, window.innerHeight)
@@ -203,7 +203,10 @@ class TableOfContents extends HTMLElement {
         // The shell no longer replays an entrance animation on hard refresh.
         // Wait one frame so the replaced article has completed layout before
         // measuring its sections.
-        requestAnimationFrame(() => this.init());
+        this.initFrame = requestAnimationFrame(() => {
+            this.initFrame = null;
+            if (this.isConnected) this.init();
+        });
     };
 
     init() {
@@ -225,16 +228,21 @@ class TableOfContents extends HTMLElement {
 
         if (this.tocEntries.length === 0) return;
 
-        this.sections = new Array(this.tocEntries.length);
-        this.headings = new Array(this.tocEntries.length);
-        for (let i = 0; i < this.tocEntries.length; i++) {
-            const id = decodeURIComponent(this.tocEntries[i].hash?.substring(1));
+        this.sections = [];
+        this.headings = [];
+        this.headingIdxMap.clear();
+        this.anchorNavTarget = null;
+        const entries = this.tocEntries;
+        this.tocEntries = [];
+        for (const entry of entries) {
+            const id = decodeURIComponent(entry.hash.substring(1));
             const heading = document.getElementById(id);
             const section = heading?.parentElement;
             if (heading instanceof HTMLElement && section instanceof HTMLElement) {
-                this.headings[i] = heading;
-                this.sections[i] = section;
-                this.headingIdxMap.set(id, i);
+                this.headingIdxMap.set(id, this.tocEntries.length);
+                this.tocEntries.push(entry);
+                this.headings.push(heading);
+                this.sections.push(section);
             }
         }
         this.active = new Array(this.tocEntries.length).fill(false);
@@ -248,6 +256,10 @@ class TableOfContents extends HTMLElement {
     };
 
     disconnectedCallback() {
+		if (this.initFrame !== null) {
+			cancelAnimationFrame(this.initFrame);
+			this.initFrame = null;
+		}
 		if (this.updateFrame !== null) {
 			cancelAnimationFrame(this.updateFrame);
 			this.updateFrame = null;
@@ -256,7 +268,7 @@ class TableOfContents extends HTMLElement {
             this.observer.unobserve(section)
         );
         this.observer.disconnect();
-        this.tocEl?.removeEventListener("click", this.handleAnchorClick);
+        this.tocEl?.removeEventListener("click", this.handleAnchorClick, true);
     };
 }
 

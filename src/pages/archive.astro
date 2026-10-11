@@ -129,7 +129,7 @@ function formatTag(tagList: string[]) {
 					</div>
 					{post.data.image && (
 						<div class="winter-archive-cover">
-							<ImageWrapper src={post.data.image} basePath={path.join("content/posts/", getDir(post.id))} alt={post.data.title} class="w-full h-full object-cover" />
+							<ImageWrapper src={post.data.image} basePath={path.join("content/posts/", getDir(post.id))} alt={post.data.title} class="w-full h-full object-cover" loading="lazy" decoding="async" />
 						</div>
 					)}
 					<span class="journey-filter-card-action" aria-hidden="true">

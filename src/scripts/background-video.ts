@@ -3,6 +3,8 @@
  * Do not request video on narrow/coarse-pointer or reduced-motion devices.
  * The wallpaper lives outside #swup-container, so route changes cannot restart it.
  */
+import { isIntroCoveringPage } from "./intro-lifecycle";
+
 type BackgroundVideoWindow = Window & {
   __siteBackgroundVideoDispose?: () => void;
 };
@@ -30,7 +32,7 @@ if (video instanceof HTMLVideoElement) {
       }
       return;
     }
-    if (document.hidden) {
+    if (document.hidden || isIntroCoveringPage()) {
       player.pause();
       hide();
       return;
@@ -44,7 +46,7 @@ if (video instanceof HTMLVideoElement) {
   }
 
   const onPlaying = () => {
-    if (allowed.matches && !connection?.saveData && !document.hidden)
+    if (allowed.matches && !connection?.saveData && !document.hidden && !isIntroCoveringPage())
       video.classList.add("is-ready");
   };
   const onVisibility = () => synchronize();
@@ -54,6 +56,7 @@ if (video instanceof HTMLVideoElement) {
   video.addEventListener("error", hide);
   allowed.addEventListener("change", synchronize);
   document.addEventListener("visibilitychange", onVisibility);
+  document.addEventListener("site:intro-prepare", synchronize);
   synchronize();
 
   runtime.__siteBackgroundVideoDispose = () => {
@@ -64,6 +67,7 @@ if (video instanceof HTMLVideoElement) {
     video.removeEventListener("error", hide);
     allowed.removeEventListener("change", synchronize);
     document.removeEventListener("visibilitychange", onVisibility);
+    document.removeEventListener("site:intro-prepare", synchronize);
     delete runtime.__siteBackgroundVideoDispose;
   };
   if (import.meta.hot)

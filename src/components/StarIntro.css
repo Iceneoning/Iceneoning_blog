@@ -2,6 +2,13 @@
    Once the reveal finishes, the entire node is removed by star-intro.ts. */
 /* Prevent unwanted flashes on revisits and Swup navigation. */
 html:not([data-site-intro-pending]) #star-intro-overlay{display:none!important}
+/* Ambient page animations cannot be seen through the opaque star curtain.
+   Resume before the shader starts revealing the interface. */
+html[data-site-intro-pending]:not([data-site-intro-preparing]) #site-content *,
+html[data-site-intro-pending]:not([data-site-intro-preparing]) #site-content *::before,
+html[data-site-intro-pending]:not([data-site-intro-preparing]) #site-content *::after{
+ animation-play-state:paused!important;
+}
 #star-intro-overlay{
  position:fixed;inset:0;z-index:2147482000;isolation:isolate;
  background:#150d30;overflow:hidden;pointer-events:auto;

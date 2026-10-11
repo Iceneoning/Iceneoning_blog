@@ -100,18 +100,6 @@ body:has(#main-grid) { font-family: "Microsoft YaHei", "PingFang SC", system-ui,
 }
 :root.dark #main-grid .winter-home-heading p span { background:rgba(31,42,42,.91); }
 :root.dark #main-grid .winter-home-heading h1 { background:rgba(31,42,42,.72); }
-:root #main-grid .winter-home-accent { flex-basis:.16rem; background:linear-gradient(#faffff,#a8c1c0 55%,#ffe9b7); }
-:root #main-grid .winter-home-latest,
-:root #main-grid .winter-home-guide a {
-  color:var(--winter-art-ink);
-  border-color:var(--winter-art-edge);
-  background:rgba(254,253,246,.64);
-  border-radius:.55rem;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 2px 8px rgba(62,73,66,.05);
-}
-:root.dark #main-grid .winter-home-latest,
-:root.dark #main-grid .winter-home-guide a { background:rgba(31,43,42,.85); }
-:root #main-grid .winter-home-latest-meta { color:var(--winter-art-muted); }
 :root #main-grid #sidebar .journey-passport,
 :root #main-grid widget-layout.journey-index-widget,
 :root #main-grid aside .date-panel-card {
@@ -153,9 +141,6 @@ body:has(#main-grid) { font-family: "Microsoft YaHei", "PingFang SC", system-ui,
 :root #main-grid .journey-entry { border-bottom-color:rgba(139,169,157,.2); }
 :root #main-grid .journey-entry-title { color:var(--winter-art-ink); font-weight:600; letter-spacing:.015em; }
 :root #main-grid .journey-entry-summary { color:var(--winter-art-muted); }
-:root #main-grid .journey-entry-number { color:#778f90; font-weight:500; }
-:root.dark #main-grid .journey-entry-number { color:#b9ceca; }
-:root #main-grid .journey-entry-tick { opacity:.24; }
 :root #main-grid .journey-entry-image { border-radius:.5rem; border-color:var(--winter-art-edge); box-shadow:0 4px 12px var(--winter-art-shadow); }
 :root #main-grid .journey-entry-image-corner { width:.75rem; height:.75rem; opacity:.72; background:linear-gradient(130deg,#fffdf0,#cfe4df); }
 :root #main-grid .journey-entry-footer { border-top-color:rgba(139,169,157,.17); color:var(--winter-art-muted); }

@@ -37,21 +37,6 @@ export async function getSortedPosts() {
 		},
 	}));
 }
-export type PostForList = {
-	slug: string;
-	data: CollectionEntry<"posts">["data"];
-};
-export async function getSortedPostsList(): Promise<PostForList[]> {
-	const sortedFullPosts = await getRawSortedPosts();
-
-	// delete post.body
-	const sortedPostsList = sortedFullPosts.map((post) => ({
-		slug: post.slug,
-		data: post.data,
-	}));
-
-	return sortedPostsList;
-}
 export type Tag = {
 	name: string;
 	count: number;

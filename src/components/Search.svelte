@@ -81,8 +81,9 @@ const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 
 		if (import.meta.env.PROD && pagefindLoaded && window.pagefind) {
 			const response = await window.pagefind.search(keyword);
+			if (isDesktop ? requestId !== desktopRequestId : requestId !== mobileRequestId) return;
 			searchResults = await Promise.all(
-				response.results.map((item) => item.data()),
+				response.results.slice(0, 12).map((item) => item.data()),
 			);
 		} else if (import.meta.env.DEV) {
 			searchResults = fakeResult;
@@ -99,6 +100,7 @@ const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 		result = searchResults.slice(0, 12);
 		setPanelVisibility(result.length > 0, isDesktop);
 	} catch (error) {
+		if (isDesktop ? requestId !== desktopRequestId : requestId !== mobileRequestId) return;
 		console.error("Search error:", error);
 		result = [];
 		setPanelVisibility(false, isDesktop);
@@ -111,6 +113,9 @@ const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 };
 
 const scheduleSearch = (keyword: string, isDesktop: boolean) => {
+	// Invalidate in-flight results as soon as input changes, before debounce.
+	if (isDesktop) desktopRequestId++;
+	else mobileRequestId++;
 	const existingTimer = isDesktop ? desktopSearchTimer : mobileSearchTimer;
 	if (existingTimer) clearTimeout(existingTimer);
 
@@ -143,6 +148,9 @@ onMount(() => {
 	}
 
 	return () => {
+		initialized = false;
+		desktopRequestId++;
+		mobileRequestId++;
 		document.removeEventListener("pagefindready", handlePagefindReady);
 		document.removeEventListener("pagefindloaderror", handlePagefindError);
 		if (desktopSearchTimer) clearTimeout(desktopSearchTimer);

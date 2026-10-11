@@ -5,6 +5,8 @@
  * activates stars with two fragmented GLSL light fronts and dissolves pixels to reveal the blog MP4.
  * Outside Swup; a single intro then complete GPU, rAF, canvas and DOM cleanup.
  */
+import { prepareIntroPage } from "./intro-lifecycle";
+
 (() => {
   "use strict";
   // An overlay mounted outside Swup; never restart on client-side navigation.
@@ -19,10 +21,13 @@
   const total = 3600;
   const clamp = (x,a=0,b=1) => Math.min(b,Math.max(a,x));
   const smooth = (a,b,x) => {const t=clamp((x-a)/(b-a));return t*t*(3-2*t);};
-  let gl=null, shaderProgram=null, samplerTexture=null, loc=null;
+  let gl=null, shaderProgram=null, samplerTexture=null, vertexBuffer=null, loc=null;
   let graphicReady=false, finished=false;
   let raf=0, last=0, elapsed=0, strength=2.0, waterStrength=1.0, frame=0;
   let width=1,height=1;
+  let textureWidth=0,textureHeight=0;
+  let pulseAspect=1,pulseMain=0,pulseEcho=0,pulseRise=0,pulseFade=0;
+  let captionOpacity="";
   const skySource = document.createElement("canvas");
   const baseSource = document.createElement("canvas");
   const ctx=skySource.getContext("2d",{alpha:false});
@@ -83,20 +88,18 @@
   };
   // The expanding stellar pulse is shared with GLSL's first and second ring.
   // Use the same camera aspect ratio and radial pacing for coherent star response.
-  function pulseAt(x,y,p){
-    const aspect=width/Math.max(1,height);
-    const radial=Math.hypot((x-.5)*aspect,y-.5);
-    const smoothMain=smooth(.14,.82,p);
-    const smoothEcho=smooth(.34,.87,p);
-    const main=.045+.98*smoothMain;
-    const echo=.035+.81*smoothEcho;
-    const signed=radial-main, echoSigned=radial-echo;
+  function pulseAt(x,y){
+    // Before/after the pulse its contribution is exactly zero. Avoid four
+    // exponentials and a distance calculation for every invisible response.
+    if(pulseRise===0||pulseFade===0)return 0;
+    const radial=Math.hypot((x-.5)*pulseAspect,y-.5);
+    const signed=radial-pulseMain, echoSigned=radial-pulseEcho;
     const peak=Math.exp(-Math.pow(signed/.048,2));
     const tail=signed<0 ? Math.exp(signed/.095)*.21 : 0;
     const echoPeak=Math.exp(-Math.pow(echoSigned/.041,2))*.56;
     const echoTail=echoSigned<0 ? Math.exp(echoSigned/.086)*.12 : 0;
     return Math.min(1,Math.max(peak+tail,echoPeak+echoTail))
-      *smooth(.12,.31,p)*(1-smooth(.79,.95,p));
+      *pulseRise*pulseFade;
   }
   const vertex=`
     attribute vec2 a_pos;
@@ -111,7 +114,7 @@
     varying vec2 v_uv;
     uniform sampler2D u_sky;
     uniform vec2 u_resolution;
-    uniform float u_time,u_progress,u_style,u_intensity,u_water;
+    uniform float u_time,u_progress,u_intensity,u_water;
     float hash21(vec2 p) {
       p=fract(p*vec2(127.1,311.7));
       p+=dot(p,p+19.19);
@@ -125,17 +128,11 @@
     }
     float gauss(float x,float w){return exp(-pow(x/max(w,.0001),2.));}
     float rise(float a,float b,float x){return smoothstep(a,b,x);}
-    float beam(vec2 p,vec2 a,vec2 b,float w) {
-      vec2 ab=b-a;
-      float t=clamp(dot(p-a,ab)/dot(ab,ab),0.,1.);
-      return gauss(length(p-a-ab*t),w);
-    }
     void main(){
       vec2 uv=v_uv;
       float p=u_progress;
       float aspect=u_resolution.x/u_resolution.y;
       vec2 q=(uv-.5)*vec2(aspect,1.);
-      float scene=rise(.15,.33,p)*(1.-rise(.70,.88,p));
       float time=u_time;
       float power=u_intensity;
       vec2 shift=vec2(0.);
@@ -282,8 +279,8 @@
     if(!gl.getProgramParameter(shaderProgram,gl.LINK_STATUS))
       throw Error(gl.getProgramInfoLog(shaderProgram)||"WebGL shader link failed");
     gl.useProgram(shaderProgram);
-    const buf=gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+    vertexBuffer=gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER,vertexBuffer);
     gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]),gl.STATIC_DRAW);
     const att=gl.getAttribLocation(shaderProgram,"a_pos");
     gl.enableVertexAttribArray(att);
@@ -299,12 +296,13 @@
       resolution:gl.getUniformLocation(shaderProgram,"u_resolution"),
       time:gl.getUniformLocation(shaderProgram,"u_time"),
       progress:gl.getUniformLocation(shaderProgram,"u_progress"),
-      style:gl.getUniformLocation(shaderProgram,"u_style"),
       intensity:gl.getUniformLocation(shaderProgram,"u_intensity"),
       water:gl.getUniformLocation(shaderProgram,"u_water"),
       sky:gl.getUniformLocation(shaderProgram,"u_sky")
     };
     gl.uniform1i(loc.sky,0);
+    gl.uniform1f(loc.intensity,strength);
+    gl.uniform1f(loc.water,waterStrength);
     gl.disable(gl.BLEND);
     graphicReady=true;
 
@@ -383,15 +381,24 @@
     // Canvas texture upload cost is capped to avoid huge per-frame bandwidth.
     const ratio=Math.min(devicePixelRatio||1,innerWidth<900?1:1.15,
       Math.sqrt(1250000/Math.max(1,innerWidth*innerHeight)));
-    width=Math.max(1,Math.floor(innerWidth*ratio));
-    height=Math.max(1,Math.floor(innerHeight*ratio));
-    for(const item of [canvas,fallback,skySource,baseSource]){
+    const nextWidth=Math.max(1,Math.floor(innerWidth*ratio));
+    const nextHeight=Math.max(1,Math.floor(innerHeight*ratio));
+    if(width===nextWidth&&height===nextHeight)return false;
+    width=nextWidth;height=nextHeight;
+    for(const item of [canvas,skySource,baseSource]){
       if(item.width!==width||item.height!==height){
         item.width=width;item.height=height;
       }
     }
     rebuildSky();
     if(gl)gl.viewport(0,0,width,height);
+    return true;
+  }
+  function prepareFallback(){
+    // The hidden fallback does not need a full-size buffer on the WebGL path.
+    if(fallback.width!==width||fallback.height!==height){
+      fallback.width=width;fallback.height=height;
+    }
   }
   function renderJS(time,p){
     if(!ctx)return;
@@ -399,6 +406,13 @@
     ctx.drawImage(baseSource,0,0);
     const maxBrightness=Math.min(1.8,strength);
     const active=maxBrightness;
+    // All stars in this texture frame share these five values. Keep the
+    // original arithmetic order in pulseAt so the rendered pixels stay exact.
+    pulseAspect=width/Math.max(1,height);
+    pulseMain=.045+.98*smooth(.14,.82,p);
+    pulseEcho=.035+.81*smooth(.34,.87,p);
+    pulseRise=smooth(.12,.31,p);
+    pulseFade=1-smooth(.79,.95,p);
     const withinText=(x,y)=>Math.abs(x-.5)<.25&&y>.28&&y<.57;
 
     // Far: small and slow, gently breathing independently.
@@ -406,7 +420,7 @@
       const x=(s.x+time*.000038)%1;
       const y=(s.y+time*.000013)%1;
       const breath=.72+.28*Math.sin(s.phase+time*s.speed);
-      const pulse=pulseAt(x,y,p)*active;
+      const pulse=pulseAt(x,y)*active;
       const a=(.10+.17*breath+.39*pulse)*(withinText(x,y)?.54:1);
       ctx.fillStyle=s.shade?"rgba(203,220,255,"+a.toFixed(3)+")":
                              "rgba(215,195,246,"+a.toFixed(3)+")";
@@ -417,7 +431,7 @@
       const x=(s.x+time*.00020*s.depth)%1;
       const y=(s.y-time*.000083*s.depth+1)%1;
       const breath=.54+.46*Math.sin(s.phase+time*s.speed);
-      const pulse=pulseAt(x,y,p)*active;
+      const pulse=pulseAt(x,y)*active;
       const glowA=(.18+.34*breath+.49*pulse)*(withinText(x,y)?.55:1);
       const size=s.size*(1+pulse*.36);
       ctx.fillStyle=s.shade?"rgba(188,212,255,"+glowA.toFixed(3)+")":
@@ -429,7 +443,7 @@
     for(const s of nearStars){
       const x=(s.x+time*.00039)%1,y=(s.y+time*.00014)%1;
       const breathe=Math.pow(Math.max(0,.5+.5*Math.sin(time*s.speed+s.phase)),5);
-      const pulse=pulseAt(x,y,p)*active;
+      const pulse=pulseAt(x,y)*active;
       const a=Math.min(.84,.12+.35*breathe+.51*pulse)*
               (withinText(x,y)?.36:1);
       if(a<.14)continue;
@@ -447,7 +461,7 @@
     for(const s of dust){
       const x=(s.x+time*(s.near?.00031:.000075))%1;
       const y=(s.y+time*.000036)%1;
-      const pStar=pulseAt(x,y,p)*active;
+      const pStar=pulseAt(x,y)*active;
       const twinkle=.56+.44*Math.sin(s.phase+time*s.speed);
       const a=Math.max(.05,Math.min(.46,.10+.13*twinkle+.27*pStar));
       ctx.fillStyle=s.near?"rgba(234,198,255,"+a.toFixed(3)+")":
@@ -458,7 +472,7 @@
     for(const s of accents){
       const x=(s.x+time*.00018)%1;
       const y=(s.y-time*.00005+1)%1;
-      const resonance=pulseAt(x,y,p)*active;
+      const resonance=pulseAt(x,y)*active;
       const shimmer=Math.pow(Math.max(0,.5+.5*Math.sin(s.phase+time*s.speed)),14);
       const alpha=(.07+.22*shimmer+.28*resonance)*
                   (withinText(x,y)?.4:1);
@@ -485,7 +499,7 @@
     // A constellation node briefly responds when the stellar echo reaches it.
     for(const chain of constellations){
       for(const [x,y] of chain){
-        const resonance=pulseAt(x,y,p)*active;
+        const resonance=pulseAt(x,y)*active;
         if(resonance<.10)continue;
         const px=x*w,py=y*h,alpha=Math.min(.65,resonance*.45);
         const halo=ctx.createRadialGradient(px,py,0,px,py,11);
@@ -497,17 +511,19 @@
   }
   function renderWebGL(time,p,upload){
     if(!graphicReady||!gl)return;
-    gl.viewport(0,0,width,height);
-    gl.useProgram(shaderProgram);
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D,samplerTexture);
-    if(upload)gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE,skySource);
-    gl.uniform2f(loc.resolution,width,height);
+    // This private context has one program and one texture. Initialization
+    // binds them; only resize changes the viewport.
+    if(upload){
+      if(textureWidth!==width||textureHeight!==height){
+        gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE,skySource);
+        gl.uniform2f(loc.resolution,width,height);
+        textureWidth=width;textureHeight=height;
+      } else {
+        gl.texSubImage2D(gl.TEXTURE_2D,0,0,0,gl.RGB,gl.UNSIGNED_BYTE,skySource);
+      }
+    }
     gl.uniform1f(loc.time,time);
     gl.uniform1f(loc.progress,p);
-    gl.uniform1f(loc.style,2);
-    gl.uniform1f(loc.intensity,strength);
-    gl.uniform1f(loc.water,waterStrength);
     gl.drawArrays(gl.TRIANGLES,0,6);
   }
   const overlay = $("star-intro-overlay");
@@ -518,6 +534,8 @@
     cleaned = true;
     if (raf) cancelAnimationFrame(raf);
     clearTimeout(durationGuard);
+    clearTimeout(window.__siteStarIntroGuard);
+    window.__siteStarIntroGuard=undefined;
     document.removeEventListener("visibilitychange", onVisibility);
     window.removeEventListener("pagehide", clean);
     window.removeEventListener("resize", onResize);
@@ -527,6 +545,7 @@
     try {
       if (gl) {
         if (samplerTexture) gl.deleteTexture(samplerTexture);
+        if (vertexBuffer) gl.deleteBuffer(vertexBuffer);
         if (shaderProgram) gl.deleteProgram(shaderProgram);
         gl.getExtension("WEBGL_lose_context")?.loseContext();
       }
@@ -542,6 +561,8 @@
     // small spatial layers. Keep the marker only until transitions finish;
     // regular Swup navigation should never inherit these entrance effects.
     const pageRoot = document.documentElement;
+    prepareIntroPage();
+    pageRoot.removeAttribute("data-site-intro-preparing");
     if (pageRoot.hasAttribute("data-site-intro-pending")) {
       pageRoot.setAttribute("data-site-intro-revealing", "");
       pageRoot.removeAttribute("data-site-intro-pending");
@@ -556,12 +577,12 @@
     else if (!finished && !raf) { last=0;raf=requestAnimationFrame(tick); }
   }
   function onResize() {
-    resize();
+    if(!resize())return;
     if (!finished && !reduce.matches) {
       const p=clamp(elapsed/total);
       renderJS(elapsed/1000,p);
       if (graphicReady) renderWebGL(elapsed/1000,p,true);
-      else if (fb) fb.drawImage(skySource,0,0);
+      else if (fb) {prepareFallback();fb.drawImage(skySource,0,0);}
     }
   }
   function onMotionChange() { if (reduce.matches) clean(); }
@@ -580,15 +601,19 @@
     const delta=last?Math.min(70,Math.max(0,now-last)):0;
     last=now;elapsed+=delta;
     const p=clamp(elapsed/total),t=elapsed/1000;
+    // Give the wallpaper time to load before the dissolve at 60.5%.
+    if(p>=.42)prepareIntroPage();
     const upload=(frame++%2===0);
     if(upload||!graphicReady)renderJS(t,p);
     if(graphicReady)renderWebGL(t,p,upload);
     else if(fb){
+      prepareFallback();
       fb.clearRect(0,0,width,height);
       fb.drawImage(skySource,0,0);
       fallback.style.opacity=String(1-smooth(.62,.98,p));
     }
-    caption.style.opacity=String(smooth(.11,.30,p)*(1-smooth(.50,.68,p)));
+    const nextOpacity=String(smooth(.11,.30,p)*(1-smooth(.50,.68,p)));
+    if(nextOpacity!==captionOpacity){caption.style.opacity=nextOpacity;captionOpacity=nextOpacity;}
     if(p>=1)finish();else raf=requestAnimationFrame(tick);
   }
   try {
@@ -601,6 +626,7 @@
       renderWebGL(0,0,true);
       overlay.classList.add("ready-stage");
     } else if(fb) {
+      prepareFallback();
       fb.drawImage(skySource,0,0);
       overlay.classList.add("ready-stage");
     }
@@ -608,8 +634,9 @@
     window.addEventListener("resize",onResize,{passive:true});
     window.addEventListener("pagehide",clean,{once:true});
     reduce.addEventListener("change",onMotionChange);
+    canvas.addEventListener("webglcontextlost",onContextLost);
     skip?.addEventListener("click",clean);
-    durationGuard=window.setTimeout(clean,9000);
+    if(!window.__siteStarIntroGuard)durationGuard=window.setTimeout(clean,9000);
     (window as any).__siteStarIntroDestroy=clean;
     raf=requestAnimationFrame(tick);
   } catch(e){console.error("[site intro] Rendering failed, recovering",e);clean();}

@@ -32,10 +32,6 @@ body:has(#main-grid) { font-family:var(--winter-type-text); }
 :root #main-grid .journey-index-header h2 span { font-family:var(--winter-type-text); font-size:.73rem; letter-spacing:.04em; font-weight:700; }
 :root #main-grid .journey-section-overline { font-family:var(--winter-type-text); font-weight:500; font-size:.78rem; letter-spacing:.045em; }
 :root #main-grid .winter-home-heading p { font-family:var(--winter-type-text); font-weight:400; letter-spacing:normal; }
-:root #main-grid .winter-home-latest-action,
-:root #main-grid .winter-home-guide a { font-weight:600; letter-spacing:normal; }
-:root #main-grid .winter-home-latest-action { font-weight:600; }
-:root #main-grid .winter-home-latest-meta { font-weight:650; font-size:.79rem; letter-spacing:normal; }
 :root #main-grid .journey-entry-title {
   font-family:var(--winter-type-text);
   font-weight:700;

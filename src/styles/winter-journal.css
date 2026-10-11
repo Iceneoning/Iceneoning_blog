@@ -86,13 +86,7 @@
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
-:root:root #main-grid .winter-home-header {
-  min-height: 10.5rem;
-  padding: 1.5rem 1.65rem 1rem;
-  gap: 1rem;
-}
 :root:root #main-grid .winter-home-heading { gap: 0; }
-:root:root #main-grid .winter-home-accent { display: none; }
 .winter-home-eyebrow {
   margin-bottom: .75rem;
   font-size: .72rem;
@@ -116,36 +110,6 @@
   text-shadow: none;
 }
 :root:root #main-grid .winter-home-heading p span { display: block; white-space: normal; }
-:root:root #main-grid .winter-home-latest,
-:root:root.dark #main-grid .winter-home-latest {
-  background: var(--journal-paper);
-  border: 1px solid var(--journal-edge);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  padding: .7rem .8rem;
-  min-width: 0;
-  border-radius: .7rem;
-}
-:root:root #main-grid .winter-home-latest-meta { font-size: .7rem; }
-:root:root #main-grid .winter-home-latest-action { font-size: .83rem; }
-:root:root #main-grid .winter-home-guide {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: .65rem;
-  padding: .5rem 1.65rem 1.25rem;
-}
-:root:root #main-grid .winter-home-guide a,
-:root:root.dark #main-grid .winter-home-guide a {
-  min-width: 0;
-  min-height: 2.75rem;
-  border-radius: .6rem;
-  background: var(--journal-paper);
-  border: 1px solid var(--journal-edge);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  font-size: .83rem;
-  font-weight: 500;
-}
 :root:root #main-grid .winter-home :is(a:hover, a:focus-visible),
 :root:root.dark #main-grid .winter-home :is(a:hover, a:focus-visible) {
   background: var(--journal-paper);
@@ -247,20 +211,9 @@
   :root:root #main-grid { padding-inline: .8rem; }
   :root:root #navbar .journey-topbar-inner { border-radius: 0 0 .85rem .85rem; }
 }
-@container (max-width: 610px) {
-  :root:root #main-grid .winter-home-header { flex-wrap: nowrap; padding-inline: 1.15rem; }
-  :root:root #main-grid .winter-home-latest { align-items: flex-end; }
-  :root:root #main-grid .winter-home-latest-meta { flex-direction: column; align-items: flex-end; gap: .25rem; }
-  :root:root #main-grid .winter-home-guide { padding-inline: 1.15rem; gap: .4rem; }
-  :root:root #main-grid .winter-home-guide a { font-size: .76rem; gap: .2rem; padding-inline: .6rem; }
-}
 @media (max-width: 640px) {
-  :root:root #main-grid .winter-home-header { min-height: 11rem; padding-top: 1.25rem; }
   :root:root #main-grid .winter-home-heading h1 { font-size: 1.65rem; }
   :root:root #main-grid .winter-home-heading p { font-size: .8rem; }
-  :root:root #main-grid .winter-home-latest { padding: .55rem; }
-  :root:root #main-grid .winter-home-latest-action { font-size: .72rem; gap: .25rem; }
-  :root:root #main-grid .winter-home-guide { padding-bottom: 1rem; }
   :root:root #main-grid .journey-index { padding-inline: 1.1rem; }
   :root:root #main-grid .journey-index-header h2 { font-size: 1.45rem; }
   :root:root #main-grid .journey-entry { padding-block: 1.35rem; gap: .85rem; }
@@ -484,7 +437,6 @@ html[data-archive-filter-pending] #archive-filter-view { display: none; }
   :root:root #main-grid .friends-header > .journey-page-orbit { opacity: .2; }
 }
 
-
 /* Quiet starfield layout: content panels use solid night material. */
 :root:root #main-grid :is(.journey-index, .journey-about, .journey-chronicle, .friends-shell, .friend-guide),
 :root:root #main-grid :is(#post-container.card-base, #archive-filter-view .journey-filter-heading, #archive-cards .journey-filter-card) {
@@ -516,13 +468,10 @@ html[data-archive-filter-pending] #archive-filter-view { display: none; }
 :root:root.dark #main-grid .journey-index-header { padding-block: 1.3rem 1.05rem; border-bottom-width: 1px; }
 :root:root.dark #main-grid .journey-entry { padding-block: 1.4rem; }
 :root:root.dark #main-grid .journey-entry-image { box-shadow: none; }
-:root:root.dark #main-grid .winter-home-guide a,
-:root:root.dark #main-grid .winter-home-latest,
 :root:root.dark #main-grid .journey-passport-social-link { box-shadow: none; border-color: var(--journal-rule); }
 :root:root.dark #main-grid :is(.winter-home-latest,.winter-home-guide a):is(:hover,:focus-visible) {
   border-color: rgba(183,175,234,.46); background: #292a44;
 }
-
 
 /* Date widget: secondary controls should not compete with the heroine. */
 :root:root.dark #main-grid aside .fortune-button {
@@ -571,27 +520,6 @@ html[data-archive-filter-pending] #archive-filter-view { display: none; }
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
-:root:root.dark #main-grid .winter-home-header {
-  flex-direction: row;
-  align-items: flex-start;
-  min-height: 0;
-  gap: 1rem;
-  padding: 1.3rem 1.55rem .85rem;
-}
-:root:root.dark #main-grid .winter-home-latest {
-  max-width: 18rem;
-  width: auto;
-  background: rgba(17, 21, 39, .42);
-}
-:root:root.dark #main-grid .winter-home-guide {
-  grid-template-columns: repeat(3, minmax(0,1fr));
-  padding: .4rem 1.55rem 1rem;
-  gap: .6rem;
-}
-:root:root.dark #main-grid .winter-home-guide a {
-  grid-column: auto;
-  background: rgba(17, 21, 39, .42);
-}
 :root:root.dark #main-grid .journey-index,
 :root:root.dark #main-grid :is(.journey-about,.journey-chronicle,.friends-shell,.friend-guide),
 :root:root.dark #main-grid #archive-filter-view .journey-filter-heading,
@@ -616,17 +544,6 @@ html[data-archive-filter-pending] #archive-filter-view { display: none; }
 :root:root.dark #main-grid .journey-entry-title,
 :root:root.dark #main-grid .journey-entry-summary {
   text-shadow: 0 1px 3px rgba(5, 7, 23, .72);
-}
-@media (max-width: 767px) {
-  :root:root.dark #main-grid .winter-home-header {
-    flex-direction: column;
-    padding-inline: 1.15rem;
-  }
-  :root:root.dark #main-grid .winter-home-latest { width: 100%; max-width: none; }
-  :root:root.dark #main-grid .winter-home-guide {
-    padding-inline: 1.15rem;
-    grid-template-columns: 1fr;
-  }
 }
 
 /* Desktop v1.2 — balanced frame and content-led Hero, never frosted glass. */
@@ -721,13 +638,6 @@ html[data-archive-filter-pending] #archive-filter-view { display: none; }
   :root:root.dark #main-grid .winter-home-reflection {
     margin-top: 0;
   }
-  :root:root.dark #main-grid .winter-home-header {
-    min-height: 0;
-    padding: 1.15rem 1.4rem .2rem;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1.2rem;
-  }
   :root:root.dark #main-grid .winter-home-heading h1 {
     font-size: 1.9rem;
     font-weight: 650;
@@ -737,20 +647,11 @@ html[data-archive-filter-pending] #archive-filter-view { display: none; }
     line-height: 1.8;
     font-size: .93rem;
   }
-  :root:root.dark #main-grid .winter-home-guide {
-    grid-template-columns: repeat(3,minmax(0,1fr));
-    padding: .15rem 1.4rem 1rem;
-    gap: .65rem;
-  }
   :root:root.dark #main-grid :is(.winter-home-guide a,.winter-home-latest) {
     background: var(--pc-control);
     border: 1px solid rgba(205,201,239,.18);
     border-radius: .65rem;
     box-shadow: none;
-  }
-  :root:root.dark #main-grid .winter-home-guide a {
-    min-height: 2.55rem;
-    font-size: .86rem;
   }
   :root:root.dark #main-grid :is(.winter-home-guide a,.winter-home-latest):is(:hover,:focus-visible) {
     background: rgba(35,35,64,.42);
