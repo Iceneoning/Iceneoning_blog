@@ -16,6 +16,10 @@ friends:
     url: https://super-s-blog.pages.dev/
     avatar: /Portrait/NanKeYiMeng.jpg
     description: 月相流转之间，我以我为锚点。
+  - name: 上官紫宸OFFICIAL（KAMINOSEKI）
+    url: https://kaminosekimusic.169427.xyz/
+    avatar: /Portrait/KAMINOSEKI.jpg
+    description: 中国VOCALOID P主，独立音乐制作人，独立游戏开发者。
   - name: 一曝十寒
     url: https://yuhhhy.cn/
     avatar: /Portrait/avatar.jpg
