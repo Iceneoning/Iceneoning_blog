@@ -46,6 +46,13 @@ const crossesLayoutBoundary = (href: string) =>
         </nav>
         <div class="journey-topbar-tools">
             <Search client:load />
+            <button type="button" id="blank-screen-switch"
+                class="journey-topbar-icon btn-plain h-11 w-11"
+                aria-label="进入空屏模式" aria-pressed="false"
+                title="仅查看星空背景">
+                <Icon name="material-symbols:fullscreen" class="blank-screen-enter-icon text-xl" />
+                <Icon name="material-symbols:fullscreen-exit" class="blank-screen-exit-icon text-xl" />
+            </button>
             {!siteConfig.themeColor.fixed && (
                 <button aria-label="显示设置" class="journey-topbar-icon btn-plain h-11 w-11" id="display-settings-switch">
                     <Icon name="material-symbols:palette-outline" class="text-xl" />

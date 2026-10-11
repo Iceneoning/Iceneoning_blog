@@ -11,8 +11,10 @@ import "../styles/winter-art.css";
 import "../styles/winter-crystal.css";
 import "../styles/winter-type.css";
 import "../styles/winter-journal.css";
+import "../styles/blank-screen.css";
 import ConfigCarrier from "@components/ConfigCarrier.astro";
 import MouseSparkEffect from "@components/effects/MouseSparkEffect.astro";
+import StarIntro from "@components/StarIntro.astro";
 
 import roboto400 from "@fontsource/roboto/files/roboto-latin-400-normal.woff2";
 import roboto700 from "@fontsource/roboto/files/roboto-latin-700-normal.woff2";
@@ -150,13 +152,32 @@ const socialImageUrl = image
 			document.documentElement.style.setProperty('--primary', preset.hex);
 			document.documentElement.style.setProperty('--theme-chroma-scale', String(preset.chromaScale));
 		</script>
+        <!-- Set the gate early: one cinematic intro per browser tab session.
+             ?intro=1 replays it deliberately for visual regression testing. -->
+        <script is:inline>
+          (() => {
+            try {
+              const key = 'iceneoning-star-intro-v45-seen';
+              const force = new URLSearchParams(location.search).get('intro') === '1';
+              if (!matchMedia('(prefers-reduced-motion: reduce)').matches &&
+                  (force || sessionStorage.getItem(key) !== '1')) {
+                document.documentElement.setAttribute('data-site-intro-pending', '');
+                sessionStorage.setItem(key, '1');
+              }
+            } catch (e) {
+              // Do not block the blog if session storage is unavailable.
+            }
+          })();
+        </script>
 		<!-- Guard query-filtered archive routes before the first paint. -->
         <script is:inline>
-            const archiveParams = new URLSearchParams(window.location.search);
-            if (/\/archive\/?$/.test(window.location.pathname) &&
-                (archiveParams.has("category") || archiveParams.has("tag") || archiveParams.has("uncategorized"))) {
-                document.documentElement.setAttribute("data-archive-filter-pending", "");
-            }
+            (() => {
+                const archiveParams = new URLSearchParams(window.location.search);
+                if (/\/archive\/?$/.test(window.location.pathname) &&
+                    (archiveParams.has("category") || archiveParams.has("tag") || archiveParams.has("uncategorized"))) {
+                    document.documentElement.setAttribute("data-archive-filter-pending", "");
+                }
+            })();
         </script>
 		<style define:vars={{
 			configHue,
@@ -188,6 +209,7 @@ const socialImageUrl = image
 				<div id="site-bg-frosted" aria-hidden="true"></div>
 			</>
 		)}
+		<StarIntro />
 		<div id="site-content">
 			<ConfigCarrier></ConfigCarrier>
 			<MouseSparkEffect></MouseSparkEffect>
@@ -271,10 +293,21 @@ const socialImageUrl = image
 // not inside a conditional Astro component whose scripts may not be emitted.
 import "../scripts/background-video";
 import "../scripts/background-parallax";
+import "../scripts/blank-screen";
+// Start only once per document, never on Swup page:view.
+if (document.documentElement.hasAttribute("data-site-intro-pending")) {
+    void import("../scripts/star-intro").catch(error => {
+        console.warn("[site intro] Load failed; showing the blog.", error);
+        document.getElementById("star-intro-overlay")?.remove();
+        document.documentElement.removeAttribute("data-site-intro-pending");
+    });
+} else {
+    document.getElementById("star-intro-overlay")?.remove();
+}
 // The oversized journey carousel was retired; the compact homepage is static.
 import "../scripts/novel-progress";
 import "../scripts/novel-showcase";
-import "../scripts/novel-hero-effects";
+import "../scripts/novel-crystal-hero";
 import {getHue, getStoredTheme, setHue, setTheme} from "../utils/setting-utils";
 import { BACK_TO_TOP_SHOW_THRESHOLD_VH } from "../constants/constants";
 

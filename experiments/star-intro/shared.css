@@ -1,0 +1,50 @@
+:root{color-scheme:dark;font-family:"Microsoft YaHei",ui-sans-serif,system-ui,sans-serif;color:#f0eafb;background:#0b071a}
+*{box-sizing:border-box}
+html,body{min-height:100%;margin:0}
+body{overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer}
+.background{position:fixed;inset:0;z-index:0;background:#170c2e url("../../public/background/star-sea-poster.webp") center/cover no-repeat}
+.background video{height:100%;width:100%;object-fit:cover;object-position:center;display:block}
+.background:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,6,27,.28),transparent 50%,rgba(9,5,25,.22))}
+#star-shader{position:fixed;inset:0;width:100%;height:100%;z-index:2;pointer-events:none}
+.topbar{position:fixed;inset:0 0 auto;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:24px clamp(18px,4vw,54px);font-size:12px;letter-spacing:.12em;text-shadow:0 2px 16px #0b051a}
+.brand{font-weight:700;letter-spacing:.16em}
+.lab-tag{opacity:.7}
+.bottom-bar{position:fixed;z-index:6;bottom:22px;left:clamp(18px,4vw,54px);right:clamp(18px,4vw,54px);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:12px;letter-spacing:.06em}
+.controls{display:flex;gap:10px}
+.button,.link-chip{display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border:1px solid rgba(223,204,255,.25);border-radius:999px;background:rgba(13,9,35,.45);backdrop-filter:none;color:#f1eafa;transition:background .2s,border-color .2s,transform .2s}
+.button:hover,.link-chip:hover{background:rgba(41,23,83,.7);border-color:rgba(229,203,255,.55)}
+.button:active,.link-chip:active{transform:scale(.98)}
+.button:focus-visible,.link-chip:focus-visible,a:focus-visible{outline:2px solid #f2d7ff;outline-offset:3px}
+.experiment{display:grid;place-items:center;min-height:100svh;padding:120px 24px 110px;position:relative;z-index:1}
+.intro-copy{position:fixed;z-index:4;top:42%;left:50%;width:min(90vw,650px);transform:translate(-50%,-38%);text-align:center;pointer-events:none;text-shadow:0 3px 23px rgba(4,3,21,.85);opacity:0;animation:intro-caption 2.8s both}
+.intro-copy small{display:block;margin-bottom:18px;color:#d6c7ef;letter-spacing:.6em;font-size:clamp(10px,.8vw,13px)}
+.intro-copy h2{margin:0;font-weight:400;letter-spacing:.3em;font-size:clamp(21px,4vw,45px)}
+.intro-copy p{margin-top:20px;letter-spacing:.12em;font-size:12px;color:#e6ddf4}
+@keyframes intro-caption{0%,14%{opacity:0;transform:translate(-50%,-34%)}30%,67%{opacity:1;transform:translate(-50%,-38%)}92%,100%{opacity:0;transform:translate(-50%,-43%)}}
+.landing{width:min(700px,100%);text-align:center;opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;pointer-events:none;text-shadow:0 3px 30px rgba(8,3,23,.85)}
+.is-complete .landing{opacity:1;transform:none;pointer-events:auto}
+.eyebrow{font-size:11px;letter-spacing:.3em;color:#dfd0fa}
+.landing h1{font-size:clamp(34px,6vw,70px);margin:18px 0 24px;letter-spacing:.07em;font-weight:500}
+.landing p{font-size:clamp(14px,1.6vw,17px);line-height:1.95;color:#f2eefa;margin:0 auto 32px;max-width:470px}
+.is-complete .intro-copy{animation:none;opacity:0}
+.scene-description{max-width:46ch;line-height:1.8;color:#ded4f1;opacity:.9}
+.scene-nav{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.scene-nav a{display:inline-flex;align-items:center;padding:11px 17px;border-radius:999px;background:rgba(18,8,45,.52);border:1px solid rgba(219,206,250,.28)}
+.scene-nav a:hover{background:rgba(60,37,94,.65)}
+/* Landing page: all experiments can be reached without a build or dev server. */
+.gallery{min-height:100svh;padding:125px clamp(22px,6vw,90px) 80px;position:relative;z-index:1}
+.gallery:before{content:"";position:fixed;inset:0;z-index:-1;background:rgba(7,4,19,.58)}
+.gallery h1{font-size:clamp(32px,5vw,62px);font-weight:500;letter-spacing:.06em;margin:12px 0}
+.gallery-lead{line-height:2;color:#e1d9f3;max-width:690px}
+.gallery-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:48px}
+.demo-card{min-height:244px;display:flex;flex-direction:column;justify-content:space-between;gap:24px;padding:27px;border-radius:18px;background:rgba(18,9,43,.66);border:1px solid rgba(233,216,255,.25);transition:transform .22s,border-color .22s,background .22s}
+.demo-card:hover{transform:translateY(-4px);border-color:rgba(243,216,255,.65);background:rgba(32,16,67,.78)}
+.demo-card .number{color:#c8b0ef;letter-spacing:.2em;font-size:12px}
+.demo-card h2{font-weight:500;font-size:25px;letter-spacing:.09em;margin:0 0 10px}
+.demo-card p{line-height:1.9;font-size:13px;color:#d9cdeb;margin:0}
+.demo-card .arrow{align-self:flex-end;font-size:23px}
+.gallery-note{margin-top:28px;color:#d6cae6;font-size:12px;line-height:1.8}
+@media(max-width:900px){.background video{display:none}.background{background-image:url("../../public/background/mobile-background.jpg")}.gallery-grid{grid-template-columns:1fr}.demo-card{min-height:174px}.lab-tag{display:none}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}.intro-copy{display:none}.landing{opacity:1;transform:none}}

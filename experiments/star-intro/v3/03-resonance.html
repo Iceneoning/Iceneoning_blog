@@ -1,0 +1,14 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>星河涟漪 · 星空开场 V3</title><link rel="stylesheet" href="scene.css"></head>
+<body data-scene="ripple">
+<div class="wallpaper" aria-hidden="true"><video id="background-video" autoplay muted loop playsinline preload="none" data-src="../../../public/background/star-sea-loop-1080p.mp4"></video></div>
+<canvas id="sky-layer" class="sky-layer" aria-hidden="true"></canvas><canvas id="fx-layer" class="fx-layer" aria-hidden="true"></canvas>
+<header class="topbar"><a class="brand" href="index.html">← STAR INTRO / STELLAR RESONANCE</a><span class="lab-tag">VIDEO + CANVAS PARTICLES + GLSL</span></header>
+<div id="intro-copy" class="intro-copy" aria-hidden="true"><small>I C E N E O N I N G · 星 海 旅 途</small><h2>让星河，轻轻泛起涟漪。</h2><p>从一瞬微光，走向浩瀚星空。</p></div>
+<main class="stage"><section class="landing" aria-label="开场结束画面"><div class="eyebrow">冰霓的旅途手记</div><h1>你好，旅人。</h1><p>宇宙很大，旅途还长。欢迎在这里停留片刻。</p>
+<nav class="scene-nav" aria-label="其他原型"><a href="01-hand-starlight.html">01 · 星辉</a><a href="02-starlane.html">02 · 流星</a><a href="03-resonance.html">03 · 涟漪</a></nav></section></main>
+<footer class="stage-footer"><div class="footer-progress"><span id="status-label">正在播放开场</span><div class="track"><span id="progress-bar"></span></div></div>
+<div class="controls"><button class="chip" id="replay" type="button">↻ 重播</button><button class="chip" id="pause" type="button">暂停</button><button class="chip" id="skip" type="button">跳过</button>
+<button class="chip is-active" id="shader-toggle" type="button" aria-pressed="true">Shader 开</button>
+<label class="shader-range">强度 <input id="shader-intensity" type="range" min="0" max="200" step="10" value="115" aria-label="Shader 强度"><output id="shader-value">115%</output></label>
+<button class="chip" id="shader-solo" type="button" aria-pressed="false">只看 Shader</button><span class="shader-state" id="shader-state">检测 Shader …</span>
+</div></footer><script defer src="scene.js"></script></body></html>

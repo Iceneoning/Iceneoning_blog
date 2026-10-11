@@ -1,0 +1,31 @@
+/* A top-level transient cover: outside #swup-container and site wallpaper.
+   Once the reveal finishes, the entire node is removed by star-intro.ts. */
+/* Prevent unwanted flashes on revisits and Swup navigation. */
+html:not([data-site-intro-pending]) #star-intro-overlay{display:none!important}
+#star-intro-overlay{
+ position:fixed;inset:0;z-index:2147482000;isolation:isolate;
+ background:#150d30;overflow:hidden;pointer-events:auto;
+}
+/* Critical: the Shader's transparent fragments must reveal the actual site,
+   not an opaque backdrop underneath the Canvas. */
+#star-intro-overlay.ready-stage{background:transparent}
+#star-intro-overlay canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
+#star-intro-canvas{z-index:1;background:transparent}
+#star-intro-overlay:not(.ready-stage) #star-intro-canvas{background:#150d30}
+#star-intro-fallback{z-index:1;display:none;background:#150d30;}
+#star-intro-overlay.fallback #star-intro-fallback{display:block}
+#star-intro-overlay.fallback #star-intro-canvas{display:none}
+#star-intro-copy{
+ position:absolute;z-index:3;top:42%;left:50%;width:min(90vw,650px);
+ transform:translate(-50%,-38%);text-align:center;pointer-events:none;
+ color:#f0eafa;text-shadow:0 3px 23px rgba(4,3,21,.85);opacity:0;
+}
+#star-intro-copy small{display:block;margin-bottom:18px;color:#d6c7ef;letter-spacing:.6em;font-size:clamp(10px,.8vw,13px);}
+#star-intro-copy h2{margin:0;font-weight:400;letter-spacing:.3em;font-size:clamp(21px,4vw,45px);line-height:1.5}
+#star-intro-copy p{margin-top:20px;letter-spacing:.12em;font-size:12px;color:#e6ddf4}
+#star-intro-skip{position:absolute;z-index:6;right:clamp(18px,3vw,52px);bottom:24px;
+ border:1px solid rgba(235,210,255,.37);border-radius:999px;padding:9px 17px;
+ background:rgba(17,9,41,.68);color:#f2e8ff;font-size:12px;cursor:pointer}
+#star-intro-skip:focus-visible{outline:2px solid #fff;outline-offset:3px}
+@media (prefers-reduced-motion:reduce){#star-intro-overlay{display:none!important}}
+@media(max-width:580px){#star-intro-copy h2{font-size:clamp(20px,5vw,31px);letter-spacing:.15em}}

@@ -6,9 +6,10 @@ import { Icon } from "astro-icon/components";
 
 interface Props {
 	record: NovelRecord;
+	featured?: boolean;
 }
 
-const { record } = Astro.props;
+const { record, featured = false } = Astro.props;
 const { series, chapters, latestPublished } = record;
 const detailUrl = getNovelUrl(series.data.novelId);
 const readingUrl = getFirstChapterUrl(record) ?? detailUrl;
@@ -16,7 +17,7 @@ const accentStyle = `--novel-accent-hue: ${series.data.accentHue}`;
 ---
 
 <article
-	class="novel-card novel-work-card card-base grid gap-6 p-5 sm:p-6 md:grid-cols-[11rem_minmax(0,1fr)] md:gap-7 lg:p-7"
+	class="novel-card novel-work-card novel-archive-feature card-base grid gap-6 p-5 sm:p-6 md:grid-cols-[11rem_minmax(0,1fr)] md:gap-7 lg:p-7"
 	style={accentStyle}
 	data-pagefind-body
 	data-showcase-target={series.data.novelId}
@@ -44,12 +45,13 @@ const accentStyle = `--novel-accent-hue: ${series.data.accentHue}`;
 	</a>
 
 	<div class="novel-work-copy flex min-w-0 flex-col justify-center">
+		<p class="novel-archive-card-eyebrow">{featured ? "FEATURED STORY" : "STORY"} <span aria-hidden="true">✧</span></p>
 		<div class="novel-work-topline">
 			<span class="novel-status-soft">{series.data.status}</span>
-			<span class="text-30 text-sm">{series.data.tags.join(" · ")}</span>
+			<span class="novel-work-tags text-30 text-sm">{series.data.tags.join(" · ")}</span>
 		</div>
 
-		<a href={detailUrl} class="group mt-4 block w-fit no-underline">
+		<a href={detailUrl} class="novel-work-heading-link group mt-4 block w-fit no-underline">
 			<h2
 				data-pagefind-meta="title"
 				class="novel-work-title text-90 transition group-hover:text-[var(--primary)]"

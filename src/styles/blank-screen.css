@@ -1,0 +1,119 @@
+/*
+ * Cinematic page choreography.
+ * Shader first reveals the original video; the actual UI then enters in layers.
+ * Neither Swup markup nor the persistent background is transformed or replaced.
+ */
+:root { --intro-ui-ease: cubic-bezier(.30,.12,.58,.96); }
+/* Preserve the exact layout width when blank mode suppresses scrolling. */
+html { scrollbar-gutter: stable; }
+
+/* Keep navigation and the actual layout parts independently composited.
+   Restrict transitions to the short intro-reveal interval only, so Swup
+   navigations later retain their original animation behavior. */
+html:is([data-site-intro-pending],[data-site-intro-revealing]) #top-row {
+  transition: opacity 960ms var(--intro-ui-ease), transform 1020ms var(--intro-ui-ease) !important;
+  transition-delay: 70ms !important;
+}
+html:is([data-site-intro-pending],[data-site-intro-revealing]) #main-grid > main,
+html:is([data-site-intro-pending],[data-site-intro-revealing]) .novel-shell {
+  transition: opacity 1050ms var(--intro-ui-ease), transform 1100ms var(--intro-ui-ease) !important;
+  transition-delay: 200ms !important;
+}
+html:is([data-site-intro-pending],[data-site-intro-revealing]) #main-grid > #sidebar,
+html:is([data-site-intro-pending],[data-site-intro-revealing]) #main-grid > aside,
+html:is([data-site-intro-pending],[data-site-intro-revealing]) #main-grid > .footer,
+html:is([data-site-intro-pending],[data-site-intro-revealing]) #toc-wrapper {
+  transition: opacity 1050ms var(--intro-ui-ease), transform 1100ms var(--intro-ui-ease) !important;
+  transition-delay: 330ms !important;
+}
+html[data-site-intro-pending] #site-content { pointer-events: none; }
+html[data-site-intro-pending] #top-row {
+  opacity: 0;
+  transform: translate3d(0,-14px,0);
+}
+html[data-site-intro-pending] #main-grid > main,
+html[data-site-intro-pending] .novel-shell {
+  opacity: 0;
+  transform: translate3d(0,17px,0);
+}
+/* Left and right panels enter laterally; the center keeps its old rise. */
+html[data-site-intro-pending] #main-grid > #sidebar {
+  opacity: 0;
+  transform: translate3d(-32px,0,0);
+}
+html[data-site-intro-pending] #main-grid > aside,
+html[data-site-intro-pending] #toc-wrapper {
+  opacity: 0;
+  transform: translate3d(32px,0,0);
+}
+html[data-site-intro-pending] #main-grid > .footer {
+  opacity: 0;
+  transform: translate3d(0,11px,0);
+}
+
+/* Immersive blank screen — quickly tuck content away and slide the ENTIRE
+   persistent navbar out of the viewport. Only the original wallpaper remains. */
+#site-content > :not(#top-row) {
+  transition: opacity 820ms cubic-bezier(.31,.10,.63,.91), visibility 0s linear;
+}
+html[data-blank-screen] {
+  overflow: hidden;
+}
+html[data-blank-screen] #site-content > :not(#top-row) {
+  opacity: 0 !important;
+  visibility: hidden;
+  pointer-events: none !important;
+  transition: opacity 820ms cubic-bezier(.31,.10,.63,.91), visibility 0s linear 820ms;
+}
+/* When returning, content comes back gently, not with a slow fog-like fade. */
+html:not([data-blank-screen]) #site-content > :not(#top-row) {
+  transition: opacity 850ms cubic-bezier(.31,.10,.63,.91), visibility 0s linear;
+}
+/* In blank mode the parent wrapper owns the opacity fade. The individual
+   sidebars translate horizontally only, avoiding an accidental double fade.
+   Keep the transition alive briefly after exit to finish the slide-in. */
+html:is([data-blank-screen],[data-blank-screen-revealing]) #main-grid > #sidebar,
+html:is([data-blank-screen],[data-blank-screen-revealing]) #main-grid > aside,
+html:is([data-blank-screen],[data-blank-screen-revealing]) #toc-wrapper {
+  transition: transform 900ms var(--intro-ui-ease) !important;
+}
+html[data-blank-screen] #main-grid > #sidebar {
+  transform: translate3d(-32px,0,0);
+}
+html[data-blank-screen] #main-grid > aside,
+html[data-blank-screen] #toc-wrapper {
+  transform: translate3d(32px,0,0);
+}
+html[data-blank-screen] #top-row {
+  position: fixed !important;
+  inset: 0 0 auto !important;
+  width: 100%;
+  margin-inline: auto;
+  z-index: 100 !important;
+  transform: translate3d(0,calc(-100% - 6px),0);
+  transition: transform 460ms cubic-bezier(.2,.75,.22,1) !important;
+  transition-delay: 0ms !important;
+  will-change: transform;
+}
+/* The navbar is never unmounted or hidden with display:none. */
+html[data-blank-screen][data-blank-nav-visible] #top-row,
+html[data-blank-screen] #top-row:focus-within {
+  transform: translate3d(0,0,0);
+}
+#blank-screen-switch .blank-screen-exit-icon {display:none}
+html[data-blank-screen] #blank-screen-switch .blank-screen-enter-icon {display:none}
+html[data-blank-screen] #blank-screen-switch .blank-screen-exit-icon {display:block}
+html[data-blank-screen] #blank-screen-switch {
+  color: var(--primary);
+  background: color-mix(in srgb,var(--primary) 12%,transparent);
+}
+@media (prefers-reduced-motion:reduce) {
+  html:is([data-site-intro-pending],[data-site-intro-revealing]) #top-row,
+  html:is([data-site-intro-pending],[data-site-intro-revealing]) #main-grid > *,
+  html:is([data-site-intro-pending],[data-site-intro-revealing]) .novel-shell,
+  html:is([data-site-intro-pending],[data-site-intro-revealing]) #toc-wrapper,
+  #site-content > :not(#top-row),html[data-blank-screen] #top-row {
+    transition-duration: 0ms !important;
+    transition-delay: 0ms !important;
+  }
+}
