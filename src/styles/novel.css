@@ -828,13 +828,15 @@
 .novel-shell .novel-reader-card {
 	padding: clamp(1.75rem, 4.5vw, 3.6rem);
 	border-radius: var(--radius-large);
-	background: rgba(255, 255, 255, 0.78);
+	background: rgba(255, 255, 255, 0.94);
+	-webkit-backdrop-filter: blur(18px) saturate(108%);
+	backdrop-filter: blur(18px) saturate(108%);
 	border: 1px solid rgba(255, 255, 255, 0.6);
 	box-shadow: 0 10px 30px rgba(30, 71, 112, 0.07);
 }
 
 :root.dark .novel-shell .novel-reader-card {
-	background: rgba(21, 27, 38, 0.74);
+	background: rgba(21, 27, 38, 0.90);
 	border-color: rgba(255, 255, 255, 0.08);
 }
 

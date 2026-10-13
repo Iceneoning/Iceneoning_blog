@@ -494,7 +494,7 @@ html[data-archive-filter-pending] #archive-filter-view { display: none; }
 }
 :root:root.dark #main-grid aside .live-dot span { box-shadow: none; }
 
-/* Starfield night UI — one transparent material, no backdrop blur. */
+/* Starfield night UI; reading panels receive their own denser backing. */
 :root:root.dark {
   --journal-glass: rgba(17, 21, 39, .67);
   --journal-paper: rgba(21, 24, 46, .58);
@@ -528,11 +528,15 @@ html[data-archive-filter-pending] #archive-filter-view { display: none; }
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
+:root:root #main-grid #post-container.card-base {
+  background: rgba(241, 246, 252, .94);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
 :root:root.dark #main-grid #post-container.card-base {
-  background: rgba(21, 24, 46, .84);
-  background-color: rgba(21, 24, 46, .84);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+  background: rgba(13, 16, 35, .90);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 :root:root.dark #main-grid .friend-card,
 :root:root.dark #main-grid .friend-guide .application-card {
@@ -617,14 +621,10 @@ html[data-archive-filter-pending] #archive-filter-view { display: none; }
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
-  /* Only full-length article reading receives extra backing. */
+  /* Keep the desktop article frame; reading material is defined above. */
   :root:root.dark #main-grid #post-container.card-base {
-    background: rgba(13,16,35,.52);
-    background-color: rgba(13,16,35,.52);
     border-color: var(--pc-outline);
     border-radius: .82rem;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
   }
   :root:root.dark #navbar .journey-topbar-inner { border-top: 0; }
   :root:root.dark #main-grid .winter-home {
