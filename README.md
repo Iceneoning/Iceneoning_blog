@@ -72,3 +72,5 @@ astro.config.mjs        # Astro 构建与站点地址
 本站基于 [saicaca/Fuwari](https://github.com/saicaca/fuwari) 进行个人定制，感谢原作者与相关开源项目。仓库保留了原项目的 [MIT License](./LICENSE) 和版权声明。
 
 本站原创文章按站点标注的 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) 授权；第三方素材与其他内容遵循各自授权约定。
+
+**开场动画独立授权：** V4.5「星水涟漪」中由 Iceneoning 拥有权利的原创 JS / Shader / 样式部分，单独适用 [Star Intro Non-Commercial License](./LICENSES/STAR_INTRO_LICENSE.md)：允许学习与个人非商业实验；公开非商业改编须有实质性修改、注明来源；原样搬运和未经书面授权的商业使用不在许可范围内。**此条款不适用于 Fuwari MIT 部分、其他博客功能和第三方素材。**

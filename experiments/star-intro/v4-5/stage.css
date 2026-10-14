@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Iceneoning — original V4.5 demo CSS portions.
+   License: LICENSES/STAR_INTRO_LICENSE.md (source-available, non-commercial).
+   Fuwari MIT / third-party rights remain unaffected. */
 :root{color-scheme:dark;font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;color:#f0eafa;background:#0d0922}*{box-sizing:border-box}html,body{min-height:100%;margin:0;overflow-x:hidden}a{color:inherit;text-decoration:none}button,input{font:inherit}button{cursor:pointer}
 button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #f7d8ff;outline-offset:3px}
 .wallpaper{position:fixed;inset:0;z-index:0;background:#130d2c url("../../../public/background/star-sea-poster.webp") center/cover no-repeat;overflow:hidden}

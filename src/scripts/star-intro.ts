@@ -1,3 +1,6 @@
+// Copyright (c) 2026 Iceneoning — original V4.5 opening animation portions.
+// License: LICENSES/STAR_INTRO_LICENSE.md (source-available, non-commercial).
+// Existing Fuwari MIT / third-party rights remain unaffected.
 // @ts-nocheck -- Port of validated Canvas/WebGL prototype; lifecycle isolated.
 /*
  * V4.5 / Stellar Tide: approved intro (200% star / 100% water), never ambient.

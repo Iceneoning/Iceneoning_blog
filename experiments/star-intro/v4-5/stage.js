@@ -1,4 +1,8 @@
 /*
+ * Copyright (c) 2026 Iceneoning — original V4.5 demo code portions.
+ * License: LICENSES/STAR_INTRO_LICENSE.md (source-available, non-commercial).
+ * Fuwari MIT / third-party rights remain unaffected.
+ *
  * V4.5 / Stellar Tide: retain luminous star populations and add adjustable subtle water-like refraction; isolated demo only.
  * JS Canvas2D builds a real starfield. WebGL1 samples that canvas as a texture,
  * activates stars with two fragmented GLSL light fronts and dissolves pixels to reveal the blog MP4.

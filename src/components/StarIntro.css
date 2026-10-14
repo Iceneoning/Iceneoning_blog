@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Iceneoning — original V4.5 intro styling portions.
+   License: LICENSES/STAR_INTRO_LICENSE.md (source-available, non-commercial).
+   Fuwari MIT / third-party rights remain unaffected. */
 /* A top-level transient cover: outside #swup-container and site wallpaper.
    Once the reveal finishes, the entire node is removed by star-intro.ts. */
 /* Prevent unwanted flashes on revisits and Swup navigation. */

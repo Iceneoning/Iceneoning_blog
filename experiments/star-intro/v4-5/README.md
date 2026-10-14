@@ -2,6 +2,10 @@
 
 V4.5「星水涟漪」已成为正式博客采用的开场方案。这里保留独立 Demo 供参数调节和回归测试；旧 V1～V4.4 演示已退役。**独立 Demo 默认值与正式站参数不同，正式站使用星纹 200%、水感 100%。**
 
+## 版权与使用许可
+
+本 Demo 中由 Iceneoning 拥有权利的原创开场代码、Shader 和样式，适用仓库根目录的 [`LICENSES/STAR_INTRO_LICENSE.md`](../../../LICENSES/STAR_INTRO_LICENSE.md)。允许阅读、个人非商业实验；非商业公开改编需要实质性修改与署名；禁止未经授权的原样搬运与商业使用。Fuwari MIT 代码、第三方依赖及背景素材不受此附加条款覆盖。
+
 ## 预览方式
 
 双击 `H:/vs_code/fuwari/experiments/star-intro/v4-5/index.html`。

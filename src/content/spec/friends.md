@@ -20,6 +20,10 @@ friends:
     url: https://kaminosekimusic.169427.xyz/
     avatar: /Portrait/KAMINOSEKI.jpg
     description: 中国VOCALOID P主，独立音乐制作人，独立游戏开发者。
+  - name: Bakka's Blog
+    url: https://bakkac.github.io/BakkacBlog/
+    avatar: /Portrait/kumiko.jpg
+    description: 记录全栈开发、设计、AI Agent 和 ACGN 的兴趣与思考。
   - name: 一曝十寒
     url: https://yuhhhy.cn/
     avatar: /Portrait/avatar.jpg

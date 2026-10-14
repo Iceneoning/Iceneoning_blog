@@ -11,6 +11,10 @@
 
 **正式开场参数：星纹强度 200%、水感 100%。** V4.5 Demo 内滑块仍可调整，用于后续美术对照，默认值不等于正式站参数。
 
+## 原创部分的版权与授权
+
+V4.5 中由 Iceneoning 拥有权利的原创开场动画代码及 Shader，适用根目录 [`LICENSES/STAR_INTRO_LICENSE.md`](../../LICENSES/STAR_INTRO_LICENSE.md)（源码公开、非商业使用，禁止未经授权的原样搬运）。此条款**不改变** Fuwari 的 MIT 许可证及第三方素材权利。
+
 ## 清理说明（2026-10-11）
 
 早期 V1～V4.4 开场实验已不再作为可用版本维护。清理仅涉及独立实验素材，不移除正式渲染器；原设计演变可以在 Git 历史中回溯。小说馆使用 `src/scripts/novel-crystal-hero.ts`，不再使用旧 `novel-hero-effects.ts`。
