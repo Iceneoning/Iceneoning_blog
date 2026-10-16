@@ -24,10 +24,10 @@ friends:
     url: https://bakkac.github.io/BakkacBlog/
     avatar: /Portrait/kumiko.jpg
     description: 记录全栈开发、设计、AI Agent 和 ACGN 的兴趣与思考。
-  - name: 回首空城
+  - name: Aentro
     url: https://entropy622.github.io/about/
     avatar: /Portrait/HuiShouKongCheng.jpg
-    description: 关注游戏客户端、图形学和 Web 工程
+    description: 记录技术与生活的博客。
   - name: 一曝十寒
     url: https://yuhhhy.cn/
     avatar: /Portrait/avatar.jpg
