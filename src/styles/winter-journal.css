@@ -697,3 +697,10 @@ html[data-archive-filter-pending] #archive-filter-view { display: none; }
     border-color: rgba(205,201,239,.18);
   }
 }
+
+/* Friends link-exchange guide: match the opaque night backing used by articles. */
+:root:root.dark #main-grid .friend-guide {
+  background: rgba(13, 16, 35, .90);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
