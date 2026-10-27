@@ -853,6 +853,53 @@
     aspect-ratio:1 / 1;
   }
 }
+
+/* Per-article image composition: Toumei Yoru only. */
+#post-container.toumei-yoru-post #post-cover {
+  height: clamp(15rem, 33vw, 23rem);
+  background: #e6ecf7;
+}
+#post-container.toumei-yoru-post #post-cover > div:first-child,
+.journey-entry-image .toumei-yoru-thumb > div:first-child {
+  background: transparent !important;
+}
+#post-container.toumei-yoru-post .toumei-figure {
+  display: block;
+  width: 100%;
+  max-width: 36rem;
+  margin: 1.9rem auto;
+}
+#post-container.toumei-yoru-post .toumei-figure img,
+#post-container.toumei-yoru-post .toumei-gallery img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  border-radius: .65rem;
+  box-shadow: 0 7px 22px rgba(20, 28, 52, .12);
+}
+#post-container.toumei-yoru-post .toumei-figure--detail {max-width: 16rem;}
+#post-container.toumei-yoru-post .toumei-figure--book {max-width: 20rem;}
+#post-container.toumei-yoru-post .toumei-figure--portrait {max-width: 18rem;}
+#post-container.toumei-yoru-post .toumei-figure--closing {max-width: 37rem; margin-top: 2.5rem;}
+#post-container.toumei-yoru-post .toumei-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .9rem;
+  max-width: 28rem;
+  margin: 1.9rem auto;
+}
+#post-container.toumei-yoru-post .toumei-gallery img {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+@media (max-width: 640px) {
+  #post-container.toumei-yoru-post #post-cover {height: 15rem;}
+  #post-container.toumei-yoru-post .toumei-figure,
+  #post-container.toumei-yoru-post .toumei-gallery {margin: 1.4rem auto;}
+  #post-container.toumei-yoru-post .toumei-gallery {gap: .55rem;}
+}
+
 @media(prefers-reduced-motion:reduce) {
   #main-grid #sidebar .journey-passport-portrait,
   #main-grid #sidebar .journey-passport-portrait img,

@@ -56,7 +56,7 @@ const excerpt = description || remarkPluginFrontmatter.excerpt;
 
     {hasCover && (
         <a href={url} class="journey-entry-image" aria-label={`阅读：${title}`}>
-            <ImageWrapper src={image} basePath={path.join("content/posts/", getDir(entry.id))} alt={title} class="w-full h-full object-cover" />
+            <ImageWrapper src={image} basePath={path.join("content/posts/", getDir(entry.id))} alt={title} position={entry.slug === "toumei-yoru" ? "center 8%" : "center"} class={entry.slug === "toumei-yoru" ? "w-full h-full object-cover toumei-yoru-thumb" : "w-full h-full object-cover"} />
             <span class="journey-entry-image-corner" aria-hidden="true"></span>
         </a>
     )}

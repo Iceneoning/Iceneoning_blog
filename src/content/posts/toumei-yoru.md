@@ -10,8 +10,6 @@ draft: false
 
 # 于透明之夜，谈一场看不见的恋爱
 
-![透明之夜](/images/Posts/toumei-yoru/toumei-yoru-cover.webp)
-
 > <strong class="!text-yellow-700 dark:!text-yellow-300">⚠️ 严重剧透警告</strong>
 >
 > <span class="!text-yellow-700 dark:!text-yellow-300">本文包含动画全剧的关键情节、重大转折及最终结局。<strong class="!text-yellow-700 dark:!text-yellow-300">强烈建议先看完全部 12 集，再回来阅读这篇文章。</strong></span>
@@ -112,6 +110,10 @@ draft: false
 
 就这么慢慢熟悉了。
 
+<figure class="toumei-figure toumei-figure--wide">
+  <img src="/images/Posts/toumei-yoru/night-walk.webp" alt="夜色中同行的两人" loading="lazy" decoding="async" />
+</figure>
+
 **没有什么惊天地泣鬼神的事件，只是两个普通人，逐渐走进了彼此的生活。**
 
 说到底，就是很给人一种「过日子」的感觉。
@@ -126,7 +128,10 @@ draft: false
 
 小春这么可爱，性格又好，还会时不时冒出一些特别有意思的小表情。
 
-![小春打喷嚏](/images/Posts/toumei-yoru/koharu-no-kushami.webp)
+<div class="toumei-gallery">
+  <img src="/images/Posts/toumei-yoru/koharu-no-kushami.webp" alt="小春打喷嚏时的表情" loading="lazy" decoding="async" />
+  <img src="/images/Posts/toumei-yoru/koharu-no-egao.webp" alt="小春微笑时的表情" loading="lazy" decoding="async" />
+</div>
 
 这谁顶得住啊？
 
@@ -203,7 +208,9 @@ TWT。
 
 她会笑，会开玩笑，也会认真地表达自己的愿望。
 
-![雨中的小春](/images/Posts/toumei-yoru/kasa-ga-tobisou.webp)
+<figure class="toumei-figure toumei-figure--detail">
+  <img src="/images/Posts/toumei-yoru/kasa-ga-tobisou.webp" alt="快被风吹走雨伞时的小春" loading="lazy" decoding="async" />
+</figure>
 
 一开始，你可能只会觉得她是一个特别开朗、特别有生命力的女孩子。
 
@@ -297,6 +304,9 @@ TWT。
 
 两根烟花的火光融成了一团。
 
+<figure class="toumei-figure toumei-figure--wide">
+  <img src="/images/Posts/toumei-yoru/fireworks.webp" alt="夜色与烟花的氛围画面" loading="lazy" decoding="async" />
+</figure>
 
 小春笑着说，这样不就没办法比赛了吗？
 
@@ -442,7 +452,9 @@ TWT。
 
 那些曾经一起许下的愿望，一起经历的生活，还有留在家人身上的回忆，都成为了她确实在这个世界上生活过的证明。
 
-![极彩之夜](/images/Posts/toumei-yoru/gokusai-yoru-cover.webp)
+<figure class="toumei-figure toumei-figure--book">
+  <img src="/images/Posts/toumei-yoru/gokusai-yoru-cover.webp" alt="《极彩之夜》小说封面" loading="lazy" decoding="async" />
+</figure>
 
 我觉得这才是这部作品真正让我有所收获的地方。
 
@@ -480,7 +492,9 @@ TWT。
 
 特别可爱。
 
-![小春插画](/images/Posts/toumei-yoru/koharu-illust.webp)
+<figure class="toumei-figure toumei-figure--portrait">
+  <img src="/images/Posts/toumei-yoru/koharu-illust.webp" alt="冬月小春人物插画" loading="lazy" decoding="async" />
+</figure>
 
 有时候一个害羞的反应，或者说话时微微变化的表情，就已经很有感染力了。
 
@@ -663,3 +677,7 @@ TWT。
 ---
 
 在这部番上😩再浪费一分钟😭我都觉得😭我都觉得是在浪费我自己的眼泪✋🏻😭我自己大好人生不过😭（急喘气）我最（破音）后悔的事情😭我人生中最（破音）后悔的事情就是半夜点开你😭（喘）太——痛——苦——了——（破音）😭太（破音）——痛苦了——😭小春没有什么不好✋🏻你只是虐错了人（怒音）😭我拜托你（怒）💢你不要再治愈我了好不好😩你换一部番喜欢（抽气）😭你换一部番喜欢好不好😭我求你了😩😭你换（破音）一部番喜欢😭我不希望你掏——心——掏——肺——😩噢😩把自己（喘）身——体（喘）掏——开😩把你自己心—脏都掏给我（喘）我就想单——纯看个纯爱😭哪怕你（喘）不（破音）是诚心的😩你喂我一颗糖就可以😩（喘）好吧（喘）我不要你的刀了（破音）😩你真的离我远一点😩（破音）我真的求你了你离我远一点😭（大喘气）你离我远点……（擤鼻涕）（大喘气）（下播）
+
+<figure class="toumei-figure toumei-figure--closing">
+  <img src="/images/Posts/toumei-yoru/cover.webp" alt="露台上相对而坐的两人" loading="lazy" decoding="async" />
+</figure>
