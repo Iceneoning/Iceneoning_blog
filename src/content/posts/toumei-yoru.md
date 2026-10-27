@@ -5,7 +5,7 @@ description: "凌晨用 Codex 跑任务时，一口气看完《与奔驰于透�
 tags: ["动画", "观后感", "恋爱番"]
 category: 杂谈
 image: /images/Posts/toumei-yoru/toumei-yoru-cover.webp
-draft: true
+draft: false
 ---
 
 # 于透明之夜，谈一场看不见的恋爱
@@ -154,7 +154,6 @@ TWT。
 
 我觉得它就是一个很典型的环境锚点。
 
-![露台上的两人](/images/Posts/toumei-yoru/terrace.webp)
 
 动画反复使用同一个场景，让观众在视觉上建立起熟悉感，再通过人物的对话、动作以及关系的变化，不断给这个空间赋予新的内容。
 
@@ -298,7 +297,6 @@ TWT。
 
 两根烟花的火光融成了一团。
 
-![线香花火](/images/Posts/toumei-yoru/senkou-hanabi.webp)
 
 小春笑着说，这样不就没办法比赛了吗？
 
