@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fuwari 图片优化"
+  short_description: "为本站照片、截图和插画生成轻量 WebP，验证引用并清理已替代原图"
+  default_prompt: "使用 $fuwari-image-optimizer 优化本项目指定图片，检查画质、更新引用并验证构建。"
